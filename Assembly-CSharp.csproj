@@ -58,10 +58,11 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\Rubix.cs" />
     <Compile Include="Assets\Scripts\TilePlacer.cs" />
+    <Compile Include="Assets\Scripts\PlacerGenerator.cs" />
     <Compile Include="Assets\Scripts\CubePlacer.cs" />
     <Compile Include="Assets\Scripts\RubixCollider.cs" />
-    <Compile Include="Assets\Scripts\PlacerGenerator.cs" />
     <Compile Include="Assets\Scripts\GameManager.cs" />
+    <Compile Include="Assets\CubeScript.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
