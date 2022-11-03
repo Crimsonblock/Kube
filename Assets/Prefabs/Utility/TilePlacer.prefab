@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 2512798079477137212}
   - component: {fileID: 3451321813323900873}
   m_Layer: 0
-  m_Name: CubeCollider
+  m_Name: TilePlacer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -76,3 +76,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   face: 0
+  emptyTile: {fileID: 8856784545668669972, guid: fdb9891af4757f54e9c2a345872e6b2f, type: 3}
+  placeEmpty: 1
