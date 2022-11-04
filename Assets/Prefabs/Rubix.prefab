@@ -145,6 +145,7 @@ GameObject:
   m_Component:
   - component: {fileID: 230784793142247100}
   - component: {fileID: 230784793142247091}
+  - component: {fileID: 3327827986145284048}
   m_Layer: 0
   m_Name: Cubes
   m_TagString: Untagged
@@ -206,6 +207,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cubePlacerPrefab: {fileID: 3910634465594242341, guid: b52f078e60235f1418ccbc5289b6ed12, type: 3}
+--- !u!114 &3327827986145284048
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 230784793142247101}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 885f1f2b414edaa4d835c24dbc2854c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  accelerationX: 0
+  accelerationY: 0
+  accelerationZ: 0
+  gyroscopeX: 0
+  gyroscopeY: 0
+  gyroscopeZ: 0
 --- !u!1001 &230784791301333465
 PrefabInstance:
   m_ObjectHideFlags: 0
