@@ -43,7 +43,7 @@ public class RubixCollider : MonoBehaviour
     {
         if(other.tag == "Cube")
         {
-            Debug.Log("TRIGGER " + face + " Activated by: " + other.gameObject.name);
+            
         }
     }
 }
