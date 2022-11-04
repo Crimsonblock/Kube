@@ -9,6 +9,6 @@ public class UpdateText : MonoBehaviour
 
     public void setText(string text)
     {
-        textDebug.text = text;
+        if(textDebug != null && text != null) textDebug.text = text;
     }
 }

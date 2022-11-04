@@ -18,21 +18,24 @@ public class GameManager : MonoBehaviour
     }
 
     // Update is called once per frame
-    void FixedUpdate()
+    void Update()
     {
         if (arduino != null && arduino.hasNewData() )
         {
             RubixData data1 = arduino.getNewData();
-            if (data1 != null) orientation.orientate(data1);
+            if (data1 != null)
+            {
+                orientation.orientate(data1);
 
-            string text = "xA: " + data1.accelerometer.x.ToString("0.00") + "\t\t" +
-                    "yA: " + data1.accelerometer.y.ToString("0.00") + "\t\t" +
-                    "zA: " + data1.accelerometer.z.ToString("0.00") + "\n" +
-                    "xG: " + data1.gyroscope.x.ToString("0.00") + "\t\t" +
-                    "yG: " + data1.gyroscope.y.ToString("0.00") + "\t\t" +
-                    "zG: " + data1.gyroscope.z.ToString("0.00");
+                string text = "xA: " + data1.accelerometer.x.ToString("0.00") + "\t\t" +
+                        "yA: " + data1.accelerometer.y.ToString("0.00") + "\t\t" +
+                        "zA: " + data1.accelerometer.z.ToString("0.00") + "\n" +
+                        "xG: " + data1.gyroscope.x.ToString("0.00") + "\t\t" +
+                        "yG: " + data1.gyroscope.y.ToString("0.00") + "\t\t" +
+                        "zG: " + data1.gyroscope.z.ToString("0.00");
 
-            updateText.setText(text);
+                updateText.setText(text);
+            }
         }
     }
 }
