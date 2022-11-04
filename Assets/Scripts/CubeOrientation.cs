@@ -4,20 +4,12 @@ using UnityEngine;
 
 public class CubeOrientation : MonoBehaviour
 {
-    public float accelerationX;
-    public float accelerationY;
-    public float accelerationZ;
-
-    public float gyroscopeX;
-    public float gyroscopeY;
-    public float gyroscopeZ;
-
     private float orientX = 0;
     private float orientY = 0;
     private float orientZ = 0;
 
     private float deltaT = 0.02f;
-    private float k = 0.98f;
+    private float k = 0.999999f;
 
     // Start is called before the first frame update
     void Start()
@@ -25,12 +17,14 @@ public class CubeOrientation : MonoBehaviour
         
     }
 
-    // Update is called once per frame
-    void FixedUpdate()
+    public void orientate(RubixData data)
     {
-        orientX = k * (orientX + gyroscopeX * deltaT) + (1 - k) * accelerationX;
-        orientY = k * (orientY + gyroscopeY * deltaT) + (1 - k) * accelerationY;
-        orientZ = k * (orientZ + gyroscopeZ * deltaT) + (1 - k) * accelerationZ;
+        Vector3 accelerometer = data.accelerometer;
+        Vector3 gyroscope = data.gyroscope;
+
+        orientX = k * (gyroscope.x * deltaT) + (1 - k) * accelerometer.x;
+        orientY = k * (gyroscope.y * deltaT) + (1 - k) * accelerometer.y;
+        orientZ = k * (gyroscope.z * deltaT) + (1 - k) * accelerometer.z;
 
         transform.Rotate(orientX, orientY, orientZ);
     }

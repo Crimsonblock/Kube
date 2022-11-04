@@ -6,7 +6,7 @@ public class GameManager : MonoBehaviour
 {
 
     private ConnectionManager arduino;
-
+    public CubeOrientation orientation;
 
     // Start is called before the first frame update
     void Start()
@@ -21,14 +21,15 @@ public class GameManager : MonoBehaviour
         if (arduino != null && arduino.hasNewData() )
         {
             RubixData data1 = arduino.getNewData();
-            /*
-               Debug.Log("xA: " + data1.accelerometer.x +
-                        "yA: " + data1.accelerometer.y +
-                        "zA: " + data1.accelerometer.z+
-                        "xG: " + data1.gyroscope.x+
-                        "yG: " + data1.gyroscope.y+
-                        "zG: " + data1.gyroscope.z);
-            */
+            orientation.orientate(data1);
+            
+            Debug.Log("xA: " + data1.accelerometer.x +
+                    "yA: " + data1.accelerometer.y +
+                    "zA: " + data1.accelerometer.z+
+                    "xG: " + data1.gyroscope.x+
+                    "yG: " + data1.gyroscope.y+
+                    "zG: " + data1.gyroscope.z);
+            
         }
     }
 }

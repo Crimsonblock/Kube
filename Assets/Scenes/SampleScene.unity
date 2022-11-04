@@ -305,7 +305,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9373e031b072044aaf1f6b00243ac23, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  orientation: {fileID: 0}
+  orientation: {fileID: 1903286659}
 --- !u!4 &503211913
 Transform:
   m_ObjectHideFlags: 0
@@ -556,12 +556,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 885f1f2b414edaa4d835c24dbc2854c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  accelerationX: 1
-  accelerationY: 0
-  accelerationZ: 0
-  gyroscopeX: 1
-  gyroscopeY: 0
-  gyroscopeZ: 0
 --- !u!1001 &1967314262
 PrefabInstance:
   m_ObjectHideFlags: 0

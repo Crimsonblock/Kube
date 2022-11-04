@@ -12,12 +12,12 @@ public class RubixData
     public Vector3 gyroscope;
 }
 
-
 public class ConnectionManager
 {
     static List<string> connectedComs = new List<string>();
     SerialPort sp;
     bool connected;
+
     public ConnectionManager()
     {
         string com = "";
