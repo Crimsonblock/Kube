@@ -30,7 +30,6 @@ public class ConnectionManager
                 {
                     connectedComs.Add(spName);
                     com = spName;
-                    Debug.Log("New port: " + spName);
                     break;
                 }
             }
