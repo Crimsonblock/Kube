@@ -2,3 +2,8 @@
 Logs/
 Library/
 UserSettings/
+obj/Debug
+ProjectSettings/
+Temp/
+Kube.sln
+Assembly-CSharp.csproj

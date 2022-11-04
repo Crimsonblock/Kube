@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028334, g: 0.2257134, b: 0.30692226, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -305,6 +305,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9373e031b072044aaf1f6b00243ac23, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  orientation: {fileID: 0}
 --- !u!4 &503211913
 Transform:
   m_ObjectHideFlags: 0
@@ -312,14 +313,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 503211911}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0.010042071, y: -0.01077947, z: 0.007697471, w: 0.9998619}
   m_LocalPosition: {x: -1.7280864, y: -0.127187, z: -0.75446916}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 1.16, y: -1.227, z: 0.87}
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -538,6 +539,29 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 213412531860112787, guid: 51076de4ac176ca40a9f288de4da73dd, type: 3}
   m_PrefabInstance: {fileID: 2146633193}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1903286655 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 230784792154801386, guid: deb598a99fdf6334c9ec11bfb9b314e2, type: 3}
+  m_PrefabInstance: {fileID: 230784791899707467}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1903286659
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1903286655}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 885f1f2b414edaa4d835c24dbc2854c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  accelerationX: 1
+  accelerationY: 0
+  accelerationZ: 0
+  gyroscopeX: 1
+  gyroscopeY: 0
+  gyroscopeZ: 0
 --- !u!1001 &1967314262
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -736,5 +760,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 1046107847950928245, guid: deb598a99fdf6334c9ec11bfb9b314e2, type: 3}
+      propertyPath: m_RootOrder
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3327827986145284048, guid: deb598a99fdf6334c9ec11bfb9b314e2, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8754429937458420943, guid: deb598a99fdf6334c9ec11bfb9b314e2, type: 3}
+      propertyPath: m_RootOrder
+      value: 3
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 3327827986145284048, guid: deb598a99fdf6334c9ec11bfb9b314e2, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: deb598a99fdf6334c9ec11bfb9b314e2, type: 3}
