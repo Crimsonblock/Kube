@@ -2,13 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class UpdateText : MonoBehaviour
 {
-    public Text textDebug;
+    public TMP_Text debugText;
 
     public void setText(string text)
     {
-        if(textDebug != null && text != null) textDebug.text = text;
+        if (debugText != null && text != null) debugText.SetText(text);
     }
 }
