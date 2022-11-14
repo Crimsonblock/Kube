@@ -9,7 +9,8 @@ public class CubeOrientation : MonoBehaviour
     public float orientZ = 0;
 
     public float deltaT = 0.02f;
-    public float k = 0.98f;
+    public float k;
+    public float scalar = 2.5f;
 
     // Start is called before the first frame update
     void Start()
@@ -17,16 +18,25 @@ public class CubeOrientation : MonoBehaviour
         
     }
 
-    public void orientate(RubixData data)
+    public void Orientate(RubixData data)
     {
         Vector3 accelerometer = data.accelerometer;
-        Vector3 gyroscope = data.gyroscope;
+        Vector3 gyroscope = data.gyroscope / scalar;
 
         orientX = k * (orientX + gyroscope.x * deltaT) + (1 - k) * accelerometer.x;
         orientY = k * (orientY + gyroscope.y * deltaT) + (1 - k) * accelerometer.y;
         orientZ = k * (orientZ + gyroscope.z * deltaT) + (1 - k) * accelerometer.z;
 
         // Z axis in arduio is vertical axis
+        transform.eulerAngles = new Vector3(orientX, -orientZ, -orientY);
+    }
+
+    public void ResetOrientation()
+    {
+        orientX = 0;
+        orientZ = 0;
+        orientY= 0;
+
         transform.eulerAngles = new Vector3(orientX, orientZ, orientY);
     }
 }

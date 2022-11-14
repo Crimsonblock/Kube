@@ -25,7 +25,7 @@ public class GameManager : MonoBehaviour
             RubixData data1 = arduino.getNewData();
             if (data1 != null)
             {
-                orientation.orientate(data1);
+                orientation.Orientate(data1);
 
                 string text = "xA: " + data1.accelerometer.x.ToString("0.00") + "\t\t" +
                         "yA: " + data1.accelerometer.y.ToString("0.00") + "\t\t" +
