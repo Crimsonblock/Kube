@@ -26,6 +26,7 @@ public class CubeOrientation : MonoBehaviour
         orientY = k * (orientY + gyroscope.y * deltaT) + (1 - k) * accelerometer.y;
         orientZ = k * (orientZ + gyroscope.z * deltaT) + (1 - k) * accelerometer.z;
 
-        transform.eulerAngles = new Vector3(orientX, orientY, orientZ);
+        // Z axis in arduio is vertical axis
+        transform.eulerAngles = new Vector3(orientX, orientZ, orientY);
     }
 }
