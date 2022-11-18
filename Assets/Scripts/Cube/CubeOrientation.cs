@@ -1,42 +1,55 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Orientation3D;
 
 public class CubeOrientation : MonoBehaviour
 {
-    public float orientX = 0;
-    public float orientY = 0;
-    public float orientZ = 0;
+    public float OrientX = 0;
+    public float OrientY = 0;
+    public float OrientZ = 0;
 
-    public float deltaT = 0.02f;
-    public float k;
-    public float scalar = 2.5f;
+    public float DeltaT = 0.02f;
+    public float Scalar = 2.5f;
+
+    private cOrientation orient;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        orient = new(DeltaT);
     }
 
     public void Orientate(RubixData data)
     {
         Vector3 accelerometer = data.accelerometer;
-        Vector3 gyroscope = data.gyroscope / scalar;
+        Vector3 gyroscope = data.gyroscope;
 
-        orientX = k * (orientX + gyroscope.x * deltaT) + (1 - k) * accelerometer.x;
-        orientY = k * (orientY + gyroscope.y * deltaT) + (1 - k) * accelerometer.y;
-        orientZ = k * (orientZ + gyroscope.z * deltaT) + (1 - k) * accelerometer.z;
+        float[] quaternions = orient.KalmanFilter(
+            accelerometer.x,
+            accelerometer.z,
+            accelerometer.y,
+            gyroscope.x,
+            gyroscope.z,
+            gyroscope.y
+            );
 
-        // Z axis in arduio is vertical axis
-        transform.eulerAngles = new Vector3(orientX, -orientZ, -orientY);
+        Quaternion q = new(
+            quaternions[1],
+            quaternions[2],
+            quaternions[3],
+            quaternions[0]);
+
+
+        transform.rotation = q;
     }
 
     public void ResetOrientation()
     {
-        orientX = 0;
-        orientZ = 0;
-        orientY= 0;
+        OrientX = 0;
+        OrientZ = 0;
+        OrientY = 0;
 
-        transform.eulerAngles = new Vector3(orientX, orientZ, orientY);
+        transform.eulerAngles = new Vector3(OrientX, OrientZ, OrientY);
     }
 }

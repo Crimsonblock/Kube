@@ -35,6 +35,9 @@ public class ConnectionManager
             }
         }
 
+        Debug.Log(com);
+        //TODO REMOVE
+        com = "COM4";
 
         sp = new SerialPort("\\\\.\\" + com, 9600);
 
