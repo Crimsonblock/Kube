@@ -631,7 +631,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Reset
+  m_text: Pause Orientation
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -960,7 +960,7 @@ RectTransform:
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: -30, y: -30}
-  m_SizeDelta: {x: 160, y: 30}
+  m_SizeDelta: {x: 160, y: 60}
   m_Pivot: {x: 1, y: 1}
 --- !u!114 &1636525290
 MonoBehaviour:
@@ -1147,12 +1147,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 885f1f2b414edaa4d835c24dbc2854c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  orientX: 0
-  orientY: 0
-  orientZ: 0
-  deltaT: 0.02
-  k: 0.99999
-  scalar: 2.5
+  DeltaT: 0.02
+  Scalar: 2.5
+  Pause: 1
 --- !u!1001 &1967314262
 PrefabInstance:
   m_ObjectHideFlags: 0

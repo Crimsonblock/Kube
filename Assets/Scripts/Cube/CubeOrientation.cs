@@ -5,12 +5,9 @@ using Orientation3D;
 
 public class CubeOrientation : MonoBehaviour
 {
-    public float OrientX = 0;
-    public float OrientY = 0;
-    public float OrientZ = 0;
-
     public float DeltaT = 0.02f;
     public float Scalar = 2.5f;
+    public bool Pause = true;
 
     private cOrientation orient;
 
@@ -24,7 +21,7 @@ public class CubeOrientation : MonoBehaviour
     {
         Vector3 accelerometer = data.accelerometer;
         Vector3 gyroscope = data.gyroscope;
-
+        
         float[] quaternions = orient.KalmanFilter(
             accelerometer.x,
             accelerometer.z,
@@ -34,22 +31,22 @@ public class CubeOrientation : MonoBehaviour
             gyroscope.y
             );
 
-        Quaternion q = new(
-            quaternions[1],
-            quaternions[2],
-            quaternions[3],
-            quaternions[0]);
+        if (!Pause)
+        {
+            Quaternion q = new(
+                quaternions[1],
+                quaternions[2],
+                quaternions[3],
+                quaternions[0]);
 
 
-        transform.rotation = q;
+            transform.rotation = q;
+        }
     }
 
-    public void ResetOrientation()
+    public void PauseOrientation()
     {
-        OrientX = 0;
-        OrientZ = 0;
-        OrientY = 0;
-
-        transform.eulerAngles = new Vector3(OrientX, OrientZ, OrientY);
+        Pause = !Pause;
+        transform.eulerAngles = new Vector3(0, 0, 0);
     }
 }

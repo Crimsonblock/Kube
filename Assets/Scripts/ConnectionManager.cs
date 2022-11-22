@@ -1,15 +1,34 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO.Ports;
-using UnityEngine.Video;
-using UnityEditor;
 
 [System.Serializable]
 public class RubixData
 {
     public Vector3 accelerometer;
     public Vector3 gyroscope;
+    public RotaryEncoder rotaryEncoder;
+}
+
+[System.Serializable]
+public class RotaryEncoder
+{
+    public int front { get; set; }
+    public int back { get; set; }
+    public int left { get; set; }
+    public int right { get; set; }
+    public int top { get; set; }
+    public int bottom { get; set; }
+
+    public RotaryEncoder(int front, int back, int left, int right, int top, int bottom)
+    {
+        this.front = front;
+        this.back = back;
+        this.left = left;
+        this.right = right;
+        this.top = top;
+        this.bottom = bottom;
+    }
 }
 
 public class ConnectionManager
@@ -37,7 +56,7 @@ public class ConnectionManager
 
         Debug.Log(com);
         //TODO REMOVE
-        com = "COM4";
+        com = "COM6";
 
         sp = new SerialPort("\\\\.\\" + com, 9600);
 

@@ -16,6 +16,6 @@ public class ResetButton : MonoBehaviour
 
     void ResetOnClick()
     {
-        cube.ResetOrientation();
+        cube.PauseOrientation();
     }
 }
