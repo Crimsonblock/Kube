@@ -9,12 +9,26 @@ public class GameManager : MonoBehaviour
     private ConnectionManager arduino;
     public CubeOrientation orientation;
     public UpdateText updateText;
+    private BleManager bleManager = null;
 
     // Start is called before the first frame update
     void Start()
     {
-        arduino = new ConnectionManager();
-        if (!arduino.isConnected()) arduino = null;
+        // Set a first parameter to true to get .NET Library log in unity
+        // Set a second parameter to true to get Native library log in unity
+        bleManager = BleManager.getInstance(true);
+        bleManager.startScan();
+    }
+
+    ~GameManager()
+    {
+       bleManager.destroy();
+       arduino = null;
+    }
+
+    public ConnectionManager getConnectionManager()
+    {
+        return bleManager.getConnectionManager();
     }
 
     // Update is called once per frame
@@ -43,5 +57,12 @@ public class GameManager : MonoBehaviour
                 updateText.setText(text);
             }
         }
+        else if(arduino == null)
+        {
+            arduino = getConnectionManager();
+        }
+        bleManager.update();
     }
+
+
 }
