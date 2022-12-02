@@ -43,7 +43,15 @@ public class RubixCollider : MonoBehaviour
     {
         if(other.tag == "Cube")
         {
-            
+            parentRubix.addCubeToFace(other.GetComponent<Transform>(), face);
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.tag == "Cube")
+        {
+            parentRubix.removeCubeFromFace(other.GetComponent<Transform>(), face);
         }
     }
 }

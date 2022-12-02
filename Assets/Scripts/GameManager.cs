@@ -16,18 +16,21 @@ public class GameManager : MonoBehaviour
     {
         // Set a first parameter to true to get .NET Library log in unity
         // Set a second parameter to true to get Native library log in unity
-        bleManager = BleManager.getInstance(true);
+        bleManager = BleManager.getInstance();
         bleManager.startScan();
+        bleManager.destroy();
+        bleManager = null;
     }
 
     ~GameManager()
     {
-       bleManager.destroy();
+       if(bleManager != null) bleManager.destroy();
        arduino = null;
     }
 
     public ConnectionManager getConnectionManager()
     {
+        if (bleManager == null) return null;
         return bleManager.getConnectionManager();
     }
 
@@ -57,11 +60,11 @@ public class GameManager : MonoBehaviour
                 updateText.setText(text);
             }
         }
-        else if(arduino == null)
+        else if(arduino == null && bleManager != null)
         {
             arduino = getConnectionManager();
         }
-        bleManager.update();
+        if(bleManager != null) bleManager.update();
     }
 
 
