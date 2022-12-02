@@ -176,7 +176,7 @@ namespace Orientation3D
             _R = 0.01f;
             _Q_quaternion = 0.00001f;
             _Q_quatBias = 0.00001f;
-            _alpha = 0.9f;
+            _alpha = 0.98f;
         }
 
         public void setQquaternion(float Q_quaternion)
@@ -197,6 +197,11 @@ namespace Orientation3D
         public void setElapsedTime(float elapsedTime)
         {
             _elapsedTime = elapsedTime;
+        }
+
+        public void setAlpha(float alpha)
+        {
+            _alpha = alpha;
         }
 
         //Rotates a 3-dimensional vector using a quaternion.

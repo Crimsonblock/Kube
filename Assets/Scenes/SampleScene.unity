@@ -1148,8 +1148,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DeltaT: 0.02
-  Scalar: 2.5
   Pause: 1
+  Filter: 2
+  Alpha: 0.98
+  R: 0.01
+  Q_quaternion: 0.00001
+  Q_quatBias: 0.00001
 --- !u!1001 &1967314262
 PrefabInstance:
   m_ObjectHideFlags: 0
