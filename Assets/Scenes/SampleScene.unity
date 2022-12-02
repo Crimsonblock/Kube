@@ -409,8 +409,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   orientation: {fileID: 1903286659}
   updateText: {fileID: 565661687}
-  LogBluetoothLibrary: 1
-  LogBluetoothCLibrary: 1
 --- !u!4 &503211913
 Transform:
   m_ObjectHideFlags: 0
@@ -1152,10 +1150,11 @@ MonoBehaviour:
   DeltaT: 0.02
   Pause: 1
   Filter: 2
-  Alpha: 0.98
+  Alpha: 0.02
   R: 0.01
   Q_quaternion: 0.00001
   Q_quatBias: 0.00001
+  gyroscopeScale: 10
 --- !u!1001 &1967314262
 PrefabInstance:
   m_ObjectHideFlags: 0

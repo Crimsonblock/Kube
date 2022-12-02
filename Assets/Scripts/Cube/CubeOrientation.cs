@@ -22,6 +22,8 @@ public class CubeOrientation : MonoBehaviour
     public float Q_quaternion = 0.00001f;
     public float Q_quatBias = 0.00001f;
 
+    public float gyroscopeScale = 1000.0f;
+
     private cOrientation orient;
 
     // Start is called before the first frame update
@@ -33,55 +35,43 @@ public class CubeOrientation : MonoBehaviour
     public void Orientate(RubixData data)
     {
         Vector3 accelerometer = data.accelerometer;
-        Vector3 gyroscope = data.gyroscope;
+        Vector3 gyroscope = data.gyroscope / gyroscopeScale;
 
         orient.setAlpha(Alpha);
         orient.setR(R);
         orient.setQquaternion(Q_quaternion);
         orient.setQquatbias(Q_quatBias);
 
-        float[] quaternions = new float[] { 0, 0, 0, 0};
+        float[] quaternions = new float[] { 0, 0, 0, 0 };
 
         if (Filter == FilterType.Complementary)
         {
             quaternions = orient.ComplementaryFilter(
-                accelerometer.z,
-                accelerometer.x,
-                accelerometer.y,
-                gyroscope.z,
-                gyroscope.x,
-                gyroscope.y
+                accelerometer.x, accelerometer.y, accelerometer.z,
+                gyroscope.x, gyroscope.y, gyroscope.z
                 );
         }
         else if (Filter == FilterType.Kalman)
         {
             quaternions = orient.KalmanFilter(
-                accelerometer.z,
-                accelerometer.x,
-                accelerometer.y,
-                gyroscope.z,
-                gyroscope.x,
-                gyroscope.y
+                accelerometer.x, accelerometer.y, accelerometer.z,
+                gyroscope.x, gyroscope.y, gyroscope.z
                 );
         }
         else if (Filter == FilterType.KalmanExrended)
         {
             quaternions = orient.KalmanFilterBias(
-                accelerometer.z,
-                accelerometer.x,
-                accelerometer.y,
-                gyroscope.z,
-                gyroscope.x,
-                gyroscope.y
+                accelerometer.x, accelerometer.y, accelerometer.z,
+                gyroscope.x, gyroscope.y, gyroscope.z
                 );
         }
 
         if (!Pause)
         {
             Quaternion q = new(
-                0, //quaternions[1],
+                -quaternions[1],
+                -quaternions[3],
                 quaternions[2],
-                0, //quaternions[3],
                 quaternions[0]);
 
 
