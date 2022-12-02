@@ -409,6 +409,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   orientation: {fileID: 1903286659}
   updateText: {fileID: 565661687}
+  LogBluetoothLibrary: 1
+  LogBluetoothCLibrary: 1
 --- !u!4 &503211913
 Transform:
   m_ObjectHideFlags: 0
