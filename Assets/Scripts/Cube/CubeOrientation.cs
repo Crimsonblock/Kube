@@ -68,14 +68,55 @@ public class CubeOrientation : MonoBehaviour
 
         if (!Pause)
         {
-            Quaternion q = new(
-                -quaternions[1],
-                -quaternions[3],
-                quaternions[2],
-                quaternions[0]);
+            float max = Mathf.Abs(accelerometer.x);
+            char gravity = 'x';
+            
+            if (Mathf.Abs(accelerometer.y) > max)
+            {
+                max= Mathf.Abs(accelerometer.y);
+                gravity = 'y';
+            }
+            if (Mathf.Abs(accelerometer.z) > max)
+            {
+                gravity = 'z';
+            }
+
+            if (gravity == 'x')
+            {
+                Quaternion q = new(
+                    -quaternions[3],
+                    -quaternions[1],
+                    quaternions[2],
+                    quaternions[0]
+                    );
 
 
-            transform.rotation = q;
+                transform.rotation = q;
+            }
+            else if (gravity == 'y')
+            {
+                Quaternion q = new(
+                    -quaternions[1],
+                    -quaternions[2],
+                    quaternions[3],
+                    quaternions[0]
+                    );
+
+
+                transform.rotation = q;
+            }
+            else if (gravity == 'z')
+            {
+                Quaternion q = new(
+                    -quaternions[1],
+                    -quaternions[3],
+                    quaternions[2],
+                    quaternions[0]
+                    );
+
+
+                transform.rotation = q;
+            }
         }
     }
 
