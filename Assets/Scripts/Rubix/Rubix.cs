@@ -13,7 +13,7 @@ public class Rubix : MonoBehaviour
     List<Transform> frontCubes = new List<Transform>();
     List<Transform> backCubes = new List<Transform>();
 
-    double step = 20f;
+    public float step = 2f;
 
 
     // Start is called before the first frame update
@@ -88,7 +88,7 @@ public class Rubix : MonoBehaviour
 
         foreach(Transform cube in frontCubes)
         {
-            cube.SetLocalPositionAndRotation(  , Quaternion.Euler(step*Time.deltaTime*rotationAxis.normalized)  )
+            cube.SetPositionAndRotation(cube.position, Quaternion.Euler( cube.rotation.eulerAngles + rotationAxis * step * (float)Time.deltaTime));
         }
     }
 
