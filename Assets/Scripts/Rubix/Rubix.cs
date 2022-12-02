@@ -6,12 +6,27 @@ using UnityEngine.PlayerLoop;
 public class Rubix : MonoBehaviour
 {
 
+    // Cubes faces
     List<Transform> topCubes = new List<Transform>();
     List<Transform> bottomCubes = new List<Transform>();
     List<Transform> leftCubes = new List<Transform>();
     List<Transform> rightCubes = new List<Transform>();
     List<Transform> frontCubes = new List<Transform>();
     List<Transform> backCubes = new List<Transform>();
+
+    // Center cubes (used for rotation)
+    Transform frontCenterCube;
+    Transform backCenterCube;
+    Transform leftCenterCube;
+    Transform rightCenterCube;
+    Transform topCenterCube;
+    Transform bottomCenterCube;
+
+
+    ConnectionManager connMgr = null;
+    GameManager gameMgr = null;
+
+    bool areCenterCubesSelected = false;
 
     public float step = 2f;
 
@@ -21,17 +36,33 @@ public class Rubix : MonoBehaviour
     {
         MeshRenderer mr = GetComponent<MeshRenderer>();
         mr.enabled = false;
+        gameMgr = GetComponent<GameManager>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        // Step 1: get the data from the connMgr
+        if(connMgr == null)
+        {
+            if (gameMgr != null) connMgr = gameMgr.getConnectionManager();
+            return;
+        }
+        if (areCenterCubesSelected)
+        {
+            if (connMgr.hasNewData())
+            {
+                // Step 1: get the data from the connMgr
+                RubixData newData = connMgr.getNewData();
+                // Step 2: update the orientation of the cube
 
-        // Step 2: update the orientation of the cube
-
-        // Step 3:  update the faces of the cube
-        updateFaces();
+                // Step 3:  update the faces of the cube
+                updateFaces(newData.rotation);
+            }
+        }
+        else
+        {
+            selectCenterCubes();
+        }
     }
 
 
@@ -40,8 +71,8 @@ public class Rubix : MonoBehaviour
     /// <summary>
     /// Calculates the position of the center of the cubes in a face.
     /// </summary>
-    /// <param name="face"></param>
-    /// <returns></returns>
+    /// <param name="face">The face the center should be returned for</param>
+    /// <returns>Returns a vector3 to the position of the center of the face</returns>
     Vector3 getFaceCenter(colliderFace face)
     {
         Vector3 faceCenter = Vector3.zero;
@@ -80,22 +111,230 @@ public class Rubix : MonoBehaviour
         return faceCenter/cubes.Count;
     }
 
-
-    void updateFaces()
+    /// <summary>
+    /// Updates the faces' rotation
+    /// </summary>
+    /// <param name="newFaces">The new faces rotation data.</param>
+    void updateFaces(RotaryEncoder newFaces)
     {
-        Vector3 faceCenter = getFaceCenter(colliderFace.FRONT);
-        Vector3 rotationAxis = faceCenter - transform.position;
+        if (newFaces.left != 0) rotateFace(colliderFace.LEFT, newFaces.left);
+        if (newFaces.right != 0) rotateFace(colliderFace.RIGHT, newFaces.right);
+        if (newFaces.bottom != 0) rotateFace(colliderFace.BOTTOM, newFaces.bottom);
+        if (newFaces.top != 0) rotateFace(colliderFace.TOP, newFaces.top);
+        if (newFaces.front != 0) rotateFace(colliderFace.FRONT, newFaces.front);
+        if (newFaces.back != 0) rotateFace(colliderFace.BACK, newFaces.back);
+    }
 
-        foreach(Transform cube in frontCubes)
+    /// <summary>
+    /// Rotates the face around its axis.
+    /// </summary>
+    /// <param name="face">The face to be rotated around</param>
+    /// <param name="steps">The number of steps to rotate. 1 step = 10°. Positive = cw, negative = ccw</param>
+    void rotateFace(colliderFace face,  float steps)
+    {
+        Vector3 faceCenter = Vector3.zero;
+        Vector3 rotationAxis = Vector3.zero;
+        Transform cubesParents = null;
+
+        switch (face)
         {
-            cube.SetPositionAndRotation(cube.position, Quaternion.Euler( cube.rotation.eulerAngles + rotationAxis * step * (float)Time.deltaTime));
+            
+            case colliderFace.TOP:
+                faceCenter = getFaceCenter(colliderFace.TOP);
+                rotationAxis = faceCenter - transform.position;
+                cubesParents = topCenterCube.parent;
+                foreach (Transform cube in topCubes)
+                {
+                    cube.SetParent(topCenterCube, true);
+                }
+
+                topCenterCube.Rotate(rotationAxis, 10*steps);
+
+                foreach (Transform cube in topCubes)
+                {
+                    cube.SetParent(cubesParents, true);
+                }
+                break;
+            case colliderFace.BOTTOM:
+                faceCenter = getFaceCenter(colliderFace.BOTTOM);
+                rotationAxis = faceCenter - transform.position;
+                cubesParents = bottomCenterCube.parent;
+                foreach (Transform cube in bottomCubes)
+                {
+                    cube.SetParent(bottomCenterCube, true);
+                }
+
+                bottomCenterCube.Rotate(rotationAxis, 10*steps);
+
+                foreach (Transform cube in bottomCubes)
+                {
+                    cube.SetParent(cubesParents, true);
+                }
+                break;
+            case colliderFace.LEFT:
+                faceCenter = getFaceCenter(colliderFace.LEFT);
+                rotationAxis = faceCenter - transform.position;
+                cubesParents = leftCenterCube.parent;
+                foreach (Transform cube in leftCubes)
+                {
+                    cube.SetParent(leftCenterCube, true);
+                }
+
+                leftCenterCube.Rotate(rotationAxis, 10 * steps);
+
+                foreach (Transform cube in leftCubes)
+                {
+                    cube.SetParent(cubesParents, true);
+                }
+                break;
+            case colliderFace.RIGHT:
+                faceCenter = getFaceCenter(colliderFace.RIGHT);
+                rotationAxis = faceCenter - transform.position;
+                cubesParents = rightCenterCube.parent;
+                foreach (Transform cube in rightCubes)
+                {
+                    cube.SetParent(rightCenterCube, true);
+                }
+
+                rightCenterCube.Rotate(rotationAxis, 10 * steps);
+
+                foreach (Transform cube in rightCubes)
+                {
+                    cube.SetParent(cubesParents, true);
+                }
+                break;
+            case colliderFace.FRONT:
+                faceCenter = getFaceCenter(colliderFace.FRONT);
+                rotationAxis = faceCenter - transform.position;
+                cubesParents = frontCenterCube.parent;
+                foreach (Transform cube in frontCubes)
+                {
+                    cube.SetParent(frontCenterCube, true);
+                }
+
+                frontCenterCube.Rotate(rotationAxis, 10 * steps);
+
+                foreach (Transform cube in frontCubes)
+                {
+                    cube.SetParent(cubesParents, true);
+                }
+                break;
+            case colliderFace.BACK:
+                faceCenter = getFaceCenter(colliderFace.BACK);
+                rotationAxis = faceCenter - transform.position;
+                cubesParents = backCenterCube.parent;
+                foreach (Transform cube in backCubes)
+                {
+                    cube.SetParent(backCenterCube, true);
+                }
+
+                backCenterCube.Rotate(rotationAxis, 10 * steps);
+
+                foreach (Transform cube in backCubes)
+                {
+                    cube.SetParent(cubesParents, true);
+                }
+                break;
+            default:
+                break;
         }
     }
 
 
+    /// <summary>
+    /// Retrieves the center cube of every face and removes it from the lists of each face
+    /// </summary>
+    private void selectCenterCubes()
+    {
+        if (topCubes.Count <= 0) return;
+        // Top
+        Vector3 center = getFaceCenter(colliderFace.TOP);
+        foreach (Transform cube in topCubes)
+            {
+                if (cube.position == center)
+                {
+                    topCenterCube = cube;
+                    topCubes.Remove(cube);
+                    break;
+                }
+            }
+        if (topCenterCube == null) return;
 
 
+        if (bottomCubes.Count <= 0) return;  
+        // Bottom
+        center = getFaceCenter(colliderFace.BOTTOM);
+        foreach (Transform cube in bottomCubes)
+            {
+                if (cube.position == center)
+                {
+                    bottomCenterCube = cube;
+                    bottomCubes.Remove(cube);
+                    break;
+                }
+            }
+        if (bottomCenterCube == null) return;
 
+
+        if (frontCubes.Count <=0) return;
+        // Front
+        center = getFaceCenter(colliderFace.FRONT);
+        foreach (Transform cube in frontCubes)
+            {
+                if (cube.position == center)
+                {
+                    frontCenterCube = cube;
+                    frontCubes.Remove(cube);
+                    
+                    break;
+                }
+            }
+        if (frontCenterCube == null) return;
+
+
+        if (backCubes.Count <= 0) return;
+        // Back
+        center = getFaceCenter(colliderFace.BACK);
+        foreach (Transform cube in backCubes)
+        {
+            if (cube.position == center)
+            {
+                backCenterCube = cube;
+                backCubes.Remove(cube);
+                break;
+            }
+        }
+        if (backCenterCube == null) return;
+
+        if (leftCubes.Count <= 0) return;
+        // Left
+        center = getFaceCenter(colliderFace.LEFT);
+        foreach (Transform cube in leftCubes)
+            {
+                if (cube.position == center)
+                {
+                    leftCenterCube = cube;
+                    leftCubes.Remove(cube);
+                    break;
+                }
+        }
+        if (leftCenterCube == null) return;
+
+        if (rightCubes.Count <= 0) return;
+        // Right
+        center = getFaceCenter(colliderFace.RIGHT);
+        foreach (Transform cube in rightCubes)
+            {
+                if (cube.position == center)
+                {
+                    rightCenterCube = cube;
+                    rightCubes.Remove(cube);
+                    break;
+                }
+        }
+        if (rightCenterCube == null) return;
+        areCenterCubesSelected = true;
+    }
 
     /// <summary>
     /// Adds a cube to the face List. This is used to rotate the face if needed later on.
