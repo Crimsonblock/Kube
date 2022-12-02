@@ -50,12 +50,12 @@ public class GameManager : MonoBehaviour
                         "xG: " + data1.gyroscope.x.ToString("0.00") + "\t\t" +
                         "yG: " + data1.gyroscope.y.ToString("0.00") + "\t\t" +
                         "zG: " + data1.gyroscope.z.ToString("0.00") + "\n" +
-                        "fr: " + data1.rotaryEncoder.front.ToString() + "\t\t" +
-                        "ba: " + data1.rotaryEncoder.back.ToString() + "\t\t" +
-                        "le: " + data1.rotaryEncoder.left.ToString() + "\n" +
-                        "ri: " + data1.rotaryEncoder.right.ToString() + "\t\t" +
-                        "to: " + data1.rotaryEncoder.top.ToString() + "\t\t" +
-                        "bo: " + data1.rotaryEncoder.bottom.ToString();
+                        "fr: " + data1.rotation.front.ToString() + "\t\t" +
+                        "ba: " + data1.rotation.back.ToString() + "\t\t" +
+                        "le: " + data1.rotation.left.ToString() + "\n" +
+                        "ri: " + data1.rotation.right.ToString() + "\t\t" +
+                        "to: " + data1.rotation.top.ToString() + "\t\t" +
+                        "bo: " + data1.rotation.bottom.ToString();
 
                 updateText.setText(text);
             }

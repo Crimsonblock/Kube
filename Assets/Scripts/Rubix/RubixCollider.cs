@@ -39,6 +39,9 @@ public class RubixCollider : MonoBehaviour
         
     }
 
+
+
+
     private void OnTriggerEnter(Collider other)
     {
         if(other.tag == "Cube")

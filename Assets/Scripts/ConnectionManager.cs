@@ -5,27 +5,27 @@ public class RubixData
 {
     public Vector3 accelerometer;
     public Vector3 gyroscope;
-    public RotaryEncoder rotaryEncoder;
+    public RotaryEncoder rotation;
 
     public RubixData()
     {
         accelerometer = Vector3.zero;
         gyroscope = Vector3.zero;
-        rotaryEncoder = new RotaryEncoder(0, 0, 0, 0, 0, 0);
+        rotation = new RotaryEncoder();
     }
 }
 
 [System.Serializable]
 public class RotaryEncoder
 {
-    public int front { get; set; }
-    public int back { get; set; }
-    public int left { get; set; }
-    public int right { get; set; }
-    public int top { get; set; }
-    public int bottom { get; set; }
+    public float front { get; set; }
+    public float back { get; set; }
+    public float left { get; set; }
+    public float right { get; set; }
+    public float top { get; set; }
+    public float bottom { get; set; }
 
-    public RotaryEncoder(int front, int back, int left, int right, int top, int bottom)
+    public RotaryEncoder(float front = 0, float back = 0, float left = 0, float right = 0, float top=0, float bottom=0)
     {
         this.front = front;
         this.back = back;
@@ -91,12 +91,12 @@ public class ConnectionManager
         callbacks.accel = newAccel;
         callbacks.gyro = newGyro;
 
-        callbacks.encoderLeft = null;
-        callbacks.encoderRight = null;
-        callbacks.encoderFront = null;
-        callbacks.encoderBack = null;
-        callbacks.encoderTop = null;
-        callbacks.encoderBottom = null;
+        callbacks.encoderLeft = newLeftEncoder;
+        callbacks.encoderRight = newRightEncoder;
+        callbacks.encoderFront = newFrontEncoder;
+        callbacks.encoderBack = newBackEncoder;
+        callbacks.encoderTop = newTopEncoder;
+        callbacks.encoderBottom = newBottomEncoder;
 
         return callbacks;
     }
@@ -114,6 +114,39 @@ public class ConnectionManager
         this.data.gyroscope.z = z;
         newDataReceived = true;
     }
+
+    private void newFrontEncoder(float data)
+    {
+        this.data.rotation.front = data;
+        this.newDataReceived = true;
+    }
+    private void newBackEncoder(float data)
+    {
+        this.data.rotation.back = data;
+        this.newDataReceived = true;
+    }
+    private void newLeftEncoder(float data)
+    {
+        this.data.rotation.left = data;
+        this.newDataReceived=true;
+    }
+    private void newRightEncoder(float data)
+    {
+        this.data.rotation.right = data;
+        this.newDataReceived = true;
+    }
+    private void newTopEncoder(float data)
+    {
+        this.data.rotation.top = data;
+        this.newDataReceived = true;
+    }
+    private void newBottomEncoder(float data)
+    {
+        this.data.rotation.bottom = data;
+        this.newDataReceived = true;
+    }
+
+
     public bool isConnected()
     {
         return true;
