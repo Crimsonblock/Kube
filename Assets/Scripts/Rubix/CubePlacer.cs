@@ -17,18 +17,19 @@ public class CubePlacer : MonoBehaviour
     {
         if (numLoops > 10)
         {
-            Destroy(this.gameObject);
+            //Destroy(this.gameObject);
         }
-        numLoops++;
+        //numLoops++;
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if(other.tag == "Cube")
         {
+            Debug.Log("Collision !");
             other.transform.position = transform.position;
             other.transform.SetParent(transform.parent, true);
-            Destroy(gameObject);
+            Destroy(this.gameObject);
         }
     }
 }

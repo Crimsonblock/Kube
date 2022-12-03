@@ -1319,15 +1319,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 230784792154801388, guid: deb598a99fdf6334c9ec11bfb9b314e2, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.028204568
+      value: -9.86
       objectReference: {fileID: 0}
     - target: {fileID: 230784792154801388, guid: deb598a99fdf6334c9ec11bfb9b314e2, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.04783842
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 230784792154801388, guid: deb598a99fdf6334c9ec11bfb9b314e2, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.060527436
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 230784792154801388, guid: deb598a99fdf6334c9ec11bfb9b314e2, type: 3}
       propertyPath: m_LocalRotation.w
@@ -1355,6 +1355,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 230784792154801388, guid: deb598a99fdf6334c9ec11bfb9b314e2, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 230784793142247091, guid: deb598a99fdf6334c9ec11bfb9b314e2, type: 3}
+      propertyPath: cubePlacerPrefab
+      value: 
+      objectReference: {fileID: 3910634465594242341, guid: b52f078e60235f1418ccbc5289b6ed12, type: 3}
+    - target: {fileID: 230784793142247100, guid: deb598a99fdf6334c9ec11bfb9b314e2, type: 3}
+      propertyPath: m_LocalPosition.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1046107847950928245, guid: deb598a99fdf6334c9ec11bfb9b314e2, type: 3}

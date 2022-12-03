@@ -42,20 +42,6 @@ public class Rubix : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
-        //TEST - To delete
-        if (areCenterCubesSelected)
-        {
-            RotaryEncoder test = new RotaryEncoder(-0.01f, -0.01f);
-            updateFaces(test);
-        }
-        else
-        {
-            selectCenterCubes();
-        }
-
-        // TEST END
-
         if (connMgr == null)
         {
             if (gameMgr != null) connMgr = gameMgr.getConnectionManager();

@@ -11,6 +11,8 @@ public class PlacerGenerator : MonoBehaviour
     void Start()
     {
         Vector3 scale = this.transform.parent.localScale;
+        Debug.Log(scale);
+        scale = Vector3.one;
 
         scale = scale / 3;
 
@@ -22,8 +24,9 @@ public class PlacerGenerator : MonoBehaviour
                 {
                     if ( !(i==0 && j==0 && k==0) )
                     {
-                        GameObject cubePlacer = Instantiate(cubePlacerPrefab, this.gameObject.transform, true);
-                        cubePlacer.transform.position = new Vector3(i* scale.x, j*scale.y, k*scale.z);
+                        GameObject cubePlacer = Instantiate(cubePlacerPrefab, this.gameObject.transform, false);
+                        cubePlacer.transform.localPosition = new Vector3(i* scale.x, j*scale.y, k*scale.z);
+                        cubePlacer.transform.localScale = scale/2;
                     }
                 }
             }
