@@ -42,6 +42,12 @@ public class Rubix : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
+        if (!areCenterCubesSelected)
+        {
+            selectCenterCubes();
+        }
+
         if (connMgr == null)
         {
             if (gameMgr != null) connMgr = gameMgr.getConnectionManager();
@@ -103,7 +109,7 @@ public class Rubix : MonoBehaviour
 
         foreach(Transform t in cubes)
         {
-            faceCenter += t.localPosition;
+            faceCenter += t.position;
         }
         return faceCenter/cubes.Count;
     }
@@ -242,7 +248,7 @@ public class Rubix : MonoBehaviour
         Vector3 center = getFaceCenter(colliderFace.TOP);
         foreach (Transform cube in topCubes)
             {
-                if (cube.localPosition == center)
+                if (cube.position == center)
                 {
                     topCenterCube = cube;
                     topCubes.Remove(cube);
@@ -257,7 +263,7 @@ public class Rubix : MonoBehaviour
         center = getFaceCenter(colliderFace.BOTTOM);
         foreach (Transform cube in bottomCubes)
             {
-                if (cube.localPosition == center)
+                if (cube.position == center)
                 {
                     bottomCenterCube = cube;
                     bottomCubes.Remove(cube);
@@ -272,7 +278,7 @@ public class Rubix : MonoBehaviour
         center = getFaceCenter(colliderFace.FRONT);
         foreach (Transform cube in frontCubes)
             {
-                if (cube.localPosition == center)
+                if (cube.position == center)
                 {
                     frontCenterCube = cube;
                     frontCubes.Remove(cube);
@@ -288,7 +294,7 @@ public class Rubix : MonoBehaviour
         center = getFaceCenter(colliderFace.BACK);
         foreach (Transform cube in backCubes)
         {
-            if (cube.localPosition == center)
+            if (cube.position == center)
             {
                 backCenterCube = cube;
                 backCubes.Remove(cube);
@@ -302,7 +308,7 @@ public class Rubix : MonoBehaviour
         center = getFaceCenter(colliderFace.LEFT);
         foreach (Transform cube in leftCubes)
             {
-                if (cube.localPosition == center)
+                if (cube.position == center)
                 {
                     leftCenterCube = cube;
                     leftCubes.Remove(cube);
@@ -316,7 +322,7 @@ public class Rubix : MonoBehaviour
         center = getFaceCenter(colliderFace.RIGHT);
         foreach (Transform cube in rightCubes)
             {
-                if (cube.localPosition == center)
+                if (cube.position == center)
                 {
                     rightCenterCube = cube;
                     rightCubes.Remove(cube);
