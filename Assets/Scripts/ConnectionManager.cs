@@ -88,14 +88,8 @@ public class ConnectionManager
     private GattCallbacks createCallbacks()
     {
         GattCallbacks callbacks = new GattCallbacks();
-
-        callbacks.accelerometerX = newXAccel;
-        callbacks.accelerometerY = newYAccel;
-        callbacks.accelerometerZ = newZAccel;
-
-        callbacks.gyroscopeX = newXGyro;
-        callbacks.gyroscopeY = newYGyro;
-        callbacks.gyroscopeZ = newZGyro;
+        callbacks.accel = newAccel;
+        callbacks.gyro = newGyro;
 
         callbacks.encoderLeft = null;
         callbacks.encoderRight = null;
@@ -106,34 +100,18 @@ public class ConnectionManager
 
         return callbacks;
     }
-    private void newXAccel(float data)
+    private void newAccel(float x, float y, float z)
     {
-        this.data.accelerometer.x = data;
+        this.data.accelerometer.x = x;
+        this.data.accelerometer.y = y;
+        this.data.accelerometer.z = z;
         newDataReceived = true;
     }
-    private void newYAccel(float data)
+    private void newGyro(float x, float y, float z)
     {
-        this.data.accelerometer.y = data;
-        newDataReceived = true;
-    }
-    private void newZAccel(float data)
-    {
-        this.data.accelerometer.z = data;
-        newDataReceived = true;
-    }
-    private void newXGyro(float data)
-    {
-        this.data.gyroscope.x = data;
-        newDataReceived = true;
-    }
-    private void newYGyro(float data)
-    {
-        this.data.gyroscope.y = data;
-        newDataReceived = true;
-    }
-    private void newZGyro(float data)
-    {
-        this.data.gyroscope.z = data;
+        this.data.gyroscope.x = x;
+        this.data.gyroscope.y = y;
+        this.data.gyroscope.z = z;
         newDataReceived = true;
     }
     public bool isConnected()

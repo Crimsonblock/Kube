@@ -1344,7 +1344,7 @@ MonoBehaviour:
   DeltaT: 0.05
   Pause: 1
   Filter: 2
-  Alpha: 0.02
+  Alpha: 0.005
   R: 0.01
   Q_quaternion: 0.00001
   Q_quatBias: 0.00001
