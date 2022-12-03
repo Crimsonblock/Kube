@@ -42,7 +42,21 @@ public class Rubix : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(connMgr == null)
+
+        //TEST - To delete
+        if (areCenterCubesSelected)
+        {
+            RotaryEncoder test = new RotaryEncoder(-0.01f, -0.01f);
+            updateFaces(test);
+        }
+        else
+        {
+            selectCenterCubes();
+        }
+
+        // TEST END
+
+        if (connMgr == null)
         {
             if (gameMgr != null) connMgr = gameMgr.getConnectionManager();
             return;
@@ -58,10 +72,7 @@ public class Rubix : MonoBehaviour
                 // Step 3:  update the faces of the cube
                 updateFaces(newData.rotation);
             }
-        }
-        else
-        {
-            selectCenterCubes();
+            
         }
     }
 
@@ -106,7 +117,7 @@ public class Rubix : MonoBehaviour
 
         foreach(Transform t in cubes)
         {
-            faceCenter += t.position;
+            faceCenter += t.localPosition;
         }
         return faceCenter/cubes.Count;
     }
@@ -140,15 +151,14 @@ public class Rubix : MonoBehaviour
         {
             
             case colliderFace.TOP:
-                faceCenter = getFaceCenter(colliderFace.TOP);
-                rotationAxis = faceCenter - transform.position;
+                rotationAxis = new Vector3(0, 1, 0);
                 cubesParents = topCenterCube.parent;
                 foreach (Transform cube in topCubes)
                 {
                     cube.SetParent(topCenterCube, true);
                 }
 
-                topCenterCube.Rotate(rotationAxis, 10*steps);
+                topCenterCube.Rotate(rotationAxis, 10*steps, Space.Self);
 
                 foreach (Transform cube in topCubes)
                 {
@@ -156,15 +166,14 @@ public class Rubix : MonoBehaviour
                 }
                 break;
             case colliderFace.BOTTOM:
-                faceCenter = getFaceCenter(colliderFace.BOTTOM);
-                rotationAxis = faceCenter - transform.position;
+                rotationAxis = new Vector3(0, -1, 0);
                 cubesParents = bottomCenterCube.parent;
                 foreach (Transform cube in bottomCubes)
                 {
                     cube.SetParent(bottomCenterCube, true);
                 }
 
-                bottomCenterCube.Rotate(rotationAxis, 10*steps);
+                bottomCenterCube.Rotate(rotationAxis, 10*steps, Space.Self);
 
                 foreach (Transform cube in bottomCubes)
                 {
@@ -172,15 +181,14 @@ public class Rubix : MonoBehaviour
                 }
                 break;
             case colliderFace.LEFT:
-                faceCenter = getFaceCenter(colliderFace.LEFT);
-                rotationAxis = faceCenter - transform.position;
+                rotationAxis = new Vector3(-1, 0, 0);
                 cubesParents = leftCenterCube.parent;
                 foreach (Transform cube in leftCubes)
                 {
                     cube.SetParent(leftCenterCube, true);
                 }
 
-                leftCenterCube.Rotate(rotationAxis, 10 * steps);
+                leftCenterCube.Rotate(rotationAxis, 10 * steps, Space.Self);
 
                 foreach (Transform cube in leftCubes)
                 {
@@ -188,15 +196,14 @@ public class Rubix : MonoBehaviour
                 }
                 break;
             case colliderFace.RIGHT:
-                faceCenter = getFaceCenter(colliderFace.RIGHT);
-                rotationAxis = faceCenter - transform.position;
+                rotationAxis = new Vector3(1, 0, 0);
                 cubesParents = rightCenterCube.parent;
                 foreach (Transform cube in rightCubes)
                 {
                     cube.SetParent(rightCenterCube, true);
                 }
 
-                rightCenterCube.Rotate(rotationAxis, 10 * steps);
+                rightCenterCube.Rotate(rotationAxis, 10 * steps, Space.Self);
 
                 foreach (Transform cube in rightCubes)
                 {
@@ -204,15 +211,14 @@ public class Rubix : MonoBehaviour
                 }
                 break;
             case colliderFace.FRONT:
-                faceCenter = getFaceCenter(colliderFace.FRONT);
-                rotationAxis = faceCenter - transform.position;
+                rotationAxis = new Vector3(0, 0, -1);
                 cubesParents = frontCenterCube.parent;
                 foreach (Transform cube in frontCubes)
                 {
                     cube.SetParent(frontCenterCube, true);
                 }
 
-                frontCenterCube.Rotate(rotationAxis, 10 * steps);
+                frontCenterCube.Rotate(rotationAxis, 10 * steps, Space.Self);
 
                 foreach (Transform cube in frontCubes)
                 {
@@ -220,15 +226,14 @@ public class Rubix : MonoBehaviour
                 }
                 break;
             case colliderFace.BACK:
-                faceCenter = getFaceCenter(colliderFace.BACK);
-                rotationAxis = faceCenter - transform.position;
+                rotationAxis = new Vector3(0, 0, 1);
                 cubesParents = backCenterCube.parent;
                 foreach (Transform cube in backCubes)
                 {
                     cube.SetParent(backCenterCube, true);
                 }
 
-                backCenterCube.Rotate(rotationAxis, 10 * steps);
+                backCenterCube.Rotate(rotationAxis, 10 * steps, Space.Self);
 
                 foreach (Transform cube in backCubes)
                 {
@@ -251,7 +256,7 @@ public class Rubix : MonoBehaviour
         Vector3 center = getFaceCenter(colliderFace.TOP);
         foreach (Transform cube in topCubes)
             {
-                if (cube.position == center)
+                if (cube.localPosition == center)
                 {
                     topCenterCube = cube;
                     topCubes.Remove(cube);
@@ -266,7 +271,7 @@ public class Rubix : MonoBehaviour
         center = getFaceCenter(colliderFace.BOTTOM);
         foreach (Transform cube in bottomCubes)
             {
-                if (cube.position == center)
+                if (cube.localPosition == center)
                 {
                     bottomCenterCube = cube;
                     bottomCubes.Remove(cube);
@@ -281,7 +286,7 @@ public class Rubix : MonoBehaviour
         center = getFaceCenter(colliderFace.FRONT);
         foreach (Transform cube in frontCubes)
             {
-                if (cube.position == center)
+                if (cube.localPosition == center)
                 {
                     frontCenterCube = cube;
                     frontCubes.Remove(cube);
@@ -297,7 +302,7 @@ public class Rubix : MonoBehaviour
         center = getFaceCenter(colliderFace.BACK);
         foreach (Transform cube in backCubes)
         {
-            if (cube.position == center)
+            if (cube.localPosition == center)
             {
                 backCenterCube = cube;
                 backCubes.Remove(cube);
@@ -311,7 +316,7 @@ public class Rubix : MonoBehaviour
         center = getFaceCenter(colliderFace.LEFT);
         foreach (Transform cube in leftCubes)
             {
-                if (cube.position == center)
+                if (cube.localPosition == center)
                 {
                     leftCenterCube = cube;
                     leftCubes.Remove(cube);
@@ -325,7 +330,7 @@ public class Rubix : MonoBehaviour
         center = getFaceCenter(colliderFace.RIGHT);
         foreach (Transform cube in rightCubes)
             {
-                if (cube.position == center)
+                if (cube.localPosition == center)
                 {
                     rightCenterCube = cube;
                     rightCubes.Remove(cube);
