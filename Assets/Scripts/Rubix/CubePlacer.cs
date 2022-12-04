@@ -26,7 +26,6 @@ public class CubePlacer : MonoBehaviour
     {
         if(other.tag == "Cube")
         {
-            Debug.Log("Collision !");
             other.transform.position = transform.position;
             other.transform.SetParent(transform.parent, true);
             Destroy(this.gameObject);

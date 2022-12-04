@@ -24,7 +24,7 @@ public class Rubix : MonoBehaviour
 
 
     ConnectionManager connMgr = null;
-    GameManager gameMgr = null;
+    public GameManager gameMgr = null;
 
     bool areCenterCubesSelected = false;
 
@@ -36,7 +36,7 @@ public class Rubix : MonoBehaviour
     {
         MeshRenderer mr = GetComponent<MeshRenderer>();
         mr.enabled = false;
-        gameMgr = GetComponent<GameManager>();
+        gameMgr.registerRubix();
     }
 
     // Update is called once per frame
@@ -46,6 +46,11 @@ public class Rubix : MonoBehaviour
         if (!areCenterCubesSelected)
         {
             selectCenterCubes();
+        }
+        else
+        {
+            RotaryEncoder rot = new RotaryEncoder();
+            updateFaces(rot);
         }
 
         if (connMgr == null)
@@ -396,5 +401,10 @@ public class Rubix : MonoBehaviour
                 Debug.Log("Unknown face to remove the cube from");
                 break;
         }
+    }
+
+    public void finish()
+    {
+        gameMgr.finish();
     }
 }

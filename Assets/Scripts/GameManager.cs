@@ -10,13 +10,15 @@ public class GameManager : MonoBehaviour
     public CubeOrientation orientation;
     public UpdateText updateText;
     private BleManager bleManager = null;
+    private int numCubes = 0;
+    private int numFinished = 0;
 
     // Start is called before the first frame update
     void Start()
     {
         // Set a first parameter to true to get .NET Library log in unity
         // Set a second parameter to true to get Native library log in unity
-        bleManager = BleManager.getInstance(true);
+        bleManager = BleManager.getInstance();
         bleManager.startScan();
         bleManager.destroy();
         bleManager = null;
@@ -67,5 +69,19 @@ public class GameManager : MonoBehaviour
         if(bleManager != null) bleManager.update();
     }
 
+    public void registerRubix()
+    {
+        numCubes++;
+    }
+
+
+    public void finish()
+    {
+        numFinished++;
+        if(numFinished == numCubes)
+        {
+            Debug.Log("Game finished !");
+        }
+    }
 
 }
