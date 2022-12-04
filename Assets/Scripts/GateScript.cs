@@ -15,13 +15,13 @@ public class GateScript : MonoBehaviour
 
     void Update()
     {
-        if (isOpen && counter <90)
+        if (isOpen && counter <45)
         {
             for(int i = 0; i < transform.childCount; i++)
             {
                 Transform child = transform.GetChild(i);
                 int direction = child.tag == "gateR" ? 1 : -1;
-                child.transform.Rotate(Vector3.forward, direction, Space.Self);
+                child.transform.Rotate(Vector3.forward, direction*2, Space.Self);
             }
             counter++;
         }
@@ -31,7 +31,7 @@ public class GateScript : MonoBehaviour
             {
                 Transform child = transform.GetChild(i);
                 int direction = child.tag == "gateR" ? -1 : 1;
-                child.transform.Rotate(Vector3.forward, direction, Space.Self);
+                child.transform.Rotate(Vector3.forward, direction*2, Space.Self);
             }
             counter--;
         }
