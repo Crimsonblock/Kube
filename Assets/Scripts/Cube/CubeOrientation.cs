@@ -24,6 +24,8 @@ public class CubeOrientation : MonoBehaviour
 
     public float gyroscopeScale = 1000.0f;
 
+    public int speed = 50;
+
     private cOrientation orient;
 
     // Start is called before the first frame update
@@ -118,9 +120,36 @@ public class CubeOrientation : MonoBehaviour
                 transform.rotation = q;
             }
         }
+        else // keyboard inputs
+        {
+            if (Input.GetKey(KeyCode.W))
+            {
+                transform.Rotate(Vector3.forward * speed * Time.deltaTime);
+            }
+            if (Input.GetKey(KeyCode.S))
+            {
+                transform.Rotate(-Vector3.forward * speed * Time.deltaTime);
+            }
+            if (Input.GetKey(KeyCode.A))
+            {
+                transform.Rotate(Vector3.left * speed * Time.deltaTime);
+            }
+            if (Input.GetKey(KeyCode.D))
+            {
+                transform.Rotate(-Vector3.left * speed * Time.deltaTime);
+            }
+            if (Input.GetKey(KeyCode.Q))
+            {
+                transform.Rotate(Vector3.up * speed * Time.deltaTime);
+            }
+            if (Input.GetKey(KeyCode.E))
+            {
+                transform.Rotate(-Vector3.up * speed * Time.deltaTime);
+            }
+        }
     }
 
-    public void PauseOrientation()
+    public void TogglePause()
     {
         Pause = !Pause;
         if (Pause)
