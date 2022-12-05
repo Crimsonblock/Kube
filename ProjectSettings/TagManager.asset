@@ -7,6 +7,9 @@ TagManager:
   - Rubix
   - Cube
   - Tile
+  - btnActivator
+  - gateR
+  - gateL
   layers:
   - Default
   - TransparentFX
