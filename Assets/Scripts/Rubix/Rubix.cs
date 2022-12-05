@@ -26,7 +26,7 @@ public class Rubix : MonoBehaviour
     ConnectionManager connMgr = null;
     public GameManager gameMgr = null;
 
-    bool areCenterCubesSelected = false;
+    bool areCenterCubesSelected = true;
 
     public float step = 2f;
 

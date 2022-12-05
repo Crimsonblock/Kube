@@ -2968,6 +2968,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cube: {fileID: 1903286659}
+  text: {fileID: 692233591}
 --- !u!114 &1636525291
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3572,6 +3573,7 @@ MonoBehaviour:
   Q_quaternion: 0.00001
   Q_quatBias: 0.00001
   gyroscopeScale: 10
+  speed: 50
 --- !u!4 &1947336977 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 213412531860112787, guid: 51076de4ac176ca40a9f288de4da73dd, type: 3}
