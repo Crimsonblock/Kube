@@ -11,7 +11,6 @@ public class PlacerGenerator : MonoBehaviour
     void Start()
     {
         Vector3 scale = this.transform.parent.localScale;
-        Debug.Log(scale);
         scale = Vector3.one;
 
         scale = scale / 3;

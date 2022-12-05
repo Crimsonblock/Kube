@@ -39,20 +39,15 @@ public class Rubix : MonoBehaviour
         gameMgr.registerRubix();
     }
 
+
+    ~Rubix()
+    {
+        connMgr = null;
+    }
+
     // Update is called once per frame
     void Update()
     {
-
-        if (!areCenterCubesSelected)
-        {
-            selectCenterCubes();
-        }
-        else
-        {
-            RotaryEncoder rot = new RotaryEncoder();
-            updateFaces(rot);
-        }
-
         if (connMgr == null)
         {
             if (gameMgr != null) connMgr = gameMgr.getConnectionManager();
@@ -64,12 +59,17 @@ public class Rubix : MonoBehaviour
             {
                 // Step 1: get the data from the connMgr
                 RubixData newData = connMgr.getNewData();
+                Debug.Log(newData.accelerometer);
                 // Step 2: update the orientation of the cube
 
                 // Step 3:  update the faces of the cube
                 updateFaces(newData.rotation);
             }
             
+        }
+        else
+        {
+             selectCenterCubes();
         }
     }
 
