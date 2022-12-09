@@ -10,8 +10,6 @@ public class RubixData
 
     public void clear()
     {
-        accelerometer = Vector3.zero;
-        gyroscope = Vector3.zero;
         rotation.clear();
     }
 
@@ -131,7 +129,7 @@ public class ConnectionManager
         this.data.accelerometer.x = x;
         this.data.accelerometer.y = y;
         this.data.accelerometer.z = z;
-        newAccelDataReceiced = true;
+        newDataReceived = true;
     }
     private void newGyro(float x, float y, float z)
     {
@@ -188,6 +186,6 @@ public class ConnectionManager
     public bool hasNewData()
     {
         if (!newDataReceived) data.clear();
-        return (newDataReceived && newAccelDataReceiced );
+        return newDataReceived;
     }
 }

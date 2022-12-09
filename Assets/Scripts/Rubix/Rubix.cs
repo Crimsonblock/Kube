@@ -70,7 +70,7 @@ public class Rubix : MonoBehaviour
                 or.Orientate(newData);
 
                 // Step 3:  update the faces of the cube
-                updateFaces(newData.rotation);
+                //updateFaces(newData.rotation);
             }
         }
         else

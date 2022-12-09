@@ -37,21 +37,20 @@ public class CubeOrientation : MonoBehaviour
     public void Orientate(RubixData data)
     {
         Debug.Log(data.accelerometer + " " + data.gyroscope);
-        Vector3 accelerometer = data.accelerometer;
-        Vector3 gyroscope = data.gyroscope / gyroscopeScale;
+        Vector3 accelerometer = data.accelerometer == Vector3.zero ? new Vector3(0.01f, 0.01f, 0.01f) : data.accelerometer ;
+        Vector3 gyroscope = data.gyroscope == Vector3.zero ? new Vector3(0.01f, 0.01f, 0.01f) :  data.gyroscope / gyroscopeScale;
 
-        Debug.Log("Setting shit");
+
+
         orient.setAlpha(Alpha);
         orient.setR(R);
         orient.setQquaternion(Q_quaternion);
         orient.setQquatbias(Q_quatBias);
 
-        Debug.Log("Creating empty quaternion");
         float[] quaternions = new float[] { 0, 0, 0, 0 };
 
         if (Filter == FilterType.Complementary)
         {
-            Debug.Log("Complementary filter");
             quaternions = orient.ComplementaryFilter(
                 accelerometer.x, accelerometer.y, accelerometer.z,
                 gyroscope.x, gyroscope.y, gyroscope.z
@@ -59,7 +58,6 @@ public class CubeOrientation : MonoBehaviour
         }
         else if (Filter == FilterType.Kalman)
         {
-            Debug.Log("Kalman filter");
             quaternions = orient.KalmanFilter(
                 accelerometer.x, accelerometer.y, accelerometer.z,
                 gyroscope.x, gyroscope.y, gyroscope.z
@@ -67,7 +65,6 @@ public class CubeOrientation : MonoBehaviour
         }
         else if (Filter == FilterType.KalmanExrended)
         {
-            Debug.Log("Kalman Exrended filter");
             quaternions = orient.KalmanFilterBias(
                 accelerometer.x, accelerometer.y, accelerometer.z,
                 gyroscope.x, gyroscope.y, gyroscope.z
@@ -82,7 +79,6 @@ public class CubeOrientation : MonoBehaviour
 
         //transform.rotation = q;
 
-        Debug.Log(quaternions[0] + " " + quaternions[1] + " " + quaternions[2] + " " + quaternions[3]);
 
         transform.SetPositionAndRotation(transform.position, q);
 
