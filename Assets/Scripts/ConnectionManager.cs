@@ -71,6 +71,7 @@ public class ConnectionManager
     bool newDataReceived = false;
     LibCallback onFinished;
 
+    bool newAccelDataReceiced = false;
 
     public ConnectionManager(int bleHandle, bool debug)
     {
@@ -130,7 +131,7 @@ public class ConnectionManager
         this.data.accelerometer.x = x;
         this.data.accelerometer.y = y;
         this.data.accelerometer.z = z;
-        newDataReceived = true;
+        newAccelDataReceiced = true;
     }
     private void newGyro(float x, float y, float z)
     {
@@ -180,13 +181,13 @@ public class ConnectionManager
     public RubixData getNewData()
     {
         newDataReceived = false;
-        RubixData newData = new RubixData(data);
-        data.clear();
-        return newData;
+        newAccelDataReceiced = false;
+        return data;
     }
 
     public bool hasNewData()
     {
-        return newDataReceived;
+        if (!newDataReceived) data.clear();
+        return (newDataReceived && newAccelDataReceiced );
     }
 }

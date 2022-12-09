@@ -12,8 +12,8 @@ public class CubeOrientation : MonoBehaviour
         Complementary
     }
 
-    public float DeltaT = 0.02f;
-    public bool Pause = true;
+    public float DeltaT = 0.03f;
+    public bool Pause = false;
 
     public FilterType Filter = FilterType.Complementary;
 
@@ -23,6 +23,8 @@ public class CubeOrientation : MonoBehaviour
     public float Q_quatBias = 0.00001f;
 
     public float gyroscopeScale = 1000.0f;
+
+    public int speed = 50;
 
     private cOrientation orient;
 
@@ -34,18 +36,22 @@ public class CubeOrientation : MonoBehaviour
 
     public void Orientate(RubixData data)
     {
+        Debug.Log(data.accelerometer + " " + data.gyroscope);
         Vector3 accelerometer = data.accelerometer;
         Vector3 gyroscope = data.gyroscope / gyroscopeScale;
 
+        Debug.Log("Setting shit");
         orient.setAlpha(Alpha);
         orient.setR(R);
         orient.setQquaternion(Q_quaternion);
         orient.setQquatbias(Q_quatBias);
 
+        Debug.Log("Creating empty quaternion");
         float[] quaternions = new float[] { 0, 0, 0, 0 };
 
         if (Filter == FilterType.Complementary)
         {
+            Debug.Log("Complementary filter");
             quaternions = orient.ComplementaryFilter(
                 accelerometer.x, accelerometer.y, accelerometer.z,
                 gyroscope.x, gyroscope.y, gyroscope.z
@@ -53,6 +59,7 @@ public class CubeOrientation : MonoBehaviour
         }
         else if (Filter == FilterType.Kalman)
         {
+            Debug.Log("Kalman filter");
             quaternions = orient.KalmanFilter(
                 accelerometer.x, accelerometer.y, accelerometer.z,
                 gyroscope.x, gyroscope.y, gyroscope.z
@@ -60,20 +67,34 @@ public class CubeOrientation : MonoBehaviour
         }
         else if (Filter == FilterType.KalmanExrended)
         {
+            Debug.Log("Kalman Exrended filter");
             quaternions = orient.KalmanFilterBias(
                 accelerometer.x, accelerometer.y, accelerometer.z,
                 gyroscope.x, gyroscope.y, gyroscope.z
                 );
         }
+        Quaternion q = new(
+                    -quaternions[1],
+                    -quaternions[2],
+                    quaternions[3],
+                    quaternions[0]
+                    );
 
+        //transform.rotation = q;
+
+        Debug.Log(quaternions[0] + " " + quaternions[1] + " " + quaternions[2] + " " + quaternions[3]);
+
+        transform.SetPositionAndRotation(transform.position, q);
+
+        /*
         if (!Pause)
         {
             float max = Mathf.Abs(accelerometer.x);
             char gravity = 'x';
-            
+
             if (Mathf.Abs(accelerometer.y) > max)
             {
-                max= Mathf.Abs(accelerometer.y);
+                max = Mathf.Abs(accelerometer.y);
                 gravity = 'y';
             }
             if (Mathf.Abs(accelerometer.z) > max)
@@ -95,15 +116,7 @@ public class CubeOrientation : MonoBehaviour
             }
             else if (gravity == 'y')
             {
-                Quaternion q = new(
-                    -quaternions[1],
-                    -quaternions[2],
-                    quaternions[3],
-                    quaternions[0]
-                    );
-
-
-                transform.rotation = q;
+                
             }
             else if (gravity == 'z')
             {
@@ -118,9 +131,38 @@ public class CubeOrientation : MonoBehaviour
                 transform.rotation = q;
             }
         }
+        else // keyboard inputs
+        {
+            if (Input.GetKey(KeyCode.W))
+            {
+                transform.Rotate(Vector3.forward * speed * Time.deltaTime);
+            }
+            if (Input.GetKey(KeyCode.S))
+            {
+                transform.Rotate(-Vector3.forward * speed * Time.deltaTime);
+            }
+            if (Input.GetKey(KeyCode.A))
+            {
+                transform.Rotate(Vector3.left * speed * Time.deltaTime);
+            }
+            if (Input.GetKey(KeyCode.D))
+            {
+                transform.Rotate(-Vector3.left * speed * Time.deltaTime);
+            }
+            if (Input.GetKey(KeyCode.Q))
+            {
+                transform.Rotate(Vector3.up * speed * Time.deltaTime);
+            }
+            if (Input.GetKey(KeyCode.E))
+            {
+                transform.Rotate(-Vector3.up * speed * Time.deltaTime);
+            }
+        }
+
+        */
     }
 
-    public void PauseOrientation()
+    public void TogglePause()
     {
         Pause = !Pause;
         if (Pause)

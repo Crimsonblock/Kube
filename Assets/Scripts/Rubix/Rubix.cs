@@ -22,16 +22,15 @@ public class Rubix : MonoBehaviour
     Transform topCenterCube;
     Transform bottomCenterCube;
 
-
     ConnectionManager connMgr = null;
     public GameManager gameMgr = null;
 
     bool areCenterCubesSelected = false;
 
+    CubeOrientation or = null;
+
     public float step = 2f;
 
-
-    int testv = 0;
 
 
     // Start is called before the first frame update
@@ -40,7 +39,7 @@ public class Rubix : MonoBehaviour
         MeshRenderer mr = GetComponent<MeshRenderer>();
         mr.enabled = false;
         gameMgr.registerRubix();
-        testv = 0;
+        or = GetComponent<CubeOrientation>();
     }
 
 
@@ -66,7 +65,9 @@ public class Rubix : MonoBehaviour
             {
                 // Step 1: get the data from the connMgr
                 RubixData newData = connMgr.getNewData();
+
                 // Step 2: update the orientation of the cube
+                or.Orientate(newData);
 
                 // Step 3:  update the faces of the cube
                 updateFaces(newData.rotation);

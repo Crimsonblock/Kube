@@ -7,7 +7,7 @@ namespace Orientation3D
         //Returns the Transpose matrix (multidimensional array) of the given input multidimensional array.
         public float[,] Transpose(float[,] matrix)
         {
-            int w = matrix.GetLength(0); 
+            int w = matrix.GetLength(0);
             int h = matrix.GetLength(1);
 
             float[,] result = new float[h, w];
@@ -155,7 +155,7 @@ namespace Orientation3D
         }
     }
 
-    class cOrientation: cMatrixAlgebra
+    class cOrientation : cMatrixAlgebra
     {
         public float[,] Qxk = new float[7, 1];              //states matrix
         public float[,] Pkp = new float[7, 7];              //error covariance matrix
@@ -267,26 +267,26 @@ namespace Orientation3D
             float Magnitude;                                            //Magnitude to normalise a quaternion
             float[,] A_T;                                               //Tranpose of A matrix
             float[,] KG;                                                //Kalman Gain
-            float[,] AccRef = new float[3, 1]{{ 0 }, { 0 }, { 1 } };    //reference gravity vector
+            float[,] AccRef = new float[3, 1] { { 0 }, { 0 }, { 1 } };    //reference gravity vector
             float[,] Y_predicted = new float[3, 1];                     //predicted forces based on gyro readings
             float[,] JacobianMatrix = new float[3, 4];                  //Jacobian Matrix
             float[,] JacobianMatrix_T;                                  //Jacobian Matrix Transpose
             float[,] deltaY = new float[3, 1];                          //Innovation Matrix
             float[,] Pkp_temp1;                                         //temporary variables used in the calculations
             float[,] Pkp_temp2;
-            float[,] S_m_temp;                                          
+            float[,] S_m_temp;
             float[,] S_m;
             float[,] K_temp;
             float[,] S_inv;
             float[,] deltaQxk;
             float[,] KGH;
             float[] QxkTemp = new float[4];
-            
+
 
             // Qxk = A*Qxk(previous)    Qxk: state matrix   
-            Qxk_temp[0, 0] = Qxk[0, 0] - 0.5f * _elapsedTime * gyroX * Qxk[1, 0] - 0.5f * _elapsedTime * gyroY * Qxk[2, 0] - 0.5f * _elapsedTime * gyroZ * Qxk[3, 0];   
-            Qxk_temp[1, 0] = Qxk[1, 0] + 0.5f * _elapsedTime * gyroX * Qxk[0, 0] - 0.5f * _elapsedTime * gyroY * Qxk[3, 0] + 0.5f * _elapsedTime * gyroZ * Qxk[2, 0];     
-            Qxk_temp[2, 0] = Qxk[2, 0] + 0.5f * _elapsedTime * gyroX * Qxk[3, 0] + 0.5f * _elapsedTime * gyroY * Qxk[0, 0] - 0.5f * _elapsedTime * gyroZ * Qxk[1, 0];    
+            Qxk_temp[0, 0] = Qxk[0, 0] - 0.5f * _elapsedTime * gyroX * Qxk[1, 0] - 0.5f * _elapsedTime * gyroY * Qxk[2, 0] - 0.5f * _elapsedTime * gyroZ * Qxk[3, 0];
+            Qxk_temp[1, 0] = Qxk[1, 0] + 0.5f * _elapsedTime * gyroX * Qxk[0, 0] - 0.5f * _elapsedTime * gyroY * Qxk[3, 0] + 0.5f * _elapsedTime * gyroZ * Qxk[2, 0];
+            Qxk_temp[2, 0] = Qxk[2, 0] + 0.5f * _elapsedTime * gyroX * Qxk[3, 0] + 0.5f * _elapsedTime * gyroY * Qxk[0, 0] - 0.5f * _elapsedTime * gyroZ * Qxk[1, 0];
             Qxk_temp[3, 0] = Qxk[3, 0] - 0.5f * _elapsedTime * gyroX * Qxk[2, 0] + 0.5f * _elapsedTime * gyroY * Qxk[1, 0] + 0.5f * _elapsedTime * gyroZ * Qxk[0, 0];
 
             //State Transition Matrix
@@ -340,13 +340,13 @@ namespace Orientation3D
 
             // K = Pkp*H^T/(H*Pkp*H^T + R) -> Kalman Gain
             // R: sensor noise covariance matrix
-            S_m_temp = multiplyMatrices(JacobianMatrix, Pkp_temp2, 3, 4, 4, 4);           
+            S_m_temp = multiplyMatrices(JacobianMatrix, Pkp_temp2, 3, 4, 4, 4);
             S_m = multiplyMatrices(S_m_temp, JacobianMatrix_T, 3, 4, 4, 3);
             S_m[0, 0] += _R;
             S_m[1, 1] += _R;
-            S_m[2, 2] += _R;            
-            K_temp = multiplyMatrices(Pkp_temp2, JacobianMatrix_T, 4, 4, 4, 3);          
-            S_inv= Inverse(S_m, 3);
+            S_m[2, 2] += _R;
+            K_temp = multiplyMatrices(Pkp_temp2, JacobianMatrix_T, 4, 4, 4, 3);
+            S_inv = Inverse(S_m, 3);
             KG = multiplyMatrices(K_temp, S_inv, 4, 3, 3, 3);
 
             //Qxk += K[Y-HQkp] : Y = H*X_measurements + z_k         
@@ -388,7 +388,7 @@ namespace Orientation3D
         public float[] KalmanFilterBias(float accX, float accY, float accZ, float gyroX, float gyroY, float gyroZ)
         {
             //Temporary Variables
-            float[,] gyro = new float[3, 1]{{ gyroX }, { gyroY }, { gyroZ } };  //Gyro readings matrix
+            float[,] gyro = new float[3, 1] { { gyroX }, { gyroY }, { gyroZ } };  //Gyro readings matrix
             float[,] Qxk_temp;                                                  //new state calculated from gyro readings
             float Magnitude;                                                    //Magnitude to normalise a quaternion
             float[,] A_T;                                                       //Tranpose of A matrix
@@ -440,7 +440,7 @@ namespace Orientation3D
             Qxk_temp[1, 0] = Qxk_temp[1, 0] / Magnitude;
             Qxk_temp[2, 0] = Qxk_temp[2, 0] / Magnitude;
             Qxk_temp[3, 0] = Qxk_temp[3, 0] / Magnitude;
-            
+
             //calculating error covariance matrix
             // Pkp = A*Pkp(previous)*A^T + Q       Pkp: process covariance matrix
             Pkp_temp1 = multiplyMatrices(A, Pkp, 7, 7, 7, 7);
@@ -495,7 +495,7 @@ namespace Orientation3D
             Qxk[6, 0] += deltaQxk[6, 0];
 
             //Pkp=(I-KG*H)Pkp  I: Identity matrix
-            KGH = multiplyMatrices(KG, JacobianMatrix, 7, 3, 3, 7);           
+            KGH = multiplyMatrices(KG, JacobianMatrix, 7, 3, 3, 7);
             for (int i = 0; i < 7; i++)
             {
                 for (int j = 0; j < 7; j++)
@@ -512,7 +512,7 @@ namespace Orientation3D
         public float[] ComplementaryFilter(float accX, float accY, float accZ, float gyroX, float gyroY, float gyroZ)
         {
             // temporary variables  
-            float[] QaccWorldTemp;                              
+            float[] QaccWorldTemp;
             float[] QaccWorld;                                  //Rotated accelerometer values from gyro     
             float[] Qtilt = new float[4];
             float[] QcorrectedTemp;
@@ -526,7 +526,7 @@ namespace Orientation3D
             float[] v = new float[3];                           //normalised rotation axis
             float phi;
             float[] rot_axis = new float[3];
-            
+
 
             //Calculating quaternion from gyro
             //q(theta, v) = cos(theta/2) + i vx*sin(theta/2) + j vy*sin(theta/2) + k vz*sin(theta/2)

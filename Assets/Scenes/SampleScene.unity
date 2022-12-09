@@ -894,7 +894,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9373e031b072044aaf1f6b00243ac23, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  orientation: {fileID: 1903286659}
+  orientation: {fileID: 0}
   updateText: {fileID: 565661687}
 --- !u!4 &503211913
 Transform:
@@ -2983,7 +2983,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2bbc29b930919614ca22ee01f0ab88df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cube: {fileID: 1903286659}
+  cube: {fileID: 0}
 --- !u!114 &1636525291
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3568,7 +3568,7 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 230784792154801386, guid: deb598a99fdf6334c9ec11bfb9b314e2, type: 3}
   m_PrefabInstance: {fileID: 230784791899707467}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1903286659
+--- !u!114 &1903286663
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -3580,14 +3580,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 885f1f2b414edaa4d835c24dbc2854c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DeltaT: 0.05
+  DeltaT: 0.03
   Pause: 1
-  Filter: 2
+  Filter: 1
   Alpha: 0.005
   R: 0.01
   Q_quaternion: 0.00001
   Q_quatBias: 0.00001
   gyroscopeScale: 10
+  speed: 50
 --- !u!4 &1947336977 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 213412531860112787, guid: 51076de4ac176ca40a9f288de4da73dd, type: 3}
