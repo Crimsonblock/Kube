@@ -7,11 +7,26 @@ public class RubixData
     public Vector3 gyroscope;
     public RotaryEncoder rotation;
 
+
+    public void clear()
+    {
+        accelerometer = Vector3.zero;
+        gyroscope = Vector3.zero;
+        rotation.clear();
+    }
+
     public RubixData()
     {
         accelerometer = Vector3.zero;
         gyroscope = Vector3.zero;
         rotation = new RotaryEncoder();
+    }
+
+    public RubixData(RubixData obj)
+    {
+        accelerometer = obj.accelerometer;
+        gyroscope = obj.gyroscope;
+        rotation = obj.rotation;
     }
 }
 
@@ -24,6 +39,16 @@ public class RotaryEncoder
     public float right { get; set; }
     public float top { get; set; }
     public float bottom { get; set; }
+
+    public void clear()
+    {
+        front = 0;
+        back = 0;
+        left = 0;
+        right = 0;
+        top = 0;
+        bottom = 0;
+    }
 
     public RotaryEncoder(float front = 0, float back = 0, float left = 0, float right = 0, float top=0, float bottom=0)
     {
@@ -155,7 +180,9 @@ public class ConnectionManager
     public RubixData getNewData()
     {
         newDataReceived = false;
-        return data;
+        RubixData newData = new RubixData(data);
+        data.clear();
+        return newData;
     }
 
     public bool hasNewData()

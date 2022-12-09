@@ -31,12 +31,16 @@ public class Rubix : MonoBehaviour
     public float step = 2f;
 
 
+    int testv = 0;
+
+
     // Start is called before the first frame update
     void Start()
     {
         MeshRenderer mr = GetComponent<MeshRenderer>();
         mr.enabled = false;
         gameMgr.registerRubix();
+        testv = 0;
     }
 
 
@@ -48,29 +52,31 @@ public class Rubix : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+       
+
         if (connMgr == null)
         {
             if (gameMgr != null) connMgr = gameMgr.getConnectionManager();
             return;
         }
+
         if (areCenterCubesSelected)
         {
             if (connMgr.hasNewData())
             {
                 // Step 1: get the data from the connMgr
                 RubixData newData = connMgr.getNewData();
-                Debug.Log(newData.accelerometer);
                 // Step 2: update the orientation of the cube
 
                 // Step 3:  update the faces of the cube
                 updateFaces(newData.rotation);
             }
-            
         }
         else
         {
-             selectCenterCubes();
+            selectCenterCubes();
         }
+
     }
 
 
@@ -114,9 +120,9 @@ public class Rubix : MonoBehaviour
 
         foreach(Transform t in cubes)
         {
-            faceCenter += t.position;
+            if(t.tag == "Cube") faceCenter += t.position;
         }
-        return faceCenter/cubes.Count;
+        return faceCenter/9;
     }
 
     /// <summary>
@@ -159,7 +165,8 @@ public class Rubix : MonoBehaviour
 
                 foreach (Transform cube in topCubes)
                 {
-                    cube.SetParent(cubesParents, true);
+                    if(cube.tag == "Player") cube.SetParent(transform, true);
+                    else cube.SetParent(cubesParents, true);
                 }
                 break;
             case colliderFace.BOTTOM:
@@ -174,7 +181,8 @@ public class Rubix : MonoBehaviour
 
                 foreach (Transform cube in bottomCubes)
                 {
-                    cube.SetParent(cubesParents, true);
+                    if (cube.tag == "Player") cube.SetParent(transform, true);
+                    else cube.SetParent(cubesParents, true);
                 }
                 break;
             case colliderFace.LEFT:
@@ -189,7 +197,8 @@ public class Rubix : MonoBehaviour
 
                 foreach (Transform cube in leftCubes)
                 {
-                    cube.SetParent(cubesParents, true);
+                    if (cube.tag == "Player") cube.SetParent(transform, true);
+                    else cube.SetParent(cubesParents, true);
                 }
                 break;
             case colliderFace.RIGHT:
@@ -204,7 +213,8 @@ public class Rubix : MonoBehaviour
 
                 foreach (Transform cube in rightCubes)
                 {
-                    cube.SetParent(cubesParents, true);
+                    if (cube.tag == "Player") cube.SetParent(transform, true);
+                    else cube.SetParent(cubesParents, true);
                 }
                 break;
             case colliderFace.FRONT:
@@ -219,7 +229,8 @@ public class Rubix : MonoBehaviour
 
                 foreach (Transform cube in frontCubes)
                 {
-                    cube.SetParent(cubesParents, true);
+                    if (cube.tag == "Player") cube.SetParent(transform, true);
+                    else cube.SetParent(cubesParents, true);
                 }
                 break;
             case colliderFace.BACK:
@@ -234,7 +245,8 @@ public class Rubix : MonoBehaviour
 
                 foreach (Transform cube in backCubes)
                 {
-                    cube.SetParent(cubesParents, true);
+                    if (cube.tag == "Player") cube.SetParent(transform, true);
+                    else cube.SetParent(cubesParents, true);
                 }
                 break;
             default:

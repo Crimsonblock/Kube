@@ -44,7 +44,7 @@ public class RubixCollider : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.tag == "Cube")
+        if(other.tag == "Cube" || other.tag == "Player")
         {
             parentRubix.addCubeToFace(other.GetComponent<Transform>(), face);
         }
@@ -52,7 +52,7 @@ public class RubixCollider : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.tag == "Cube")
+        if (other.tag == "Cube" || other.tag == "Player")
         {
             parentRubix.removeCubeFromFace(other.GetComponent<Transform>(), face);
         }
