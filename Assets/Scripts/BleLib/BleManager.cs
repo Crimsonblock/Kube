@@ -14,6 +14,7 @@ public struct GattCallbacks
     public MultiDataCallback accel;
 
     public MultiDataCallback gyro;
+    public MultiDataCallback angle;
 
     public DataCallback encoderTop;
     public DataCallback encoderBottom;
@@ -29,7 +30,7 @@ public delegate void DebugLog(string message);
 public class BleManager
 {
     // Library importation
-    private const string lib = "Ble-2.0.18.dll";
+    private const string lib = "Ble-2.0.19.dll";
     [DllImport(lib)]
     public extern static void startBleDeviceWatcher(DebugLog debugLog = null); //Done
     [DllImport(lib)]

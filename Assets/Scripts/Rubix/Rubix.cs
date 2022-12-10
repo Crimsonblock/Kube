@@ -27,7 +27,6 @@ public class Rubix : MonoBehaviour
 
     bool areCenterCubesSelected = false;
 
-    CubeOrientation or = null;
 
     public float step = 2f;
 
@@ -39,7 +38,6 @@ public class Rubix : MonoBehaviour
         MeshRenderer mr = GetComponent<MeshRenderer>();
         mr.enabled = false;
         gameMgr.registerRubix();
-        or = GetComponent<CubeOrientation>();
     }
 
 
@@ -67,7 +65,7 @@ public class Rubix : MonoBehaviour
                 RubixData newData = connMgr.getNewData();
 
                 // Step 2: update the orientation of the cube
-                or.Orientate(newData);
+                transform.SetPositionAndRotation(transform.position, Quaternion.Euler(newData.angles));
 
                 // Step 3:  update the faces of the cube
                 //updateFaces(newData.rotation);

@@ -5,6 +5,7 @@ public class RubixData
 {
     public Vector3 accelerometer;
     public Vector3 gyroscope;
+    public Vector3 angles;
     public RotaryEncoder rotation;
 
 
@@ -27,6 +28,8 @@ public class RubixData
         rotation = obj.rotation;
     }
 }
+
+
 
 [System.Serializable]
 public class RotaryEncoder
@@ -68,8 +71,6 @@ public class ConnectionManager
     RubixData data;
     bool newDataReceived = false;
     LibCallback onFinished;
-
-    bool newAccelDataReceiced = false;
 
     public ConnectionManager(int bleHandle, bool debug)
     {
@@ -114,6 +115,7 @@ public class ConnectionManager
         GattCallbacks callbacks = new GattCallbacks();
         callbacks.accel = newAccel;
         callbacks.gyro = newGyro;
+        callbacks.angle = newAngle;
 
         callbacks.encoderLeft = newLeftEncoder;
         callbacks.encoderRight = newRightEncoder;
@@ -136,6 +138,14 @@ public class ConnectionManager
         this.data.gyroscope.x = x;
         this.data.gyroscope.y = y;
         this.data.gyroscope.z = z;
+        newDataReceived = true;
+    }
+
+    private void newAngle(float x, float y, float z)
+    {
+        this.data.angles.x = x;
+        this.data.angles.y = y;
+        this.data.angles.z = z;
         newDataReceived = true;
     }
 
@@ -179,13 +189,11 @@ public class ConnectionManager
     public RubixData getNewData()
     {
         newDataReceived = false;
-        newAccelDataReceiced = false;
         return data;
     }
 
     public bool hasNewData()
     {
-        if (!newDataReceived) data.clear();
         return newDataReceived;
     }
 }
