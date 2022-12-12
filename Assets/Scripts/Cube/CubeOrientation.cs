@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Orientation3D;
+using System.CodeDom.Compiler;
 
 public class CubeOrientation : MonoBehaviour
 {
@@ -40,8 +41,7 @@ public class CubeOrientation : MonoBehaviour
         Vector3 accelerometer = data.accelerometer == Vector3.zero ? new Vector3(0.01f, 0.01f, 0.01f) : data.accelerometer ;
         Vector3 gyroscope = data.gyroscope == Vector3.zero ? new Vector3(0.01f, 0.01f, 0.01f) :  data.gyroscope / gyroscopeScale;
 
-
-
+        orient.setElapsedTime(DeltaT);
         orient.setAlpha(Alpha);
         orient.setR(R);
         orient.setQquaternion(Q_quaternion);
@@ -71,91 +71,21 @@ public class CubeOrientation : MonoBehaviour
                 );
         }
         Quaternion q = new(
-                    -quaternions[1],
-                    -quaternions[2],
                     quaternions[3],
-                    quaternions[0]
-                    );
-
-        //transform.rotation = q;
-
-
-        transform.SetPositionAndRotation(transform.position, q);
-
-        /*
-        if (!Pause)
-        {
-            float max = Mathf.Abs(accelerometer.x);
-            char gravity = 'x';
-
-            if (Mathf.Abs(accelerometer.y) > max)
-            {
-                max = Mathf.Abs(accelerometer.y);
-                gravity = 'y';
-            }
-            if (Mathf.Abs(accelerometer.z) > max)
-            {
-                gravity = 'z';
-            }
-
-            if (gravity == 'x')
-            {
-                Quaternion q = new(
-                    -quaternions[3],
-                    -quaternions[1],
                     quaternions[2],
+                    quaternions[1],
                     quaternions[0]
                     );
 
+        q = Quaternion.Inverse(q);
 
-                transform.rotation = q;
-            }
-            else if (gravity == 'y')
-            {
-                
-            }
-            else if (gravity == 'z')
-            {
-                Quaternion q = new(
-                    -quaternions[1],
-                    -quaternions[3],
-                    quaternions[2],
-                    quaternions[0]
-                    );
+        Vector3 angle = q.eulerAngles;
+        angle.x = -angle.x;
 
+        Quaternion quat = Quaternion.Euler(angle);
 
-                transform.rotation = q;
-            }
-        }
-        else // keyboard inputs
-        {
-            if (Input.GetKey(KeyCode.W))
-            {
-                transform.Rotate(Vector3.forward * speed * Time.deltaTime);
-            }
-            if (Input.GetKey(KeyCode.S))
-            {
-                transform.Rotate(-Vector3.forward * speed * Time.deltaTime);
-            }
-            if (Input.GetKey(KeyCode.A))
-            {
-                transform.Rotate(Vector3.left * speed * Time.deltaTime);
-            }
-            if (Input.GetKey(KeyCode.D))
-            {
-                transform.Rotate(-Vector3.left * speed * Time.deltaTime);
-            }
-            if (Input.GetKey(KeyCode.Q))
-            {
-                transform.Rotate(Vector3.up * speed * Time.deltaTime);
-            }
-            if (Input.GetKey(KeyCode.E))
-            {
-                transform.Rotate(-Vector3.up * speed * Time.deltaTime);
-            }
-        }
+        transform.SetLocalPositionAndRotation(transform.position, quat);
 
-        */
     }
 
     public void TogglePause()

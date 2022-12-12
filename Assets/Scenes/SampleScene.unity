@@ -3580,15 +3580,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 885f1f2b414edaa4d835c24dbc2854c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DeltaT: 0.03
+  DeltaT: 0.01
   Pause: 1
-  Filter: 1
-  Alpha: 0.005
+  Filter: 2
+  Alpha: 0.02
   R: 0.01
   Q_quaternion: 0.00001
   Q_quatBias: 0.00001
-  gyroscopeScale: 10
-  speed: 50
+  gyroscopeScale: 6
+  speed: 10
 --- !u!4 &1947336977 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 213412531860112787, guid: 51076de4ac176ca40a9f288de4da73dd, type: 3}
