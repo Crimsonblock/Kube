@@ -25,8 +25,8 @@ public class GameManager : MonoBehaviour
         // Set a first parameter to true to get .NET Library log in unity
         // Set a second parameter to true to get Native library log in unity
         bleManager = BleManager.getInstance(true);
-        //bleManager.startScan();
-        bleManager = null;
+        bleManager.startScan();
+        //bleManager = null;
     }
 
     ~GameManager()
