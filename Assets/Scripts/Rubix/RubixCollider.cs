@@ -11,7 +11,8 @@ public enum colliderFace
     TOP,
     BOTTOM,
     LEFT,
-    RIGHT
+    RIGHT,
+    NONE
 }
 
 public class RubixCollider : MonoBehaviour

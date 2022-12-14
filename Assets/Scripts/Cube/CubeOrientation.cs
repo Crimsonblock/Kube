@@ -37,7 +37,6 @@ public class CubeOrientation : MonoBehaviour
 
     public void Orientate(RubixData data)
     {
-        Debug.Log(data.accelerometer + " " + data.gyroscope);
         Vector3 accelerometer = data.accelerometer == Vector3.zero ? new Vector3(0.01f, 0.01f, 0.01f) : data.accelerometer ;
         Vector3 gyroscope = data.gyroscope == Vector3.zero ? new Vector3(0.01f, 0.01f, 0.01f) :  data.gyroscope / gyroscopeScale;
 

@@ -69,7 +69,6 @@ public class ConnectionManager
     bool newDataReceived = false;
     LibCallback onFinished;
 
-    bool newAccelDataReceiced = false;
 
     public ConnectionManager(int bleHandle, bool debug)
     {
@@ -179,7 +178,6 @@ public class ConnectionManager
     public RubixData getNewData()
     {
         newDataReceived = false;
-        newAccelDataReceiced = false;
         return data;
     }
 

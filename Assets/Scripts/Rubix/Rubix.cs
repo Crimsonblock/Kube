@@ -1,6 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
+using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
+using UnityEngine.Assertions.Must;
 using UnityEngine.PlayerLoop;
 
 public class Rubix : MonoBehaviour
@@ -13,6 +16,13 @@ public class Rubix : MonoBehaviour
     List<Transform> rightCubes = new List<Transform>();
     List<Transform> frontCubes = new List<Transform>();
     List<Transform> backCubes = new List<Transform>();
+
+    colliderFace []faceSelectionRotation = { colliderFace.FRONT, colliderFace.BACK, colliderFace.LEFT, colliderFace.RIGHT, colliderFace.TOP, colliderFace.BOTTOM } ;
+    int currentSelectedFace = 0;
+    int []facesSupposedRotation = new int[6];
+
+
+    Color m_highlightColor = new Color(.95f, .95f, .80f);
 
     // Center cubes (used for rotation)
     Transform frontCenterCube;
@@ -29,8 +39,12 @@ public class Rubix : MonoBehaviour
 
     CubeOrientation or = null;
 
+    bool isKeyboardPlayed = false;
+    public bool canBeGyroPlayed = false;
+
     public float step = 2f;
 
+    Vector3 keysStatus = Vector3.zero;
 
 
     // Start is called before the first frame update
@@ -40,6 +54,8 @@ public class Rubix : MonoBehaviour
         mr.enabled = false;
         gameMgr.registerRubix();
         or = GetComponent<CubeOrientation>();
+
+        gameMgr.registerToggleModeHandler(handleToggle);
     }
 
 
@@ -51,9 +67,7 @@ public class Rubix : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-       
-
-        if (connMgr == null)
+        if (canBeGyroPlayed && !isKeyboardPlayed && connMgr == null)
         {
             if (gameMgr != null) connMgr = gameMgr.getConnectionManager();
             return;
@@ -61,7 +75,7 @@ public class Rubix : MonoBehaviour
 
         if (areCenterCubesSelected)
         {
-            if (connMgr.hasNewData())
+            if (canBeGyroPlayed && !isKeyboardPlayed && connMgr.hasNewData())
             {
                 // Step 1: get the data from the connMgr
                 RubixData newData = connMgr.getNewData();
@@ -72,6 +86,19 @@ public class Rubix : MonoBehaviour
                 // Step 3:  update the faces of the cube
                 updateFaces(newData.rotation);
             }
+            else
+            {
+                // if can be gyroplayed, sets the "crappy" commands"
+                if (canBeGyroPlayed)
+                {
+                    okayKeyboardControls();
+                }
+                // Otherwise, sets the better commands
+                else
+                {
+                    goodKeyboardControls();
+                }
+            }
         }
         else
         {
@@ -80,6 +107,137 @@ public class Rubix : MonoBehaviour
 
     }
 
+    // Controls for the cube that is non gyro playable
+    void goodKeyboardControls()
+    {
+        // Pitch
+        if (Input.GetKey(KeyCode.Z))
+        {
+            transform.Rotate(new Vector3(1, 0, 0), 1, Space.World);
+        }
+        else if (Input.GetKey(KeyCode.S))
+        {
+            transform.Rotate(new Vector3(1, 0, 0), -1, Space.World);
+        }
+
+        // Yaw
+        if (Input.GetKey(KeyCode.A))
+        {
+            transform.Rotate(new Vector3(0, 1, 0), 1, Space.World);
+        }
+        else if (Input.GetKey(KeyCode.E))
+        {
+            transform.Rotate(new Vector3(0, 1, 0), -1, Space.World);
+        }
+
+        // Roll
+        if (Input.GetKey(KeyCode.Q))
+        {
+            transform.Rotate(new Vector3(0, 0, 1), 1, Space.World);
+        }
+        else if (Input.GetKey(KeyCode.D)){
+            transform.Rotate(new Vector3(0, 0, 1), -1, Space.World);
+            
+        }
+
+        //face Selection
+        if(Input.GetAxisRaw("Mouse ScrollWheel") > 0)
+        {
+            cleanFace(faceSelectionRotation[currentSelectedFace]);
+            currentSelectedFace++;
+            if (currentSelectedFace > 5) currentSelectedFace = 0;
+            highlightFace(faceSelectionRotation[currentSelectedFace]);
+        }
+        if (Input.GetAxisRaw("Mouse ScrollWheel") < 0)
+        {
+            cleanFace(faceSelectionRotation[currentSelectedFace]);
+            currentSelectedFace--;
+            if (currentSelectedFace < 0) currentSelectedFace = 5;
+            highlightFace(faceSelectionRotation[currentSelectedFace]);
+        }
+
+        // Face rotation setup
+        if (Input.GetKeyDown(KeyCode.X))
+        {
+            facesSupposedRotation[currentSelectedFace] -= 90;
+            if(facesSupposedRotation[currentSelectedFace] < 0) facesSupposedRotation[currentSelectedFace] += 360;
+            //Debug.Log(facesSupposedRotation[currentSelectedFace]);
+        }
+        else if (Input.GetKeyDown(KeyCode.W))
+        {
+            facesSupposedRotation[currentSelectedFace] += 90;
+            if (facesSupposedRotation[currentSelectedFace] >= 360) facesSupposedRotation[currentSelectedFace] -= 360;
+            //Debug.Log(facesSupposedRotation[currentSelectedFace]);
+        }
+
+        rotateFacesK();
+    }
+
+    void okayKeyboardControls()
+    {
+        // Pitch
+        if (Input.GetKey(KeyCode.I))
+        {
+            transform.Rotate(new Vector3(1, 0, 0), 1, Space.World);
+        }
+        else if (Input.GetKey(KeyCode.K))
+        {
+            transform.Rotate(new Vector3(1, 0, 0), -1, Space.World);
+        }
+
+        // Yaw
+        if (Input.GetKey(KeyCode.U))
+        {
+            transform.Rotate(new Vector3(0, 1, 0), 1, Space.World);
+        }
+        else if (Input.GetKey(KeyCode.O))
+        {
+            transform.Rotate(new Vector3(0, 1, 0), -1, Space.World);
+        }
+
+        // Roll
+        if (Input.GetKey(KeyCode.J))
+        {
+            transform.Rotate(new Vector3(0, 0, 1), +1, Space.World);
+        }
+        else if (Input.GetKey(KeyCode.L))
+        {
+            transform.Rotate(new Vector3(0, 0, 1), -1, Space.World);
+        }
+
+        // Face Selection 
+        //face Selection
+        if (Input.GetKeyDown(KeyCode.UpArrow))
+        {
+            cleanFace(faceSelectionRotation[currentSelectedFace]);
+            currentSelectedFace++;
+            if (currentSelectedFace > 5) currentSelectedFace = 0;
+            highlightFace(faceSelectionRotation[currentSelectedFace]);
+        }
+        if (Input.GetKeyDown(KeyCode.DownArrow))
+        {
+            cleanFace(faceSelectionRotation[currentSelectedFace]);
+            currentSelectedFace--;
+            if (currentSelectedFace < 0) currentSelectedFace = 5;
+            highlightFace(faceSelectionRotation[currentSelectedFace]);
+        }
+
+        // Face rotation setup
+        if (Input.GetKeyDown(KeyCode.RightArrow))
+        {
+            facesSupposedRotation[currentSelectedFace] -= 90;
+            if (facesSupposedRotation[currentSelectedFace] < 0) facesSupposedRotation[currentSelectedFace] += 360;
+            //Debug.Log(facesSupposedRotation[currentSelectedFace]);
+        }
+        else if (Input.GetKeyDown(KeyCode.LeftArrow))
+        {
+            facesSupposedRotation[currentSelectedFace] += 90;
+            if (facesSupposedRotation[currentSelectedFace] >= 360) facesSupposedRotation[currentSelectedFace] -= 360;
+            //Debug.Log(facesSupposedRotation[currentSelectedFace]);
+        }
+
+        rotateFacesK();
+    }
 
 
 
@@ -256,6 +414,425 @@ public class Rubix : MonoBehaviour
     }
 
 
+    void rotateFacesK()
+    {
+        Vector3 rotationAxis = Vector3.zero;
+        Transform cubesParents;
+
+        // Top Face
+        if (canFaceRotate(colliderFace.TOP) && (int)(topCenterCube.localRotation.eulerAngles.y) != facesSupposedRotation[4])
+        {
+            rotationAxis = new Vector3(0, 1, 0);
+            cubesParents = topCenterCube.parent;
+            foreach (Transform cube in topCubes)
+            {
+                cube.SetParent(topCenterCube, true);
+            }
+
+            if (shouldRotateClockwise((int)topCenterCube.localRotation.eulerAngles.y, facesSupposedRotation[4]))
+            {
+                topCenterCube.Rotate(rotationAxis, 1, Space.Self);
+            }
+            else
+            {
+                topCenterCube.Rotate(rotationAxis, -1, Space.Self);
+            }
+
+            foreach (Transform cube in topCubes)
+            {
+                if (cube.tag == "Player")
+                {
+                    cube.SetParent(transform, true);
+                    cube.GetComponent<Rigidbody>().isKinematic = true;
+
+                }
+                else cube.SetParent(cubesParents, true);
+            }
+        }
+        
+        // Bottom Face
+        if (canFaceRotate(colliderFace.BOTTOM) && (int)(bottomCenterCube.localRotation.eulerAngles.y) != facesSupposedRotation[5])
+        {
+            rotationAxis = new Vector3(0, 1, 0);
+            cubesParents = bottomCenterCube.parent;
+            foreach (Transform cube in bottomCubes)
+            {
+                cube.SetParent(bottomCenterCube, true);
+            }
+
+            if (shouldRotateClockwise((int)bottomCenterCube.localRotation.eulerAngles.y, facesSupposedRotation[5]))
+            {
+                bottomCenterCube.Rotate(rotationAxis, 1, Space.Self);
+            }
+            else
+            {
+                bottomCenterCube.Rotate(rotationAxis, -1, Space.Self);
+            }
+
+            foreach (Transform cube in bottomCubes)
+            {
+                if (cube.tag == "Player")
+                {
+                    cube.SetParent(transform, true);
+                    cube.GetComponent<Rigidbody>().isKinematic = true;
+
+                }
+                else cube.SetParent(cubesParents, true);
+            }
+        }
+
+        // Front face
+        if (canFaceRotate(colliderFace.FRONT) && (int)(frontCenterCube.localRotation.eulerAngles.z) != facesSupposedRotation[0])
+        {
+            rotationAxis = new Vector3(0, 0, 1);
+            cubesParents = frontCenterCube.parent;
+            foreach (Transform cube in frontCubes)
+            {
+                cube.SetParent(frontCenterCube, true);
+            }
+
+            if (shouldRotateClockwise((int)frontCenterCube.localRotation.eulerAngles.z, facesSupposedRotation[0]))
+            {
+                frontCenterCube.Rotate(rotationAxis, 1, Space.Self);
+            }
+            else
+            {
+                frontCenterCube.Rotate(rotationAxis, -1, Space.Self);
+            }
+
+            foreach (Transform cube in frontCubes)
+            {
+                if (cube.tag == "Player")
+                {
+                    cube.SetParent(transform, true);
+                    cube.GetComponent<Rigidbody>().isKinematic = true;
+
+                }
+                else cube.SetParent(cubesParents, true);
+            }
+        }
+
+        // Back Face
+        if (canFaceRotate(colliderFace.BACK) && (int)(backCenterCube.localRotation.eulerAngles.z) != facesSupposedRotation[1])
+        {
+            rotationAxis = new Vector3(0, 0, 1);
+            cubesParents = backCenterCube.parent;
+            foreach (Transform cube in backCubes)
+            {
+                cube.SetParent(backCenterCube, true);
+            }
+
+            if (shouldRotateClockwise((int)backCenterCube.localRotation.eulerAngles.z, facesSupposedRotation[1]))
+            {
+                backCenterCube.Rotate(rotationAxis, 1, Space.Self);
+            }
+            else
+            {
+                backCenterCube.Rotate(rotationAxis, -1, Space.Self);
+            }
+
+            foreach (Transform cube in backCubes)
+            {
+                if (cube.tag == "Player")
+                {
+                    cube.SetParent(transform, true);
+                    cube.GetComponent<Rigidbody>().isKinematic = true;
+
+                }
+                else cube.SetParent(cubesParents, true);
+            }
+        }
+
+
+
+        float correctedAngle = leftCenterCube.localRotation.eulerAngles.x;
+        bool isBugged = false;
+        //bugCorrection
+        if (leftCenterCube.localRotation.eulerAngles.y == 180 && leftCenterCube.localRotation.eulerAngles.z == 180)
+        {
+            //bugged
+            isBugged = true;
+            if ((int)(leftCenterCube.localEulerAngles.x) == 0)
+            {
+                correctedAngle = 180;
+            }
+            else if (leftCenterCube.localEulerAngles.x < 90 && leftCenterCube.localEulerAngles.x > 0)
+            {
+                correctedAngle = 180 - leftCenterCube.localEulerAngles.x;
+            }
+            else if (leftCenterCube.localEulerAngles.x >= 270)
+            {
+                correctedAngle = 540 - leftCenterCube.localEulerAngles.x;
+            }
+        }
+
+        // Left Face
+        if (canFaceRotate(colliderFace.LEFT) && (int)(correctedAngle) != facesSupposedRotation[2])
+        {
+            rotationAxis = new Vector3(1, 0, 0);
+            cubesParents = leftCenterCube.parent;
+            foreach (Transform cube in leftCubes)
+            {
+                cube.SetParent(leftCenterCube, true);
+            }
+            if (shouldRotateClockwise((int) correctedAngle, facesSupposedRotation[2]))
+            {
+                leftCenterCube.Rotate(rotationAxis, 1, Space.Self);
+            }
+            else
+            {
+                leftCenterCube.Rotate(rotationAxis, -1, Space.Self);
+            }
+
+            foreach (Transform cube in leftCubes)
+            {
+                if (cube.tag == "Player")
+                {
+                    cube.SetParent(transform, true);
+                    cube.GetComponent<Rigidbody>().isKinematic = true;
+                }
+                else cube.SetParent(cubesParents, true);
+            }
+        }
+
+        // Unity bug correction
+        correctedAngle = rightCenterCube.localRotation.eulerAngles.x;
+        isBugged = false;
+        if (rightCenterCube.localRotation.eulerAngles.y == 180 && rightCenterCube.localRotation.eulerAngles.z == 180)
+        {
+            //bugged
+            isBugged = true;
+            if ((int)(rightCenterCube.localEulerAngles.x) == 0)
+            {
+                correctedAngle = 180;
+            }
+            else if (rightCenterCube.localEulerAngles.x < 90 && rightCenterCube.localEulerAngles.x > 0)
+            {
+                correctedAngle = 180 - leftCenterCube.localEulerAngles.x;
+            }
+            else if (rightCenterCube.localEulerAngles.x >= 270)
+            {
+                correctedAngle = 540 - rightCenterCube.localEulerAngles.x;
+            }
+        }
+        // Right Face
+        if (canFaceRotate(colliderFace.RIGHT) && (int)(correctedAngle) != facesSupposedRotation[3])
+        {
+            rotationAxis = new Vector3(1, 0, 0);
+            cubesParents = rightCenterCube.parent;
+            foreach (Transform cube in rightCubes)
+            {
+                cube.SetParent(rightCenterCube, true);
+            }
+
+            if (shouldRotateClockwise((int)correctedAngle, facesSupposedRotation[3]))
+            {
+                rightCenterCube.Rotate(rotationAxis, 1, Space.Self);
+            }
+            else
+            {
+                rightCenterCube.Rotate(rotationAxis, -1, Space.Self);
+            }
+
+            foreach (Transform cube in rightCubes)
+            {
+                if (cube.tag == "Player")
+                {
+                    cube.SetParent(transform, true);
+                    cube.GetComponent<Rigidbody>().isKinematic = true;
+
+                }
+                else cube.SetParent(cubesParents, true);
+            }
+        }
+
+
+
+
+        // Face rotation corrections: 
+        // bottom
+        if ((int)(bottomCenterCube.localRotation.eulerAngles.y) == facesSupposedRotation[5])
+        {
+            cubesParents = bottomCenterCube.parent;
+            foreach (Transform cube in bottomCubes)
+            {
+                cube.SetParent(bottomCenterCube, true);
+            }
+
+            bottomCenterCube.localRotation = Quaternion.Euler(0, facesSupposedRotation[5], 0);
+            foreach (Transform cube in bottomCubes)
+            {
+                if (cube.tag == "Player")
+                {
+                    cube.SetParent(transform, true);
+                    cube.GetComponent<Rigidbody>().isKinematic = false;
+                }
+                else cube.SetParent(cubesParents, true);
+            }
+        }
+
+        //Top
+        if ((int)(topCenterCube.localRotation.eulerAngles.y) == facesSupposedRotation[4])
+        {
+            cubesParents = topCenterCube.parent;
+            foreach (Transform cube in topCubes)
+            {
+                cube.SetParent(topCenterCube, true);
+            }
+
+            topCenterCube.localRotation = Quaternion.Euler(0, facesSupposedRotation[4], 0);
+
+
+            foreach (Transform cube in topCubes)
+            {
+                if (cube.tag == "Player")
+                {
+                    cube.SetParent(transform, true);
+                    cube.GetComponent<Rigidbody>().isKinematic = false;
+                }
+                else cube.SetParent(cubesParents, true);
+            }
+        }
+
+        //Front
+        if ((int)(frontCenterCube.localRotation.eulerAngles.z) == facesSupposedRotation[0])
+        {
+            cubesParents = frontCenterCube.parent;
+            foreach (Transform cube in frontCubes)
+            {
+                cube.SetParent(frontCenterCube, true);
+            }
+
+            frontCenterCube.localRotation = Quaternion.Euler(0, 0, facesSupposedRotation[0]);
+
+
+            foreach (Transform cube in frontCubes)
+            {
+                if (cube.tag == "Player")
+                {
+                    cube.SetParent(transform, true);
+                    cube.GetComponent<Rigidbody>().isKinematic = false;
+                }
+                else cube.SetParent(cubesParents, true);
+            }
+        }
+
+        //Back
+        if ((int)(backCenterCube.localRotation.eulerAngles.z) == facesSupposedRotation[1])
+        {
+            cubesParents = backCenterCube.parent;
+            foreach (Transform cube in backCubes)
+            {
+                cube.SetParent(backCenterCube, true);
+            }
+
+            backCenterCube.localRotation = Quaternion.Euler(0, 0, facesSupposedRotation[1]);
+
+
+            foreach (Transform cube in backCubes)
+            {
+                if (cube.tag == "Player")
+                {
+                    cube.SetParent(transform, true);
+                    cube.GetComponent<Rigidbody>().isKinematic = false;
+                }
+                else cube.SetParent(cubesParents, true);
+            }
+        }
+
+
+        correctedAngle = leftCenterCube.localRotation.eulerAngles.x;
+        isBugged = false;
+        //bugCorrection
+        if (leftCenterCube.localRotation.eulerAngles.y == 180 && leftCenterCube.localRotation.eulerAngles.z == 180)
+        {
+            //bugged
+            isBugged = true;
+            if ((int)(leftCenterCube.localEulerAngles.x) == 0)
+            {
+                correctedAngle = 180;
+            }
+            else if (leftCenterCube.localEulerAngles.x < 90 && leftCenterCube.localEulerAngles.x > 0)
+            {
+                correctedAngle = 180 - leftCenterCube.localEulerAngles.x;
+            }
+            else if (leftCenterCube.localEulerAngles.x >= 270)
+            {
+                correctedAngle = 540 - leftCenterCube.localEulerAngles.x;
+            }
+        }
+
+        //Left
+        if ((int)(correctedAngle) == facesSupposedRotation[2])
+        {
+            cubesParents = leftCenterCube.parent;
+            foreach (Transform cube in leftCubes)
+            {
+                cube.SetParent(leftCenterCube, true);
+            }
+
+            //Debug.Log("Angles to correct: " + facesSupposedRotation[2]);
+
+            leftCenterCube.localRotation = Quaternion.Euler((int)correctedAngle, 0, 0);
+
+            foreach (Transform cube in leftCubes)
+            {
+                if (cube.tag == "Player")
+                {
+                    cube.SetParent(transform, true);
+                    cube.GetComponent<Rigidbody>().isKinematic = false;
+                }
+                else cube.SetParent(cubesParents, true);
+            }
+        }
+
+        //bugCorrection
+        correctedAngle = rightCenterCube.localRotation.eulerAngles.x;
+        isBugged = false;
+        if (rightCenterCube.localRotation.eulerAngles.y == 180 && rightCenterCube.localRotation.eulerAngles.z == 180)
+        {
+            //bugged
+            isBugged = true;
+            if ((int)(rightCenterCube.localEulerAngles.x) == 0)
+            {
+                correctedAngle = 180;
+            }
+            else if (rightCenterCube.localEulerAngles.x < 90 && rightCenterCube.localEulerAngles.x > 0)
+            {
+                correctedAngle = 180 - leftCenterCube.localEulerAngles.x;
+            }
+            else if (rightCenterCube.localEulerAngles.x >= 270)
+            {
+                correctedAngle = 540 - rightCenterCube.localEulerAngles.x;
+            }
+        }
+        //Right
+        if ((int)(correctedAngle) == facesSupposedRotation[3])
+        {
+            rotationAxis = new Vector3(1, 0, 0);
+            cubesParents = rightCenterCube.parent;
+            foreach (Transform cube in rightCubes)
+            {
+                cube.SetParent(rightCenterCube, true);
+            }
+
+            rightCenterCube.localRotation = Quaternion.Euler((int)correctedAngle, 0, 0);
+
+
+            foreach (Transform cube in rightCubes)
+            {
+                if (cube.tag == "Player")
+                {
+                    cube.SetParent(transform, true);
+                    cube.GetComponent<Rigidbody>().isKinematic = false;
+                }
+                else cube.SetParent(cubesParents, true);
+            }
+        }
+
+    }
+
+
     /// <summary>
     /// Retrieves the center cube of every face and removes it from the lists of each face
     /// </summary>
@@ -416,6 +993,312 @@ public class Rubix : MonoBehaviour
         }
     }
 
+
+
+    // Keyboard playmode helber functions
+    void cleanFace(colliderFace face)
+    {
+        switch (face)
+        {
+            case colliderFace.FRONT:
+                foreach (var cube in frontCubes)
+                {
+                    if (cube.tag != "Player")
+                    {
+                        for (int i = 0; i < cube.childCount; i++)
+                        {
+                            var c = cube.GetChild(i);
+                            if (c.tag == "Tile") c.GetComponent<Renderer>().material.color = Color.white;
+                        }
+                    }
+                }
+                for (int i = 0; i < frontCenterCube.childCount; i++)
+                {
+                    var c = frontCenterCube.GetChild(i);
+                    if (c.tag == "Tile") c.GetComponent<Renderer>().material.color = Color.white;
+                }
+                break;
+            case colliderFace.BACK:
+                foreach (var cube in backCubes)
+                {
+                    if (cube.tag != "Player")
+                    {
+                        for (int i = 0; i < cube.childCount; i++)
+                        {
+                            var c = cube.GetChild(i);
+                            if (c.tag == "Tile") c.GetComponent<Renderer>().material.color = Color.white;
+                        }
+                    }
+                }
+                for (int i = 0; i < backCenterCube.childCount; i++)
+                {
+                    var c = backCenterCube.GetChild(i);
+                    if (c.tag == "Tile") c.GetComponent<Renderer>().material.color = Color.white;
+                }
+                break;
+            case colliderFace.TOP:
+                foreach (var cube in topCubes)
+                {
+                    if (cube.tag != "Player")
+                    {
+                        for (int i = 0; i < cube.childCount; i++)
+                        {
+                            var c = cube.GetChild(i);
+                            if (c.tag == "Tile") c.GetComponent<Renderer>().material.color = Color.white;
+                        }
+                    }
+                }
+                for (int i = 0; i < topCenterCube.childCount; i++)
+                {
+                    var c = topCenterCube.GetChild(i);
+                    if (c.tag == "Tile") c.GetComponent<Renderer>().material.color = Color.white;
+                }
+                break;
+            case colliderFace.BOTTOM:
+                foreach (var cube in bottomCubes)
+                {
+                    if (cube.tag != "Player")
+                    {
+                        for (int i = 0; i < cube.childCount; i++)
+                        {
+                            var c = cube.GetChild(i);
+                            if (c.tag == "Tile") c.GetComponent<Renderer>().material.color = Color.white;
+                        }
+                    }
+                }
+                for (int i = 0; i < bottomCenterCube.childCount; i++)
+                {
+                    var c = bottomCenterCube.GetChild(i);
+                    if (c.tag == "Tile") c.GetComponent<Renderer>().material.color = Color.white;
+                }
+                break;
+            case colliderFace.LEFT:
+                foreach (var cube in leftCubes)
+                {
+                    if (cube.tag != "Player")
+                    {
+                        for (int i = 0; i < cube.childCount; i++)
+                        {
+                            var c = cube.GetChild(i);
+                            if (c.tag == "Tile") c.GetComponent<Renderer>().material.color = Color.white;
+                        }
+                    }
+                }
+                for (int i = 0; i < leftCenterCube.childCount; i++)
+                {
+                    var c = leftCenterCube.GetChild(i);
+                    if (c.tag == "Tile") c.GetComponent<Renderer>().material.color = Color.white;
+                }
+                break;
+            case colliderFace.RIGHT:
+                foreach (var cube in rightCubes)
+                {
+                    if (cube.tag != "Player")
+                    {
+                        for (int i = 0; i < cube.childCount; i++)
+                        {
+                            var c = cube.GetChild(i);
+                            if (c.tag == "Tile") c.GetComponent<Renderer>().material.color = Color.white;
+                        }
+                    }
+                }
+                for (int i = 0; i < rightCenterCube.childCount; i++)
+                {
+                    var c = rightCenterCube.GetChild(i);
+                    if (c.tag == "Tile") c.GetComponent<Renderer>().material.color = Color.white;
+                }
+                break;
+        }
+    }
+
+    void highlightFace(colliderFace face)
+    {
+        switch (face)
+        {
+            case colliderFace.FRONT:
+                foreach (var cube in frontCubes)
+                {
+                    if (cube.tag != "Player")
+                    {
+                        for(int i = 0; i<cube.childCount; i++)
+                        {
+                            var c =cube.GetChild(i);
+                            if (c.tag == "Tile") c.GetComponent<Renderer>().material.color = m_highlightColor;
+                        }
+                    }
+                }
+                for (int i = 0; i < frontCenterCube.childCount; i++)
+                {
+                    var c = frontCenterCube.GetChild(i);
+                    if (c.tag == "Tile") c.GetComponent<Renderer>().material.color = m_highlightColor;
+                }
+                break;
+            case colliderFace.BACK:
+                foreach (var cube in backCubes)
+                {
+                    if (cube.tag != "Player")
+                    {
+                        for (int i = 0; i < cube.childCount; i++)
+                        {
+                            var c = cube.GetChild(i);
+                            if (c.tag == "Tile") c.GetComponent<Renderer>().material.color = m_highlightColor;
+                        }
+                    }
+                }
+                for (int i = 0; i < backCenterCube.childCount; i++)
+                {
+                    var c = backCenterCube.GetChild(i);
+                    if (c.tag == "Tile") c.GetComponent<Renderer>().material.color = m_highlightColor;
+                }
+                break;
+            case colliderFace.TOP:
+                foreach (var cube in topCubes)
+                {
+                    if (cube.tag != "Player")
+                    {
+                        for (int i = 0; i < cube.childCount; i++)
+                        {
+                            var c = cube.GetChild(i);
+                            if (c.tag == "Tile") c.GetComponent<Renderer>().material.color = m_highlightColor;
+                        }
+                    }
+                }
+                for (int i = 0; i < topCenterCube.childCount; i++)
+                {
+                    var c = topCenterCube.GetChild(i);
+                    if (c.tag == "Tile") c.GetComponent<Renderer>().material.color = m_highlightColor;
+                }
+                break;
+            case colliderFace.BOTTOM:
+                foreach (var cube in bottomCubes)
+                {
+                    if (cube.tag != "Player")
+                    {
+                        for (int i = 0; i < cube.childCount; i++)
+                        {
+                            var c = cube.GetChild(i);
+                            if (c.tag == "Tile") c.GetComponent<Renderer>().material.color = m_highlightColor;
+                        }
+                    }
+                }
+                for (int i = 0; i < bottomCenterCube.childCount; i++)
+                {
+                    var c = bottomCenterCube.GetChild(i);
+                    if (c.tag == "Tile") c.GetComponent<Renderer>().material.color = m_highlightColor;
+                }
+                break;
+            case colliderFace.LEFT:
+                foreach (var cube in leftCubes)
+                {
+                    if (cube.tag != "Player")
+                    {
+                        for (int i = 0; i < cube.childCount; i++)
+                        {
+                            var c = cube.GetChild(i);
+                            if (c.tag == "Tile") c.GetComponent<Renderer>().material.color = m_highlightColor;
+                        }
+                    }
+                }
+                for (int i = 0; i < leftCenterCube.childCount; i++)
+                {
+                    var c = leftCenterCube.GetChild(i);
+                    if (c.tag == "Tile") c.GetComponent<Renderer>().material.color = m_highlightColor;
+                }
+                break;
+            case colliderFace.RIGHT:
+                foreach (var cube in rightCubes)
+                {
+                    if (cube.tag != "Player")
+                    {
+                        for (int i = 0; i < cube.childCount; i++)
+                        {
+                            var c = cube.GetChild(i);
+                            if (c.tag == "Tile") c.GetComponent<Renderer>().material.color = m_highlightColor;
+                        }
+                    }
+                }
+                for (int i = 0; i < rightCenterCube.childCount; i++)
+                {
+                    var c = rightCenterCube.GetChild(i);
+                    if (c.tag == "Tile") c.GetComponent<Renderer>().material.color = m_highlightColor;
+                }
+                break;
+        }
+    }
+
+
+    bool canFaceRotate(colliderFace face)
+    {
+        switch (face)
+        {
+            case colliderFace.TOP:
+                if (frontCenterCube.localRotation.eulerAngles.z % 90 == 0
+                    && backCenterCube.localRotation.eulerAngles.z % 90 == 0
+                    && leftCenterCube.localRotation.eulerAngles.x % 90 == 0
+                    && rightCenterCube.localRotation.eulerAngles.x % 90 == 0) return true;
+                    break;
+            case colliderFace.BOTTOM:
+                if (frontCenterCube.localRotation.eulerAngles.z % 90 == 0
+                    && backCenterCube.localRotation.eulerAngles.z % 90 == 0
+                    && leftCenterCube.localRotation.eulerAngles.x % 90 == 0
+                    && rightCenterCube.localRotation.eulerAngles.x % 90 == 0) return true;
+                break;
+            case colliderFace.LEFT:
+                if (frontCenterCube.localRotation.eulerAngles.z % 90 == 0
+                    && backCenterCube.localRotation.eulerAngles.z % 90 == 0
+                    && topCenterCube.localRotation.eulerAngles.y % 90 == 0
+                    && bottomCenterCube.localRotation.eulerAngles.y % 90 == 0) return true;
+                break;
+            case colliderFace.RIGHT:
+                if (frontCenterCube.localRotation.eulerAngles.z % 90 == 0
+                    && backCenterCube.localRotation.eulerAngles.z % 90 == 0
+                    && topCenterCube.localRotation.eulerAngles.y % 90 == 0
+                    && bottomCenterCube.localRotation.eulerAngles.y % 90 == 0) return true;
+                break;
+            case colliderFace.FRONT:
+                if (topCenterCube.localRotation.eulerAngles.y % 90 == 0
+                    && bottomCenterCube.localRotation.eulerAngles.y % 90 == 0
+                    && leftCenterCube.localRotation.eulerAngles.x % 90 == 0
+                    && rightCenterCube.localRotation.eulerAngles.x % 90 == 0) return true;
+                break;
+            case colliderFace.BACK:
+                if (topCenterCube.localRotation.eulerAngles.y % 90 == 0
+                    && bottomCenterCube.localRotation.eulerAngles.y % 90 == 0
+                    && leftCenterCube.localRotation.eulerAngles.x % 90 == 0
+                    && rightCenterCube.localRotation.eulerAngles.x % 90 == 0) return true;
+                break;
+            default:
+                Debug.Log("Unknown face to add the cube to");
+                break;
+        }
+        return false;
+    }
+
+
+    public bool shouldRotateClockwise(int src, int dest)
+    {
+        if(src < dest)
+        {
+            if (Mathf.Abs(src - dest) < Mathf.Abs(src - dest + 360)) return true;
+            return false;
+        }
+        else if(src > dest)
+        {
+            if (Mathf.Abs(dest - src) < Mathf.Abs(dest - src + 360)) return false;
+            return true;
+        }
+        return false;
+    }
+
+    void handleToggle()
+    {
+        isKeyboardPlayed = !isKeyboardPlayed;
+    }
+
+    public void setKeyboardPlayed(bool newVal)
+    {
+        isKeyboardPlayed = newVal;
+    }
     public void finish()
     {
         gameMgr.finish();
