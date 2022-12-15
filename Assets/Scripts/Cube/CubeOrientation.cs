@@ -25,7 +25,7 @@ public class CubeOrientation : MonoBehaviour
 
     public float gyroscopeScale = 1000.0f;
 
-    public int speed = 50;
+    public int speed = 10;
 
     private cOrientation orient;
 
@@ -83,7 +83,7 @@ public class CubeOrientation : MonoBehaviour
 
         Quaternion quat = Quaternion.Euler(angle);
 
-        transform.SetLocalPositionAndRotation(transform.position, quat);
+        transform.rotation = Quaternion.Slerp(transform.rotation, quat, Time.deltaTime * speed);
 
     }
 
