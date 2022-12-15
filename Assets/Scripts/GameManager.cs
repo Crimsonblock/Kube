@@ -27,7 +27,7 @@ public class GameManager : MonoBehaviour
         bleManager = BleManager.getInstance(true);
         bleManager.startScan();
         //bleManager = null;
-        DontDestroyOnLoad(gameObject);
+        // DontDestroyOnLoad(gameObject);
     }
 
     ~GameManager()
