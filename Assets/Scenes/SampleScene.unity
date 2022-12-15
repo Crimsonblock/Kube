@@ -7103,6 +7103,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 503211912}
     - target: {fileID: 230784792154801385, guid: deb598a99fdf6334c9ec11bfb9b314e2, type: 3}
+      propertyPath: timeBeforeSnap
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 230784792154801385, guid: deb598a99fdf6334c9ec11bfb9b314e2, type: 3}
       propertyPath: canBeGyroPlayed
       value: 1
       objectReference: {fileID: 0}
