@@ -308,7 +308,7 @@ public class Rubix : MonoBehaviour
     /// Rotates the face around its axis.
     /// </summary>
     /// <param name="face">The face to be rotated around</param>
-    /// <param name="steps">The number of steps to rotate. 1 step = 10°. Positive = cw, negative = ccw</param>
+    /// <param name="steps">The number of steps to rotate. 1 step = 10ï¿½. Positive = cw, negative = ccw</param>
     void rotateFace(colliderFace face,  float steps)
     {
         Vector3 faceCenter = Vector3.zero;
@@ -323,6 +323,7 @@ public class Rubix : MonoBehaviour
                 cubesParents = topCenterCube.parent;
                 foreach (Transform cube in topCubes)
                 {
+                    if(cube.tag == "Player") cube.GetComponent<Rigidbody>().isKinematic = true;
                     cube.SetParent(topCenterCube, true);
                 }
 
@@ -330,7 +331,10 @@ public class Rubix : MonoBehaviour
 
                 foreach (Transform cube in topCubes)
                 {
-                    if(cube.tag == "Player") cube.SetParent(transform, true);
+                    if(cube.tag == "Player") {
+                        cube.SetParent(transform, true);
+                        cube.GetComponent<Rigidbody>().isKinematic = false;
+                    }
                     else cube.SetParent(cubesParents, true);
                 }
                 break;
@@ -339,6 +343,7 @@ public class Rubix : MonoBehaviour
                 cubesParents = bottomCenterCube.parent;
                 foreach (Transform cube in bottomCubes)
                 {
+                    if(cube.tag == "Player") cube.GetComponent<Rigidbody>().isKinematic = true;
                     cube.SetParent(bottomCenterCube, true);
                 }
 
@@ -346,7 +351,10 @@ public class Rubix : MonoBehaviour
 
                 foreach (Transform cube in bottomCubes)
                 {
-                    if (cube.tag == "Player") cube.SetParent(transform, true);
+                    if (cube.tag == "Player") {
+                        cube.GetComponent<Rigidbody>().isKinematic = false;
+                        cube.SetParent(transform, true);
+                    }
                     else cube.SetParent(cubesParents, true);
                 }
                 break;
@@ -355,6 +363,7 @@ public class Rubix : MonoBehaviour
                 cubesParents = leftCenterCube.parent;
                 foreach (Transform cube in leftCubes)
                 {
+                    if(cube.tag == "Player") cube.GetComponent<Rigidbody>().isKinematic = true;
                     cube.SetParent(leftCenterCube, true);
                 }
 
@@ -362,7 +371,10 @@ public class Rubix : MonoBehaviour
 
                 foreach (Transform cube in leftCubes)
                 {
-                    if (cube.tag == "Player") cube.SetParent(transform, true);
+                    if (cube.tag == "Player") {
+                        cube.SetParent(transform, true);
+                        cube.GetComponent<Rigidbody>().isKinematic = false;
+                    }
                     else cube.SetParent(cubesParents, true);
                 }
                 break;
@@ -371,6 +383,7 @@ public class Rubix : MonoBehaviour
                 cubesParents = rightCenterCube.parent;
                 foreach (Transform cube in rightCubes)
                 {
+                    if(cube.tag == "Player") cube.GetComponent<Rigidbody>().isKinematic = true;
                     cube.SetParent(rightCenterCube, true);
                 }
 
@@ -378,7 +391,10 @@ public class Rubix : MonoBehaviour
 
                 foreach (Transform cube in rightCubes)
                 {
-                    if (cube.tag == "Player") cube.SetParent(transform, true);
+                    if (cube.tag == "Player") {
+                        cube.SetParent(transform, true);
+                        cube.GetComponent<Rigidbody>().isKinematic = false;
+                    }
                     else cube.SetParent(cubesParents, true);
                 }
                 break;
@@ -387,6 +403,7 @@ public class Rubix : MonoBehaviour
                 cubesParents = frontCenterCube.parent;
                 foreach (Transform cube in frontCubes)
                 {
+                    if(cube.tag == "Player") cube.GetComponent<Rigidbody>().isKinematic = true;
                     cube.SetParent(frontCenterCube, true);
                 }
 
@@ -394,7 +411,10 @@ public class Rubix : MonoBehaviour
 
                 foreach (Transform cube in frontCubes)
                 {
-                    if (cube.tag == "Player") cube.SetParent(transform, true);
+                    if (cube.tag == "Player"){
+                        cube.SetParent(transform, true);
+                        cube.GetComponent<Rigidbody>().isKinematic = false;
+                    } 
                     else cube.SetParent(cubesParents, true);
                 }
                 break;
@@ -403,6 +423,7 @@ public class Rubix : MonoBehaviour
                 cubesParents = backCenterCube.parent;
                 foreach (Transform cube in backCubes)
                 {
+                    if(cube.tag == "Player") cube.GetComponent<Rigidbody>().isKinematic = true;
                     cube.SetParent(backCenterCube, true);
                 }
 
@@ -410,7 +431,10 @@ public class Rubix : MonoBehaviour
 
                 foreach (Transform cube in backCubes)
                 {
-                    if (cube.tag == "Player") cube.SetParent(transform, true);
+                    if (cube.tag == "Player"){
+                        cube.SetParent(transform, true);
+                        cube.GetComponent<Rigidbody>().isKinematic = false;
+                    }
                     else cube.SetParent(cubesParents, true);
                 }
                 break;
