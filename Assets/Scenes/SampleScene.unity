@@ -4010,7 +4010,7 @@ AudioListener:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1281380698}
-  m_Enabled: 1
+  m_Enabled: 0
 --- !u!20 &1281380700
 Camera:
   m_ObjectHideFlags: 0
@@ -6367,8 +6367,8 @@ MonoBehaviour:
   R: 0.01
   Q_quaternion: 0.00001
   Q_quatBias: 0.00001
-  gyroscopeScale: 1
-  speed: 20
+  gyroscopeScale: 6
+  speed: 10
 --- !u!65 &1903286668
 BoxCollider:
   m_ObjectHideFlags: 0
