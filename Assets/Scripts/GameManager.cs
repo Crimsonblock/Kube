@@ -45,7 +45,7 @@ public class GameManager : MonoBehaviour
     {
         if (bleManager != null) bleManager.update();
 
-        if (Input.GetKeyDown(KeyCode.KeypadPlus))
+        if (Input.GetKeyDown(KeyCode.N))
         {
             Debug.Log("Toggling mode");
             foreach (ToggleModeHandler t in toggleModes)

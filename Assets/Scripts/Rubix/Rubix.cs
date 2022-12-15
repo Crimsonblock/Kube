@@ -82,6 +82,12 @@ public class Rubix : MonoBehaviour
 
                 // Step 2: update the orientation of the cube
                 or.Orientate(newData);
+                Debug.Log(newData.rotation.front + " - " +
+                    newData.rotation.back + " - " + 
+                    newData.rotation.top + " - " + 
+                    newData.rotation.bottom + " - " +
+                    newData.rotation.left + " - " +
+                    newData.rotation.right);
 
                 // Step 3:  update the faces of the cube
                 updateFaces(newData.rotation);
@@ -91,7 +97,7 @@ public class Rubix : MonoBehaviour
                 // if can be gyroplayed, sets the "crappy" commands"
                 if (canBeGyroPlayed)
                 {
-                    okayKeyboardControls();
+                    if(isKeyboardPlayed) okayKeyboardControls();
                 }
                 // Otherwise, sets the better commands
                 else
