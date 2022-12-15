@@ -32,6 +32,8 @@ public class Rubix : MonoBehaviour
     Transform topCenterCube;
     Transform bottomCenterCube;
 
+    public float timeBeforeSnap;
+
     ConnectionManager connMgr = null;
     public GameManager gameMgr = null;
 
@@ -43,6 +45,8 @@ public class Rubix : MonoBehaviour
     public bool canBeGyroPlayed = false;
 
     public float step = 2f;
+
+    float []timeNotCentered = new float[6];
 
     Vector3 keysStatus = Vector3.zero;
 
@@ -93,6 +97,7 @@ public class Rubix : MonoBehaviour
                 if (canBeGyroPlayed)
                 {
                     if(isKeyboardPlayed) okayKeyboardControls();
+                    else snapFaces();
                 }
                 // Otherwise, sets the better commands
                 else
@@ -106,6 +111,96 @@ public class Rubix : MonoBehaviour
             selectCenterCubes();
         }
 
+
+
+    }
+
+
+    void snapFaces()
+    {
+        // Creates the correction data
+        RotaryEncoder correction = new RotaryEncoder();
+
+        // Front snapping
+        if (frontCenterCube.transform.localEulerAngles.z % 90 != 0)
+        {
+            timeNotCentered[0] += Time.deltaTime;
+            // Snaps back
+            if (timeNotCentered[0] >= timeBeforeSnap)
+            {
+                if (frontCenterCube.transform.localEulerAngles.z % 90 >= 50) correction.front = 90 - (frontCenterCube.transform.localEulerAngles.z % 90);
+                else correction.front = -(frontCenterCube.transform.localEulerAngles.z % 90);
+                correction.front = correction.front / step;
+            }
+        }
+
+        // Back snapping
+        else if(backCenterCube.transform.localEulerAngles.z % 90 != 0)
+        {
+            timeNotCentered[1] += Time.deltaTime;
+            // Snaps back
+            if (timeNotCentered[1] >= timeBeforeSnap)
+            {
+                if (backCenterCube.transform.localEulerAngles.z % 90 >= 50) correction.back = 90 - (backCenterCube.transform.localEulerAngles.z % 90);
+                else correction.back = -(backCenterCube.transform.localEulerAngles.z % 90);
+                correction.back = correction.back / step;
+            }
+        }
+
+        // Left snapping
+        else if (leftCenterCube.transform.localEulerAngles.x % 90 != 0)
+        {
+            timeNotCentered[2] += Time.deltaTime;
+            // Snaps back
+            if (timeNotCentered[2] >= timeBeforeSnap)
+            {
+                if (leftCenterCube.transform.localEulerAngles.x % 90 >= 50) correction.left = 90 - (leftCenterCube.transform.localEulerAngles.x % 90);
+                else correction.left = -(leftCenterCube.transform.localEulerAngles.x % 90);
+                correction.left = correction.left / step;
+            }
+        }
+
+        // Right snapping
+        else if (rightCenterCube.transform.localEulerAngles.x % 90 != 0)
+        {
+            timeNotCentered[3] += Time.deltaTime;
+            // Snaps back
+            if (timeNotCentered[3] >= timeBeforeSnap)
+            {
+                if (rightCenterCube.transform.localEulerAngles.x % 90 >= 50) correction.right = 90 - (rightCenterCube.transform.localEulerAngles.x % 90);
+                else correction.right = -(rightCenterCube.transform.localEulerAngles.x % 90);
+                correction.right = correction.right / step;
+            }
+        }
+
+        // Top snapping
+        else if (topCenterCube.transform.localEulerAngles.y % 90 != 0)
+        {
+            timeNotCentered[4] += Time.deltaTime;
+            // Snaps back
+            if (timeNotCentered[4] >= timeBeforeSnap)
+            {
+                if (topCenterCube.transform.localEulerAngles.y % 90 >= 50) correction.top = 90 - (topCenterCube.transform.localEulerAngles.y % 90);
+                else correction.top = -(topCenterCube.transform.localEulerAngles.y % 90);
+                correction.top = correction.top / step;
+            }
+        }
+
+        // Bottom snapping
+        else if (bottomCenterCube.transform.localEulerAngles.y % 90 != 0)
+        {
+            timeNotCentered[5] += Time.deltaTime;
+            // Snaps back
+            if (timeNotCentered[5] >= timeBeforeSnap)
+            {
+                if (bottomCenterCube.transform.localEulerAngles.y % 90 >= 50) correction.bottom = 90 - (bottomCenterCube.transform.localEulerAngles.y % 90);
+                else correction.bottom = -(bottomCenterCube.transform.localEulerAngles.y % 90);
+                correction.bottom = correction.bottom / step;
+            }
+        }
+
+        // Updates the faces with the correction to snap everything back to place
+        updateFaces(correction);
     }
 
     // Controls for the cube that is non gyro playable
@@ -332,6 +427,7 @@ public class Rubix : MonoBehaviour
                     }
                     else cube.SetParent(cubesParents, true);
                 }
+                timeNotCentered[4] = 0;
                 break;
             case colliderFace.BOTTOM:
                 rotationAxis = new Vector3(0, -1, 0);
@@ -352,6 +448,7 @@ public class Rubix : MonoBehaviour
                     }
                     else cube.SetParent(cubesParents, true);
                 }
+                timeNotCentered[5] = 0;
                 break;
             case colliderFace.LEFT:
                 rotationAxis = new Vector3(-1, 0, 0);
@@ -372,6 +469,7 @@ public class Rubix : MonoBehaviour
                     }
                     else cube.SetParent(cubesParents, true);
                 }
+                timeNotCentered[2] = 0;
                 break;
             case colliderFace.RIGHT:
                 rotationAxis = new Vector3(1, 0, 0);
@@ -392,6 +490,7 @@ public class Rubix : MonoBehaviour
                     }
                     else cube.SetParent(cubesParents, true);
                 }
+                timeNotCentered[3] = 0;
                 break;
             case colliderFace.FRONT:
                 rotationAxis = new Vector3(0, 0, -1);
@@ -412,6 +511,7 @@ public class Rubix : MonoBehaviour
                     } 
                     else cube.SetParent(cubesParents, true);
                 }
+                timeNotCentered[0] = 0;
                 break;
             case colliderFace.BACK:
                 rotationAxis = new Vector3(0, 0, 1);
@@ -432,6 +532,7 @@ public class Rubix : MonoBehaviour
                     }
                     else cube.SetParent(cubesParents, true);
                 }
+                timeNotCentered[1] = 0;
                 break;
             default:
                 break;

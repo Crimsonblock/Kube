@@ -168,6 +168,9 @@ public class BleManager
     }
 
 
+    public void resetConnMgrs() { assignedConnMgr = 0; }
+
+
     public int bindConnectionHandlerToDevice(int bleHandle, GattCallbacks callbacks, LibCallback onFinishedCallback=null)
     {
         return registerCallback(bleHandle, callbacks, onFinishedCallback);
