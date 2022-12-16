@@ -52,7 +52,11 @@ public class Rubix : MonoBehaviour
 
     public float movementSpeed = 100;
 
+    public float slerpSpeed = 10;
+
     public float rotationMovementSpeed = 100;
+
+    Quaternion desiredOrientation;
 
 
     bool cubeGenerated = false;
@@ -93,9 +97,9 @@ public class Rubix : MonoBehaviour
                 // Step 1: get the data from the connMgr
                 RubixData newData = connMgr.getNewData();
 
-                // Step 2: update the orientation of the cube
-                or.Orientate(newData);
-                
+                // Step 2: update the orientation of the 
+                desiredOrientation = or.Orientate(newData);
+                transform.rotation = Quaternion.Slerp(transform.rotation, desiredOrientation, Time.deltaTime * slerpSpeed);
 
                 // Step 3:  update the faces of the cube
                 updateFaces(newData.rotation);
@@ -105,8 +109,12 @@ public class Rubix : MonoBehaviour
                 // if can be gyroplayed, sets the "crappy" commands"
                 if (canBeGyroPlayed)
                 {
-                    if(isKeyboardPlayed) okayKeyboardControls();
-                    else snapFaces();
+                    if (isKeyboardPlayed) okayKeyboardControls();
+                    else
+                    {
+                        transform.rotation = Quaternion.Slerp(transform.rotation, desiredOrientation, Time.deltaTime * slerpSpeed);
+                        snapFaces();
+                    }
                 }
                 // Otherwise, sets the better commands
                 else

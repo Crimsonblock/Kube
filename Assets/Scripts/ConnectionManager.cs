@@ -111,8 +111,9 @@ public class ConnectionManager
     private GattCallbacks createCallbacks()
     {
         GattCallbacks callbacks = new GattCallbacks();
-        callbacks.accel = newAccel;
-        callbacks.gyro = newGyro;
+        callbacks.accel = null;
+        callbacks.gyro = null;
+        callbacks.imu = newImu;
 
         // corrected mappings
         callbacks.encoderLeft = newBottomEncoder; //newLeftEncoder;
@@ -136,6 +137,20 @@ public class ConnectionManager
         this.data.gyroscope.x = x;
         this.data.gyroscope.y = y;
         this.data.gyroscope.z = z;
+        newDataReceived = true;
+    }
+
+    private void newImu(float aX, float aY, float aZ, float gX, float gY, float gZ)
+    {
+        this.data.accelerometer.x = aX;
+        this.data.accelerometer.y = aY;
+        this.data.accelerometer.z = aZ;
+
+        this.data.gyroscope.x = gX;
+        this.data.gyroscope.y = gY;
+        this.data.gyroscope.z = gZ;
+
+        //Debug.Log(this.data.accelerometer + " - " + this.data.gyroscope);
         newDataReceived = true;
     }
 

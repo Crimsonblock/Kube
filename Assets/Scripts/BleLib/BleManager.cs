@@ -7,6 +7,7 @@ using UnityEngine;
 
 public delegate void DataCallback(float newData);
 public delegate void MultiDataCallback(float x, float y, float z);
+public delegate void imuDataCallback (float aX, float aY, float aZ, float gX, float gY, float gZ);
 
 
 public struct GattCallbacks
@@ -14,6 +15,7 @@ public struct GattCallbacks
     public MultiDataCallback accel;
 
     public MultiDataCallback gyro;
+    public imuDataCallback imu;
 
     public DataCallback encoderTop;
     public DataCallback encoderBottom;
@@ -29,7 +31,7 @@ public delegate void DebugLog(string message);
 public class BleManager
 {
     // Library importation
-    private const string lib = "Ble-2.0.18.dll";
+    private const string lib = "Ble-2.0.20.dll";
     [DllImport(lib)]
     public extern static void startBleDeviceWatcher(DebugLog debugLog = null); //Done
     [DllImport(lib)]

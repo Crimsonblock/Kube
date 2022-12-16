@@ -2420,12 +2420,10 @@ MonoBehaviour:
   DeltaT: 0.01
   Pause: 1
   Filter: 2
-  Alpha: 0.02
-  R: 0.01
-  Q_quaternion: 0.00001
-  Q_quatBias: 0.00001
-  gyroscopeScale: 6
   speed: 10
+  test: 10
+  gyroScale: 1
+  Alpha: 0.98
 --- !u!65 &885189435
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -4686,15 +4684,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 885f1f2b414edaa4d835c24dbc2854c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DeltaT: 0.01
+  DeltaT: 0.03
   Pause: 1
   Filter: 2
-  Alpha: 0.02
-  R: 0.01
-  Q_quaternion: 0.00001
-  Q_quatBias: 0.00001
-  gyroscopeScale: 6
   speed: 10
+  test: 10
+  gyroScale: 1
+  Alpha: 0.1
 --- !u!65 &1903286668
 BoxCollider:
   m_ObjectHideFlags: 0
