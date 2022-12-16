@@ -114,12 +114,13 @@ public class ConnectionManager
         callbacks.accel = newAccel;
         callbacks.gyro = newGyro;
 
-        callbacks.encoderLeft = newLeftEncoder;
-        callbacks.encoderRight = newRightEncoder;
+        // corrected mappings
+        callbacks.encoderLeft = newBottomEncoder; //newLeftEncoder;
+        callbacks.encoderRight = newTopEncoder; // newRightEncoder;
         callbacks.encoderFront = newFrontEncoder;
         callbacks.encoderBack = newBackEncoder;
-        callbacks.encoderTop = newTopEncoder;
-        callbacks.encoderBottom = newBottomEncoder;
+        callbacks.encoderTop = newRightEncoder; // newTopEncoder;
+        callbacks.encoderBottom = newLeftEncoder; // newBottomEncoder;
 
         return callbacks;
     }
