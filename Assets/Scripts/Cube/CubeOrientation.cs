@@ -83,7 +83,7 @@ public class CubeOrientation : MonoBehaviour
 
         Quaternion quat = Quaternion.Euler(angle);
 
-        transform.rotation = Quaternion.Slerp(transform.rotation, quat, Time.deltaTime * speed);
+        transform.rotation = quat;
 
     }
 
