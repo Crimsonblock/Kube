@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 
@@ -15,6 +16,8 @@ public class GameManager : MonoBehaviour
     private int numCubes = 0;
     private int numFinished = 0;
 
+    bool lastLevelFinished = false;
+
     List<ToggleModeHandler> toggleModes = new List<ToggleModeHandler>();
 
 
@@ -27,7 +30,7 @@ public class GameManager : MonoBehaviour
         bleManager = BleManager.getInstance(true);
         bleManager.startScan();
         //bleManager = null;
-        // DontDestroyOnLoad(gameObject);
+        DontDestroyOnLoad(gameObject);
     }
 
     ~GameManager()
@@ -54,6 +57,19 @@ public class GameManager : MonoBehaviour
                 t();
             }
         }
+        else if (lastLevelFinished)
+        {
+            if (Input.GetKeyDown(KeyCode.R))
+            {
+                lastLevelFinished = false;
+                SceneManager.LoadScene(0);
+            }
+            else if (Input.GetKeyDown(KeyCode.F4))
+            {
+                Application.Quit();
+                Destroy(gameObject);
+            }
+        }
     }
 
     public void registerRubix()
@@ -71,9 +87,20 @@ public class GameManager : MonoBehaviour
     public void finish()
     {
         numFinished++;
-        if(numFinished == numCubes)
+        if(numFinished >= numCubes)
         {
-            Debug.Log("Game finished !");
+            Debug.Log("Finish");
+            if(SceneManager.GetActiveScene().buildIndex < SceneManager.sceneCountInBuildSettings - 1)
+            {
+                Debug.Log("Loading next level");
+                bleManager.resetConnMgrs();
+                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+            }
+            else
+            {
+                Debug.Log("Last Level");
+                lastLevelFinished =  true;
+            }
         }
     }
 

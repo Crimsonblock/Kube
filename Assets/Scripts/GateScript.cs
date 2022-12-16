@@ -7,9 +7,13 @@ public class GateScript : MonoBehaviour
     int counter = 0;
     bool isOpen = false;
     public bool CloseOnActivatorExit = false;
+    public Color gateColor;
     void Start()
     {
-
+        for(int i=0; i<transform.childCount; i++)
+        {
+            transform.GetChild(i).GetComponent<Renderer>().material.color = gateColor;
+        }
     }
 
 

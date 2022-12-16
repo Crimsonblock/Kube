@@ -48,6 +48,8 @@ public class Rubix : MonoBehaviour
 
     float []timeNotCentered = new float[6];
 
+    public float movementSpeed = 1;
+
     Vector3 keysStatus = Vector3.zero;
 
 
@@ -215,30 +217,30 @@ public class Rubix : MonoBehaviour
         // Pitch
         if (Input.GetKey(KeyCode.Z))
         {
-            transform.Rotate(new Vector3(1, 0, 0), 1, Space.World);
+            transform.Rotate(new Vector3(1, 0, 0), 1 * movementSpeed * Time.deltaTime, Space.World);
         }
         else if (Input.GetKey(KeyCode.S))
         {
-            transform.Rotate(new Vector3(1, 0, 0), -1, Space.World);
+            transform.Rotate(new Vector3(1, 0, 0), -1 * movementSpeed * Time.deltaTime, Space.World);
         }
 
         // Yaw
         if (Input.GetKey(KeyCode.A))
         {
-            transform.Rotate(new Vector3(0, 1, 0), 1, Space.World);
+            transform.Rotate(new Vector3(0, 1, 0), 1 * movementSpeed * Time.deltaTime, Space.World);
         }
         else if (Input.GetKey(KeyCode.E))
         {
-            transform.Rotate(new Vector3(0, 1, 0), -1, Space.World);
+            transform.Rotate(new Vector3(0, 1, 0), -1 * movementSpeed * Time.deltaTime, Space.World);
         }
 
         // Roll
         if (Input.GetKey(KeyCode.Q))
         {
-            transform.Rotate(new Vector3(0, 0, 1), 1, Space.World);
+            transform.Rotate(new Vector3(0, 0, 1), 1 * movementSpeed * Time.deltaTime, Space.World);
         }
         else if (Input.GetKey(KeyCode.D)){
-            transform.Rotate(new Vector3(0, 0, 1), -1, Space.World);
+            transform.Rotate(new Vector3(0, 0, 1), -1 * movementSpeed * Time.deltaTime, Space.World);
             
         }
 
@@ -280,31 +282,31 @@ public class Rubix : MonoBehaviour
         // Pitch
         if (Input.GetKey(KeyCode.I))
         {
-            transform.Rotate(new Vector3(1, 0, 0), 1, Space.World);
+            transform.Rotate(new Vector3(1, 0, 0), 1*movementSpeed*Time.deltaTime, Space.World);
         }
         else if (Input.GetKey(KeyCode.K))
         {
-            transform.Rotate(new Vector3(1, 0, 0), -1, Space.World);
+            transform.Rotate(new Vector3(1, 0, 0), -1*movementSpeed*Time.deltaTime, Space.World);
         }
 
         // Yaw
         if (Input.GetKey(KeyCode.U))
         {
-            transform.Rotate(new Vector3(0, 1, 0), 1, Space.World);
+            transform.Rotate(new Vector3(0, 1, 0), 1 * movementSpeed * Time.deltaTime, Space.World);
         }
         else if (Input.GetKey(KeyCode.O))
         {
-            transform.Rotate(new Vector3(0, 1, 0), -1, Space.World);
+            transform.Rotate(new Vector3(0, 1, 0), -1 * movementSpeed * Time.deltaTime, Space.World);
         }
 
         // Roll
         if (Input.GetKey(KeyCode.J))
         {
-            transform.Rotate(new Vector3(0, 0, 1), +1, Space.World);
+            transform.Rotate(new Vector3(0, 0, 1), +1 * movementSpeed * Time.deltaTime, Space.World);
         }
         else if (Input.GetKey(KeyCode.L))
         {
-            transform.Rotate(new Vector3(0, 0, 1), -1, Space.World);
+            transform.Rotate(new Vector3(0, 0, 1), -1 * movementSpeed * Time.deltaTime, Space.World);
         }
 
         // Face Selection 
