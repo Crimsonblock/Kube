@@ -12,11 +12,17 @@ public class TilePlacer : MonoBehaviour
     private char numLoops;
     private const float tileOffset = .227f;
     private const float tileScale = 0.56f;
+
+    Rubix rubix;
+
     // Start is called before the first frame update
     void Start()
     {
         numLoops = (char)0;
         shouldTrigger = true;
+        Transform parent = transform.parent;
+        while (parent.tag != "Rubix") parent = parent.parent;
+        rubix = parent.GetComponent<Rubix>();
     }
 
     // Update is called once per frame
@@ -70,6 +76,7 @@ public class TilePlacer : MonoBehaviour
                         break;
                 };
             }
+            rubix.setCubeGenerated(true);
             Destroy(gameObject);
         }
         numLoops++;

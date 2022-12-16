@@ -17,7 +17,6 @@ public class Rubix : MonoBehaviour
     List<Transform> frontCubes = new List<Transform>();
     List<Transform> backCubes = new List<Transform>();
 
-    bool hasFinished = false;
 
     colliderFace []faceSelectionRotation = { colliderFace.FRONT, colliderFace.BACK, colliderFace.LEFT, colliderFace.RIGHT, colliderFace.TOP, colliderFace.BOTTOM } ;
     int currentSelectedFace = 0;
@@ -43,6 +42,7 @@ public class Rubix : MonoBehaviour
 
     CubeOrientation or = null;
 
+
     bool isKeyboardPlayed = false;
     public bool canBeGyroPlayed = false;
 
@@ -50,10 +50,12 @@ public class Rubix : MonoBehaviour
 
     float []timeNotCentered = new float[6];
 
-    public float movementSpeed = 1;
+    public float movementSpeed = 100;
 
-    public float rotationMovementSpeed = 1;
+    public float rotationMovementSpeed = 100;
 
+
+    bool cubeGenerated = false;
     Vector3 keysStatus = Vector3.zero;
 
 
@@ -77,7 +79,7 @@ public class Rubix : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (hasFinished) return;
+        if (!cubeGenerated) return;
         if (canBeGyroPlayed && !isKeyboardPlayed && connMgr == null)
         {
             if (gameMgr != null) connMgr = gameMgr.getConnectionManager();
@@ -121,7 +123,10 @@ public class Rubix : MonoBehaviour
 
 
     }
-
+    public void setCubeGenerated(bool val)
+    {
+        cubeGenerated = val;
+    }
 
     void snapFaces()
     {
@@ -157,6 +162,8 @@ public class Rubix : MonoBehaviour
                 correction.back = correction.back / step;
             }
         }
+
+        
 
 
         float correctedAngle = leftCenterCube.localRotation.eulerAngles.x;
@@ -1483,7 +1490,11 @@ public class Rubix : MonoBehaviour
     }
     public void finish()
     {
-        hasFinished = true;
         gameMgr.finish();
+    }
+
+    public void unFinish()
+    {
+        gameMgr.unFinish();
     }
 }

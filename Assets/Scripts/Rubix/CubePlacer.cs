@@ -17,9 +17,9 @@ public class CubePlacer : MonoBehaviour
     {
         if (numLoops > 10)
         {
-            //Destroy(this.gameObject);
+            Destroy(this.gameObject);
         }
-        //numLoops++;
+        numLoops++;
     }
 
     private void OnTriggerEnter(Collider other)

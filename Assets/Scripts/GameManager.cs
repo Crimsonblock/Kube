@@ -104,4 +104,8 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void unFinish()
+    {
+        numFinished--;
+    }
 }

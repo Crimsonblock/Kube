@@ -22,7 +22,14 @@ public class FinishScript : MonoBehaviour
         if(other.tag == "Player")
         {
             rubix.finish();
-            Destroy(gameObject);
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.tag == "Player")
+        {
+            rubix.unFinish();
         }
     }
 }
