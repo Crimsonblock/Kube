@@ -10,6 +10,7 @@ TagManager:
   - btnActivator
   - gateR
   - gateL
+  - table
   layers:
   - Default
   - TransparentFX

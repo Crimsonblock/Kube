@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Transactions.Configuration;
 using UnityEngine;
 
 public class BallScript : MonoBehaviour
 {
 
     private Rigidbody rb;
+    private Vector3 initialPosition;
 
     public float MaxSpeed = 1;
 
@@ -13,6 +15,7 @@ public class BallScript : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        initialPosition = transform.localPosition;
     }
 
     // Update is called once per frame
@@ -22,5 +25,10 @@ public class BallScript : MonoBehaviour
         {
             rb.velocity = MaxSpeed * rb.velocity.normalized;
         }
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.collider.tag == "table") transform.localPosition = initialPosition;
     }
 }
