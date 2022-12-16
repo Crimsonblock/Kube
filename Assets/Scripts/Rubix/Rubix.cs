@@ -1409,40 +1409,40 @@ public class Rubix : MonoBehaviour
         switch (face)
         {
             case colliderFace.TOP:
-                if (frontCenterCube.localRotation.eulerAngles.z % 90 == 0
-                    && backCenterCube.localRotation.eulerAngles.z % 90 == 0
-                    && leftCenterCube.localRotation.eulerAngles.x % 90 == 0
-                    && rightCenterCube.localRotation.eulerAngles.x % 90 == 0) return true;
+                if ((int)Mathf.Floor(frontCenterCube.localRotation.eulerAngles.z % 90) == 0
+                    && (int)Mathf.Floor(backCenterCube.localRotation.eulerAngles.z % 90) == 0
+                    && (int)Mathf.Floor(leftCenterCube.localRotation.eulerAngles.x % 90) == 0
+                    && (int)Mathf.Floor(rightCenterCube.localRotation.eulerAngles.x % 90) == 0) return true;
                     break;
             case colliderFace.BOTTOM:
-                if (frontCenterCube.localRotation.eulerAngles.z % 90 == 0
-                    && backCenterCube.localRotation.eulerAngles.z % 90 == 0
-                    && leftCenterCube.localRotation.eulerAngles.x % 90 == 0
-                    && rightCenterCube.localRotation.eulerAngles.x % 90 == 0) return true;
+                if ((int)Mathf.Floor(frontCenterCube.localRotation.eulerAngles.z) % 90 == 0
+                    && (int)Mathf.Floor(backCenterCube.localRotation.eulerAngles.z) % 90 == 0
+                    && (int)Mathf.Floor(leftCenterCube.localRotation.eulerAngles.x) % 90 == 0
+                    && (int)Mathf.Floor(rightCenterCube.localRotation.eulerAngles.x) % 90 == 0) return true;
                 break;
             case colliderFace.LEFT:
-                if (frontCenterCube.localRotation.eulerAngles.z % 90 == 0
-                    && backCenterCube.localRotation.eulerAngles.z % 90 == 0
-                    && topCenterCube.localRotation.eulerAngles.y % 90 == 0
-                    && bottomCenterCube.localRotation.eulerAngles.y % 90 == 0) return true;
+                if ((int)Mathf.Floor(frontCenterCube.localRotation.eulerAngles.z) % 90 == 0
+                    && (int)Mathf.Floor(backCenterCube.localRotation.eulerAngles.z) % 90 == 0
+                    && (int)Mathf.Floor(topCenterCube.localRotation.eulerAngles.y) % 90 == 0
+                    && (int)Mathf.Floor(bottomCenterCube.localRotation.eulerAngles.y) % 90 == 0) return true;
                 break;
             case colliderFace.RIGHT:
-                if (frontCenterCube.localRotation.eulerAngles.z % 90 == 0
-                    && backCenterCube.localRotation.eulerAngles.z % 90 == 0
-                    && topCenterCube.localRotation.eulerAngles.y % 90 == 0
-                    && bottomCenterCube.localRotation.eulerAngles.y % 90 == 0) return true;
+                if ((int)Mathf.Floor(frontCenterCube.localRotation.eulerAngles.z % 90) == 0
+                    && (int)Mathf.Floor(backCenterCube.localRotation.eulerAngles.z % 90) == 0
+                    && (int)Mathf.Floor(topCenterCube.localRotation.eulerAngles.y % 90) == 0
+                    && (int)Mathf.Floor(bottomCenterCube.localRotation.eulerAngles.y % 90) == 0) return true;
                 break;
             case colliderFace.FRONT:
-                if (topCenterCube.localRotation.eulerAngles.y % 90 == 0
-                    && bottomCenterCube.localRotation.eulerAngles.y % 90 == 0
-                    && leftCenterCube.localRotation.eulerAngles.x % 90 == 0
-                    && rightCenterCube.localRotation.eulerAngles.x % 90 == 0) return true;
+                if ((int)Mathf.Floor(topCenterCube.localRotation.eulerAngles.y % 90) == 0
+                    && (int)Mathf.Floor(bottomCenterCube.localRotation.eulerAngles.y % 90) == 0
+                    && (int)Mathf.Floor(leftCenterCube.localRotation.eulerAngles.x % 90) == 0
+                    && (int)Mathf.Floor(rightCenterCube.localRotation.eulerAngles.x % 90) == 0) return true;
                 break;
             case colliderFace.BACK:
-                if (topCenterCube.localRotation.eulerAngles.y % 90 == 0
-                    && bottomCenterCube.localRotation.eulerAngles.y % 90 == 0
-                    && leftCenterCube.localRotation.eulerAngles.x % 90 == 0
-                    && rightCenterCube.localRotation.eulerAngles.x % 90 == 0) return true;
+                if ((int)Mathf.Floor(topCenterCube.localRotation.eulerAngles.y % 90) == 0
+                    && (int)Mathf.Floor(bottomCenterCube.localRotation.eulerAngles.y % 90) == 0
+                    && (int)Mathf.Floor(leftCenterCube.localRotation.eulerAngles.x % 90) == 0
+                    && (int)Mathf.Floor(rightCenterCube.localRotation.eulerAngles.x % 90) == 0) return true;
                 break;
             default:
                 Debug.Log("Unknown face to add the cube to");
