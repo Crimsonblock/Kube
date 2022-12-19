@@ -35,7 +35,7 @@ public class Rubix : MonoBehaviour
 
     public float timeBeforeSnap;
 
-    ConnectionManager connMgr = null;
+    SerialConnectionManager connMgr = null;
     public GameManager gameMgr = null;
 
     bool areCenterCubesSelected = false;
@@ -83,6 +83,19 @@ public class Rubix : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
+        /*
+         * TODO:    - In the player: add a ray casting towards the camera location to set outline if invisible                  <----1
+         *          - In the finish lane: Do the same                                                                           <----2
+         *          - Add UI elements:                                                                                          <----3
+         *              -Clean interLevel screen
+         *              -Clean start screen
+         *              -Maybe light dimming in the beginning
+         */
+
+        
+
+
         if (!cubeGenerated) return;
         if (canBeGyroPlayed && !isKeyboardPlayed && connMgr == null)
         {
@@ -92,17 +105,25 @@ public class Rubix : MonoBehaviour
 
         if (areCenterCubesSelected)
         {
-            if (canBeGyroPlayed && !isKeyboardPlayed && connMgr.hasNewData())
+            if (canBeGyroPlayed && !isKeyboardPlayed)
             {
                 // Step 1: get the data from the connMgr
-                RubixData newData = connMgr.getNewData();
+                if (connMgr.hasNewImu())
+                {
+                    Vector3[] imuData = connMgr.getImuData();
 
-                // Step 2: update the orientation of the 
-                desiredOrientation = or.Orientate(newData);
+                    // Step 2: update the orientation of the 
+                    if(imuData != null) desiredOrientation = or.Orientate(imuData);
+                }
+
+                if (connMgr.hasNewFaces())
+                {
+                    RotaryEncoder newData = connMgr.getFaces();
+                    // Step 3:  update the faces of the cube
+                    if(newData != null) updateFaces(newData);
+                }
                 transform.rotation = Quaternion.Slerp(transform.rotation, desiredOrientation, Time.deltaTime * slerpSpeed);
-
-                // Step 3:  update the faces of the cube
-                updateFaces(newData.rotation);
+                snapFaces();
             }
             else
             {
@@ -112,7 +133,6 @@ public class Rubix : MonoBehaviour
                     if (isKeyboardPlayed) okayKeyboardControls();
                     else
                     {
-                        transform.rotation = Quaternion.Slerp(transform.rotation, desiredOrientation, Time.deltaTime * slerpSpeed);
                         snapFaces();
                     }
                 }
@@ -128,6 +148,27 @@ public class Rubix : MonoBehaviour
             selectCenterCubes();
         }
 
+        // Calibration
+        if (Input.GetKeyDown(KeyCode.Keypad1)) // FRONT
+        {
+            desiredOrientation = Quaternion.Euler(0, 0, 0);
+            or.setRotation(desiredOrientation);
+        }
+        else if (Input.GetKeyDown(KeyCode.Keypad2)) // RIGHT
+        {
+            desiredOrientation = Quaternion.Euler(0, 90, 0);
+            or.setRotation(desiredOrientation);
+        }
+        else if (Input.GetKeyDown(KeyCode.Keypad3)) // BACK
+        {
+            desiredOrientation = Quaternion.Euler(0, 180, 0);
+            or.setRotation(desiredOrientation);
+        }
+        else if (Input.GetKeyDown(KeyCode.Keypad4)) // LEFT
+        {
+            desiredOrientation = Quaternion.Euler(0, 270, 0);
+            or.setRotation(desiredOrientation);
+        }
 
 
     }

@@ -21,7 +21,6 @@ public class CubeOrientation : MonoBehaviour
     public int speed = 10;
 
     public float test = 10;
-    public float gyroScale = 1 ;
     public float Alpha = .98f;
 
     private cOrientation orient;
@@ -33,13 +32,21 @@ public class CubeOrientation : MonoBehaviour
         orient.setAlpha(Alpha);
     }
 
-    public Quaternion Orientate(RubixData data)
+
+    public void setRotation(Quaternion q)
+    {
+        float[] libQ = { q.w, q.z, q.y, q.x };
+        orient.setOrientation(libQ);
+    }
+
+
+    public Quaternion Orientate(Vector3 []data)
     {
 
         //orient.setElapsedTime(DeltaT);
 
-        Vector3 accelerometer = data.accelerometer;
-        Vector3 gyroscope = data.gyroscope;
+        Vector3 accelerometer = data[0];
+        Vector3 gyroscope = data[1];
 
 
         var quaternions = orient.ComplementaryFilter(

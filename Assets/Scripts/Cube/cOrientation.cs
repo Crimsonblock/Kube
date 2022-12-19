@@ -588,5 +588,13 @@ namespace Orientation3D
             float[] ReturnArray = new float[4] { Qxk[0, 0], Qxk[1, 0], Qxk[2, 0], Qxk[3, 0] };
             return ReturnArray;
         }
+
+        public void setOrientation(float []q)
+        {
+            Qxk[0, 0] = q[0];
+            Qxk[1, 0] = q[1];
+            Qxk[2, 0] = q[2];
+            Qxk[3, 0] = q[3];
+        }
     }
 }

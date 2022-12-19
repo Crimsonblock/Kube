@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviour
     private BleManager bleManager = null;
     private int numCubes = 0;
     private int numFinished = 0;
+    SerialConnectionManager connmgr = null;
 
     bool lastLevelFinished = false;
 
@@ -25,12 +26,7 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        // Set a first parameter to true to get .NET Library log in unity
-        // Set a second parameter to true to get Native library log in unity
-        bleManager = BleManager.getInstance(true);
-        bleManager.startScan();
-        //bleManager = null;
-        //DontDestroyOnLoad(gameObject);
+        connmgr = new();
     }
 
     ~GameManager()
@@ -38,16 +34,15 @@ public class GameManager : MonoBehaviour
        if(bleManager != null) bleManager.destroy();
     }
 
-    public ConnectionManager getConnectionManager()
+    public SerialConnectionManager getConnectionManager()
     {
-        if (bleManager == null) return null;
-        return bleManager.getConnectionManager();
+        return connmgr;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (bleManager != null) bleManager.update();
+        if (connmgr != null) connmgr.Update();
 
         if (Input.GetKeyDown(KeyCode.N))
         {
