@@ -181,34 +181,36 @@ public class Rubix : MonoBehaviour
     {
         // Creates the correction data
         RotaryEncoder correction = new RotaryEncoder();
-        int angle = (int)Mathf.Round(frontCenterCube.transform.localEulerAngles.z % 90);
+        int angle = ((int)Mathf.Round(frontCenterCube.transform.localEulerAngles.z % 90)) % 90;
 
         // Front snapping
         if (angle != 0)
         {
-            Debug.Log("Snapping front face");
             timeNotCentered[0] += Time.deltaTime;
             // Snaps back
             if (timeNotCentered[0] >= timeBeforeSnap)
             {
+                Debug.Log("Snapping front face");
+                Debug.Log("Front" + angle);
                 if (angle >= 50) correction.front = angle-90;
                 else correction.front = angle;
-                correction.front = (int) (correction.front / step);
+                correction.front = (int) (-correction.front / step);
             }
         }
 
         // Back snapping
-        else if((int)Mathf.Round(backCenterCube.transform.localEulerAngles.z % 90) !=0)
+        else if(((int)Mathf.Round(backCenterCube.transform.localEulerAngles.z % 90))%90 !=0)
         {
-            Debug.Log("Snapping back face");
-            angle = (int)Mathf.Round(backCenterCube.transform.localEulerAngles.z % 90);
+            angle = ((int)Mathf.Round(backCenterCube.transform.localEulerAngles.z % 90))%90;
             timeNotCentered[1] += Time.deltaTime;
             // Snaps back
             if (timeNotCentered[1] >= timeBeforeSnap)
             {
+                Debug.Log("Snapping back face");
+                Debug.Log("Back: " + angle);
                 if (angle >= 50) correction.back = 90 - angle;
                 else correction.back = -angle;
-                correction.back = correction.back / step;
+                correction.back = -correction.back / step;
             }
         }
 
@@ -234,17 +236,18 @@ public class Rubix : MonoBehaviour
             }
         }
         // Left snapping
-        else if ((int)Mathf.Round(correctedAngle % 90) != 0)
+        else if (((int)Mathf.Round(correctedAngle % 90))%90 != 0)
         {
-            Debug.Log("Snapping left face");
-            angle = (int)Mathf.Round(leftCenterCube.transform.localEulerAngles.x % 90);
+            angle = ((int)Mathf.Round(leftCenterCube.transform.localEulerAngles.x % 90))%90;
             timeNotCentered[2] += Time.deltaTime;
             // Snaps back
             if (timeNotCentered[2] >= timeBeforeSnap)
             {
+                Debug.Log("Snapping left face");
+                Debug.Log("Left: " + angle);
                 if (angle >= 50) correction.left = angle-90;
                 else correction.left = angle;
-                correction.left = correction.left / step;
+                correction.left = -correction.left / step;
             }
         }
 
@@ -267,47 +270,50 @@ public class Rubix : MonoBehaviour
         }
 
         // Right snapping
-        else if ((int)Mathf.Round(rightCenterCube.transform.localEulerAngles.x % 90) != 0)
+        else if (((int)Mathf.Round(rightCenterCube.transform.localEulerAngles.x % 90))%90 != 0)
         {
-            Debug.Log("Snapping right face");
-            angle = (int)Mathf.Round(rightCenterCube.transform.localEulerAngles.x % 90);
+            angle = ((int)Mathf.Round(rightCenterCube.transform.localEulerAngles.x % 90)) % 90;
             timeNotCentered[3] += Time.deltaTime;
             // Snaps back
             if (timeNotCentered[3] >= timeBeforeSnap)
             {
+                Debug.Log("Snapping right face");
+                Debug.Log("Right: " + angle);
                 if (angle % 90 >= 50) correction.right = 90-angle;
                 else correction.right = -angle;
-                correction.right = correction.right / step;
+                correction.right = -correction.right / step;
             }
         }
 
         // Top snapping
-        else if ((int)Mathf.Round(topCenterCube.transform.localEulerAngles.y % 90) != 0)
+        else if (((int)Mathf.Round(topCenterCube.transform.localEulerAngles.y % 90))%90 != 0)
         {
-            Debug.Log("Snapping top face");
-            angle = (int)Mathf.Round(topCenterCube.transform.localEulerAngles.y % 90);
+            angle = ((int)Mathf.Round(topCenterCube.transform.localEulerAngles.y % 90))%90;
             timeNotCentered[4] += Time.deltaTime;
             // Snaps back
             if (timeNotCentered[4] >= timeBeforeSnap)
             {
+                Debug.Log("Snapping top face");
+                Debug.Log("Top: " + angle);
                 if (angle >= 50) correction.top = 90-angle;
                 else correction.top = -angle;
-                correction.top = correction.top / step;
+                correction.top = -correction.top / step;
             }
         }
 
         // Bottom snapping
-        else if ((int)Mathf.Round(bottomCenterCube.transform.localEulerAngles.y % 90) != 0)
+        else if (((int)Mathf.Round(bottomCenterCube.transform.localEulerAngles.y % 90))%90 != 0)
         {
-            Debug.Log("Snapping bottom face");
-            angle = (int)Mathf.Round(bottomCenterCube.transform.localEulerAngles.y % 90);
+            angle = ((int)Mathf.Round(bottomCenterCube.transform.localEulerAngles.y % 90))%90;
             timeNotCentered[5] += Time.deltaTime;
             // Snaps back
             if (timeNotCentered[5] >= timeBeforeSnap)
             {
+                Debug.Log("Snapping bottom face");
+                Debug.Log("Bottom: " + angle);
                 if (angle >= 50) correction.bottom = angle - 90;
                 else correction.bottom = angle;
-                correction.bottom = correction.bottom / step;
+                correction.bottom = -correction.bottom / step;
             }
         }
 
@@ -529,7 +535,7 @@ public class Rubix : MonoBehaviour
                     cube.SetParent(topCenterCube, true);
                 }
 
-                topCenterCube.Rotate(rotationAxis, 10*steps, Space.Self);
+                topCenterCube.Rotate(rotationAxis, -10*steps, Space.Self);
 
                 foreach (Transform cube in topCubes)
                 {
@@ -550,7 +556,7 @@ public class Rubix : MonoBehaviour
                     cube.SetParent(bottomCenterCube, true);
                 }
 
-                bottomCenterCube.Rotate(rotationAxis, 10*steps, Space.Self);
+                bottomCenterCube.Rotate(rotationAxis, -10*steps, Space.Self);
 
                 foreach (Transform cube in bottomCubes)
                 {
@@ -571,7 +577,7 @@ public class Rubix : MonoBehaviour
                     cube.SetParent(leftCenterCube, true);
                 }
 
-                leftCenterCube.Rotate(rotationAxis, 10 * steps, Space.Self);
+                leftCenterCube.Rotate(rotationAxis, -10 * steps, Space.Self);
 
                 foreach (Transform cube in leftCubes)
                 {
@@ -592,7 +598,7 @@ public class Rubix : MonoBehaviour
                     cube.SetParent(rightCenterCube, true);
                 }
 
-                rightCenterCube.Rotate(rotationAxis, 10 * steps, Space.Self);
+                rightCenterCube.Rotate(rotationAxis, -10 * steps, Space.Self);
 
                 foreach (Transform cube in rightCubes)
                 {
@@ -613,7 +619,7 @@ public class Rubix : MonoBehaviour
                     cube.SetParent(frontCenterCube, true);
                 }
 
-                frontCenterCube.Rotate(rotationAxis, 10 * steps, Space.Self);
+                frontCenterCube.Rotate(rotationAxis, -10 * steps, Space.Self);
 
                 foreach (Transform cube in frontCubes)
                 {
@@ -634,7 +640,7 @@ public class Rubix : MonoBehaviour
                     cube.SetParent(backCenterCube, true);
                 }
 
-                backCenterCube.Rotate(rotationAxis, 10 * steps, Space.Self);
+                backCenterCube.Rotate(rotationAxis, -10 * steps, Space.Self);
 
                 foreach (Transform cube in backCubes)
                 {

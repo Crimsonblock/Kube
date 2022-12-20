@@ -2423,6 +2423,7 @@ MonoBehaviour:
   speed: 10
   test: 10
   Alpha: 0.98
+  AngleDeviation: 0
 --- !u!65 &885189435
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -4689,6 +4690,7 @@ MonoBehaviour:
   speed: 10
   test: 10
   Alpha: 0.98
+  AngleDeviation: -25
 --- !u!65 &1903286668
 BoxCollider:
   m_ObjectHideFlags: 0

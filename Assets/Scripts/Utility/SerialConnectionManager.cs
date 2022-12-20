@@ -66,12 +66,16 @@ public class SerialConnectionManager
             }
             else if(result.StartsWith("r"))
             {
+                rotData = new();
+
+                result = result.Remove(0, 1);
                 string[] inputvec = result.Split(' ');
                 for (int i = 0; i < inputvec.Length; i++)
                     if (inputvec[i] == "") return;
+                Debug.Log(inputvec[0]);
 
-                rotData.front = int.Parse(inputvec[0]);
-                rotData.back = int.Parse(inputvec[1]);
+                rotData.front = int.Parse(inputvec[1]);
+                rotData.back = int.Parse(inputvec[0]);
                 rotData.left = int.Parse(inputvec[2]);
                 rotData.right = int.Parse(inputvec[3]);
                 rotData.top = int.Parse(inputvec[4]);

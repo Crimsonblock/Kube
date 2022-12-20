@@ -23,6 +23,8 @@ public class CubeOrientation : MonoBehaviour
     public float test = 10;
     public float Alpha = .98f;
 
+    public float AngleDeviation = 0;
+
     private cOrientation orient;
 
     // Start is called before the first frame update
@@ -30,6 +32,11 @@ public class CubeOrientation : MonoBehaviour
     {
         orient = new(DeltaT);
         orient.setAlpha(Alpha);
+
+        Quaternion q = Quaternion.Euler(0, AngleDeviation, 0);
+        float[] libQ = { q.w, q.z, q.y, q.x };
+        orient.setOrientation(libQ);
+
     }
 
 
