@@ -99,6 +99,7 @@ public class GameManager : MonoBehaviour
             {
                 Debug.Log("Last Level");
                 lastLevelFinished =  true;
+                NextLevel.gameObject.SetActive(false);
             }
         }
 
