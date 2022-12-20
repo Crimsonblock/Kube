@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.VisualScripting;
 using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
@@ -58,6 +59,7 @@ public class Rubix : MonoBehaviour
 
     Quaternion desiredOrientation;
 
+    public TMP_Text wait;
 
     bool cubeGenerated = false;
     Vector3 keysStatus = Vector3.zero;
@@ -175,6 +177,7 @@ public class Rubix : MonoBehaviour
     public void setCubeGenerated(bool val)
     {
         cubeGenerated = val;
+        wait.enabled = false;
     }
 
     void snapFaces()
@@ -1545,11 +1548,15 @@ public class Rubix : MonoBehaviour
     }
     public void finish()
     {
-        gameMgr.finish();
+        if (!gameMgr.finish())
+            wait.enabled = true;
+        else
+            wait.enabled = false;
     }
 
     public void unFinish()
     {
         gameMgr.unFinish();
+        wait.enabled = false;
     }
 }
