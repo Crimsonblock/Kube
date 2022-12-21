@@ -18,14 +18,11 @@ public class CubeOrientation : MonoBehaviour
 
     public FilterType Filter = FilterType.Complementary;
 
-    public float Alpha = 0.98f;
-    public float R = 0.01f;
-    public float Q_quaternion = 0.00001f;
-    public float Q_quatBias = 0.00001f;
-
-    public float gyroscopeScale = 1000.0f;
-
     public int speed = 10;
+
+    public float test = 10;
+    public float gyroScale = 1 ;
+    public float Alpha = .98f;
 
     private cOrientation orient;
 
@@ -33,42 +30,21 @@ public class CubeOrientation : MonoBehaviour
     void Start()
     {
         orient = new(DeltaT);
+        orient.setAlpha(Alpha);
     }
 
-    public void Orientate(RubixData data)
+    public Quaternion Orientate(RubixData data)
     {
-        Vector3 accelerometer = data.accelerometer == Vector3.zero ? new Vector3(0.01f, 0.01f, 0.01f) : data.accelerometer ;
-        Vector3 gyroscope = data.gyroscope == Vector3.zero ? new Vector3(0.01f, 0.01f, 0.01f) :  data.gyroscope / gyroscopeScale;
 
-        orient.setElapsedTime(DeltaT);
-        orient.setAlpha(Alpha);
-        orient.setR(R);
-        orient.setQquaternion(Q_quaternion);
-        orient.setQquatbias(Q_quatBias);
+        //orient.setElapsedTime(DeltaT);
 
-        float[] quaternions = new float[] { 0, 0, 0, 0 };
+        Vector3 accelerometer = data.accelerometer;
+        Vector3 gyroscope = data.gyroscope;
 
-        if (Filter == FilterType.Complementary)
-        {
-            quaternions = orient.ComplementaryFilter(
-                accelerometer.x, accelerometer.y, accelerometer.z,
-                gyroscope.x, gyroscope.y, gyroscope.z
-                );
-        }
-        else if (Filter == FilterType.Kalman)
-        {
-            quaternions = orient.KalmanFilter(
-                accelerometer.x, accelerometer.y, accelerometer.z,
-                gyroscope.x, gyroscope.y, gyroscope.z
-                );
-        }
-        else if (Filter == FilterType.KalmanExrended)
-        {
-            quaternions = orient.KalmanFilterBias(
-                accelerometer.x, accelerometer.y, accelerometer.z,
-                gyroscope.x, gyroscope.y, gyroscope.z
-                );
-        }
+
+        var quaternions = orient.ComplementaryFilter(
+            accelerometer.x, accelerometer.y, accelerometer.z,
+            gyroscope.x, gyroscope.y, gyroscope.z);
         Quaternion q = new(
                     quaternions[3],
                     quaternions[2],
@@ -78,12 +54,12 @@ public class CubeOrientation : MonoBehaviour
 
         q = Quaternion.Inverse(q);
 
-        Vector3 angle = q.eulerAngles;
+        /*Vector3 angle = q.eulerAngles;
         angle.x = -angle.x;
 
-        Quaternion quat = Quaternion.Euler(angle);
-
-        transform.rotation = quat;
+        Quaternion quat = Quaternion.Euler(angle);*/
+        // transform.rotation = q;
+        return q;
 
     }
 

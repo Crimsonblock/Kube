@@ -17,6 +17,7 @@ public class Rubix : MonoBehaviour
     List<Transform> frontCubes = new List<Transform>();
     List<Transform> backCubes = new List<Transform>();
 
+
     colliderFace []faceSelectionRotation = { colliderFace.FRONT, colliderFace.BACK, colliderFace.LEFT, colliderFace.RIGHT, colliderFace.TOP, colliderFace.BOTTOM } ;
     int currentSelectedFace = 0;
     int []facesSupposedRotation = new int[6];
@@ -41,6 +42,7 @@ public class Rubix : MonoBehaviour
 
     CubeOrientation or = null;
 
+
     bool isKeyboardPlayed = false;
     public bool canBeGyroPlayed = false;
 
@@ -48,8 +50,16 @@ public class Rubix : MonoBehaviour
 
     float []timeNotCentered = new float[6];
 
-    public float movementSpeed = 1;
+    public float movementSpeed = 100;
 
+    public float slerpSpeed = 10;
+
+    public float rotationMovementSpeed = 100;
+
+    Quaternion desiredOrientation;
+
+
+    bool cubeGenerated = false;
     Vector3 keysStatus = Vector3.zero;
 
 
@@ -73,6 +83,7 @@ public class Rubix : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!cubeGenerated) return;
         if (canBeGyroPlayed && !isKeyboardPlayed && connMgr == null)
         {
             if (gameMgr != null) connMgr = gameMgr.getConnectionManager();
@@ -86,9 +97,9 @@ public class Rubix : MonoBehaviour
                 // Step 1: get the data from the connMgr
                 RubixData newData = connMgr.getNewData();
 
-                // Step 2: update the orientation of the cube
-                or.Orientate(newData);
-                
+                // Step 2: update the orientation of the 
+                desiredOrientation = or.Orientate(newData);
+                transform.rotation = Quaternion.Slerp(transform.rotation, desiredOrientation, Time.deltaTime * slerpSpeed);
 
                 // Step 3:  update the faces of the cube
                 updateFaces(newData.rotation);
@@ -98,8 +109,12 @@ public class Rubix : MonoBehaviour
                 // if can be gyroplayed, sets the "crappy" commands"
                 if (canBeGyroPlayed)
                 {
-                    if(isKeyboardPlayed) okayKeyboardControls();
-                    else snapFaces();
+                    if (isKeyboardPlayed) okayKeyboardControls();
+                    else
+                    {
+                        transform.rotation = Quaternion.Slerp(transform.rotation, desiredOrientation, Time.deltaTime * slerpSpeed);
+                        snapFaces();
+                    }
                 }
                 // Otherwise, sets the better commands
                 else
@@ -116,7 +131,10 @@ public class Rubix : MonoBehaviour
 
 
     }
-
+    public void setCubeGenerated(bool val)
+    {
+        cubeGenerated = val;
+    }
 
     void snapFaces()
     {
@@ -152,6 +170,8 @@ public class Rubix : MonoBehaviour
                 correction.back = correction.back / step;
             }
         }
+
+        
 
 
         float correctedAngle = leftCenterCube.localRotation.eulerAngles.x;
@@ -608,11 +628,11 @@ public class Rubix : MonoBehaviour
 
             if (shouldRotateClockwise((int)topCenterCube.localRotation.eulerAngles.y, facesSupposedRotation[4]))
             {
-                topCenterCube.Rotate(rotationAxis, 1, Space.Self);
+                topCenterCube.Rotate(rotationAxis, 1 * rotationMovementSpeed * Time.deltaTime, Space.Self);
             }
             else
             {
-                topCenterCube.Rotate(rotationAxis, -1, Space.Self);
+                topCenterCube.Rotate(rotationAxis, -1 * rotationMovementSpeed * Time.deltaTime, Space.Self);
             }
 
             foreach (Transform cube in topCubes)
@@ -639,11 +659,11 @@ public class Rubix : MonoBehaviour
 
             if (shouldRotateClockwise((int)bottomCenterCube.localRotation.eulerAngles.y, facesSupposedRotation[5]))
             {
-                bottomCenterCube.Rotate(rotationAxis, 1, Space.Self);
+                bottomCenterCube.Rotate(rotationAxis, 1 * rotationMovementSpeed * Time.deltaTime, Space.Self);
             }
             else
             {
-                bottomCenterCube.Rotate(rotationAxis, -1, Space.Self);
+                bottomCenterCube.Rotate(rotationAxis, -1 * rotationMovementSpeed * Time.deltaTime, Space.Self);
             }
 
             foreach (Transform cube in bottomCubes)
@@ -670,11 +690,11 @@ public class Rubix : MonoBehaviour
 
             if (shouldRotateClockwise((int)frontCenterCube.localRotation.eulerAngles.z, facesSupposedRotation[0]))
             {
-                frontCenterCube.Rotate(rotationAxis, 1, Space.Self);
+                frontCenterCube.Rotate(rotationAxis, 1 * rotationMovementSpeed * Time.deltaTime, Space.Self);
             }
             else
             {
-                frontCenterCube.Rotate(rotationAxis, -1, Space.Self);
+                frontCenterCube.Rotate(rotationAxis, -1 * rotationMovementSpeed * Time.deltaTime, Space.Self);
             }
 
             foreach (Transform cube in frontCubes)
@@ -701,11 +721,11 @@ public class Rubix : MonoBehaviour
 
             if (shouldRotateClockwise((int)backCenterCube.localRotation.eulerAngles.z, facesSupposedRotation[1]))
             {
-                backCenterCube.Rotate(rotationAxis, 1, Space.Self);
+                backCenterCube.Rotate(rotationAxis, 1 * rotationMovementSpeed * Time.deltaTime, Space.Self);
             }
             else
             {
-                backCenterCube.Rotate(rotationAxis, -1, Space.Self);
+                backCenterCube.Rotate(rotationAxis, -1 * rotationMovementSpeed * Time.deltaTime, Space.Self);
             }
 
             foreach (Transform cube in backCubes)
@@ -754,11 +774,11 @@ public class Rubix : MonoBehaviour
             }
             if (shouldRotateClockwise((int) correctedAngle, facesSupposedRotation[2]))
             {
-                leftCenterCube.Rotate(rotationAxis, 1, Space.Self);
+                leftCenterCube.Rotate(rotationAxis, 1 * rotationMovementSpeed * Time.deltaTime, Space.Self);
             }
             else
             {
-                leftCenterCube.Rotate(rotationAxis, -1, Space.Self);
+                leftCenterCube.Rotate(rotationAxis, -1 * rotationMovementSpeed * Time.deltaTime, Space.Self);
             }
 
             foreach (Transform cube in leftCubes)
@@ -804,11 +824,11 @@ public class Rubix : MonoBehaviour
 
             if (shouldRotateClockwise((int)correctedAngle, facesSupposedRotation[3]))
             {
-                rightCenterCube.Rotate(rotationAxis, 1, Space.Self);
+                rightCenterCube.Rotate(rotationAxis, 1 * rotationMovementSpeed * Time.deltaTime, Space.Self);
             }
             else
             {
-                rightCenterCube.Rotate(rotationAxis, -1, Space.Self);
+                rightCenterCube.Rotate(rotationAxis, -1 * rotationMovementSpeed * Time.deltaTime, Space.Self);
             }
 
             foreach (Transform cube in rightCubes)
@@ -1479,5 +1499,10 @@ public class Rubix : MonoBehaviour
     public void finish()
     {
         gameMgr.finish();
+    }
+
+    public void unFinish()
+    {
+        gameMgr.unFinish();
     }
 }
