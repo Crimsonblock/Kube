@@ -11,6 +11,9 @@ public delegate void ToggleModeHandler();
 public class GameManager : MonoBehaviour
 {
 
+    public AudioSource source1;
+    public AudioClip yay;
+
     private BleManager bleManager = null;
     private int numCubes = 0;
     private int numFinished = 0;
@@ -29,6 +32,8 @@ public class GameManager : MonoBehaviour
     {
         connmgr = new();
         NextLevel.gameObject.SetActive(false);
+        source1 = GetComponent<AudioSource>();
+
     }
 
     ~GameManager()
@@ -91,6 +96,8 @@ public class GameManager : MonoBehaviour
             {
                 Debug.Log("Loading next level");
                 //bleManager.resetConnMgrs();
+                source1.Pause();
+                AudioClip.PlayOneShot(yay, 1.0f);
                 NextLevel.gameObject.SetActive(true);
 
                 return true;
