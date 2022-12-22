@@ -1,9 +1,5 @@
 fileFormatVersion: 2
-<<<<<<<< HEAD:Assets/Scripts/UI/NextLevelButton.cs.meta
-guid: 21651be8cf603154fb649f525dc77035
-========
-guid: cbb1076478d3ca34f8c7be0a864ed9ff
->>>>>>>> gatesT:Assets/Button.cs.meta
+guid: f27e090b1eb769b4fb09998a37827354
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2

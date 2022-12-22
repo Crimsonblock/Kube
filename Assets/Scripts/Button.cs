@@ -17,18 +17,6 @@ public class Button : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         text.color = normalTextColor;
     }
 
-    //public void onMouseover() 
-    //{
-    //    text.color = highlightedTextColor;
-    //}
-
-    //void OnMouseExit()
-    //{
-        // Reset the color of the GameObject back to normal
-    //    text.color = normalTextColor;
-    //}
-
-
     public void OnPointerEnter(PointerEventData eventData)
     {
         text.color = highlightedTextColor;
