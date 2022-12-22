@@ -71,6 +71,7 @@ public class Rubix : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        Debug.Log("Constructing the cube...");
         MeshRenderer mr = GetComponent<MeshRenderer>();
         mr.enabled = false;
         gameMgr.registerRubix();
@@ -185,7 +186,7 @@ public class Rubix : MonoBehaviour
     public void setCubeGenerated(bool val)
     {
         cubeGenerated = val;
-        wait.enabled = false;
+        //wait.enabled = false;
     }
 
     void snapFaces()

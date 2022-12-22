@@ -1,9 +1,5 @@
 fileFormatVersion: 2
-<<<<<<<< HEAD:Assets/Scripts/Utility/SerialConnectionManager.cs.meta
-guid: 0372d5daf3bf70742a8e1655a721c1f3
-========
-guid: 9d1df4afe4d9fe045bc0e74f227dca6c
->>>>>>>> gatesT:Assets/MainMenu.cs.meta
+guid: e3a330fe06d4a374db2b809c51346252
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2

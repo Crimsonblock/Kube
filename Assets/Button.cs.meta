@@ -1,9 +1,9 @@
 fileFormatVersion: 2
-<<<<<<<< HEAD:Assets/Scripts/Utility/SerialConnectionManager.cs.meta
-guid: 0372d5daf3bf70742a8e1655a721c1f3
+<<<<<<<< HEAD:Assets/Scripts/UI/NextLevelButton.cs.meta
+guid: 21651be8cf603154fb649f525dc77035
 ========
-guid: 9d1df4afe4d9fe045bc0e74f227dca6c
->>>>>>>> gatesT:Assets/MainMenu.cs.meta
+guid: cbb1076478d3ca34f8c7be0a864ed9ff
+>>>>>>>> gatesT:Assets/Button.cs.meta
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2

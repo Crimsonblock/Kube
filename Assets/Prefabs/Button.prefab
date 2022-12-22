@@ -57,9 +57,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 4513899227813432578}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: be13679e940194e49bfc6d8ef0390e3d, type: 3}
+  m_Script: {fileID: 11500000, guid: e3a330fe06d4a374db2b809c51346252, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gate: {fileID: 0}
+  buttonColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!1 &5442363080945860742
 GameObject:
   m_ObjectHideFlags: 0

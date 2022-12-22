@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ButtonScript : MonoBehaviour
+public class PushButtonScript : MonoBehaviour
 {
     // Start is called before the first frame update
 
@@ -26,7 +26,7 @@ public class ButtonScript : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.tag == "Player")
+        if (other.tag == "Player")
         {
             gate.activatorEnter();
         }

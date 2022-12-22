@@ -1601,8 +1601,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   source1: {fileID: 0}
-  source2: {fileID: 0}
-  NextLevel: {fileID: 1143883374}
+  yay: {fileID: 0}
+  NextLevel: {fileID: 0}
 --- !u!4 &503211913
 Transform:
   m_ObjectHideFlags: 0
@@ -3437,7 +3437,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1143883371}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 91c0306be21add94593e099cbcd7001d, type: 3}
+  m_Script: {fileID: 11500000, guid: e1e37dcb4ad419c4387456725f0c82a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &1143883374
@@ -3483,7 +3483,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1143883375}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1143883373}
+        m_TargetAssemblyTypeName: NextLevelButton, Assembly-CSharp
+        m_MethodName: NextLevelOnClick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1143883375
 MonoBehaviour:
   m_ObjectHideFlags: 0

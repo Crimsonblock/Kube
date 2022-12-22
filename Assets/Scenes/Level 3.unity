@@ -716,8 +716,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   source1: {fileID: 0}
-  source2: {fileID: 0}
-  NextLevel: {fileID: 2048707667}
+  yay: {fileID: 0}
+  NextLevel: {fileID: 0}
 --- !u!4 &503211913
 Transform:
   m_ObjectHideFlags: 0
@@ -4474,7 +4474,8 @@ PrefabInstance:
       propertyPath: buttonColor.r
       value: 1
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 7360900755452634854, guid: 0d6f303b404e06d44bda4aebd8752ef0, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 0d6f303b404e06d44bda4aebd8752ef0, type: 3}
 --- !u!1001 &2021152272
 PrefabInstance:
@@ -4679,6 +4680,25 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f886ced5bad433545a271c5b42f7aff4, type: 3}
+--- !u!1 &2040847398 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4513899227813432578, guid: fb29e470a0949ae429a56144ea62f65f, type: 3}
+  m_PrefabInstance: {fileID: 776605692}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2040847402
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2040847398}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3a330fe06d4a374db2b809c51346252, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gate: {fileID: 866089506}
+  buttonColor: {r: 0.011764706, g: 0.67058825, b: 0, a: 1}
 --- !u!1 &2048707664
 GameObject:
   m_ObjectHideFlags: 0
@@ -4729,7 +4749,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2048707664}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 91c0306be21add94593e099cbcd7001d, type: 3}
+  m_Script: {fileID: 11500000, guid: e1e37dcb4ad419c4387456725f0c82a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &2048707667
@@ -4775,7 +4795,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2048707668}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2048707666}
+        m_TargetAssemblyTypeName: NextLevelButton, Assembly-CSharp
+        m_MethodName: NextLevelOnClick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &2048707668
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4814,6 +4846,25 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2048707664}
   m_CullTransparentMesh: 1
+--- !u!1 &2062687611 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4513899227813432578, guid: 0d6f303b404e06d44bda4aebd8752ef0, type: 3}
+  m_PrefabInstance: {fileID: 2010130946}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2062687615
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2062687611}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3a330fe06d4a374db2b809c51346252, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gate: {fileID: 148434609}
+  buttonColor: {r: 1, g: 0, b: 0, a: 1}
 --- !u!4 &2070036522 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4870038834045653742, guid: f886ced5bad433545a271c5b42f7aff4, type: 3}
