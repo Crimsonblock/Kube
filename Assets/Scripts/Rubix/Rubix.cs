@@ -21,6 +21,7 @@ public class Rubix : MonoBehaviour
     colliderFace []faceSelectionRotation = { colliderFace.FRONT, colliderFace.BACK, colliderFace.LEFT, colliderFace.RIGHT, colliderFace.TOP, colliderFace.BOTTOM } ;
     int currentSelectedFace = 0;
     int []facesSupposedRotation = new int[6];
+    bool[] faceNeedSnappingK = {false, false, false, false, false, false};
 
 
     Color m_highlightColor = new Color(.95f, .95f, .80f);
@@ -62,6 +63,8 @@ public class Rubix : MonoBehaviour
     bool cubeGenerated = false;
     Vector3 keysStatus = Vector3.zero;
 
+    bool orient = false;
+
 
     // Start is called before the first frame update
     void Start()
@@ -73,7 +76,6 @@ public class Rubix : MonoBehaviour
 
         gameMgr.registerToggleModeHandler(handleToggle);
     }
-
 
     ~Rubix()
     {
@@ -97,6 +99,12 @@ public class Rubix : MonoBehaviour
 
 
         if (!cubeGenerated) return;
+        if (!orient)
+        {
+            orient = true;
+            or.isRubixReady(cubeGenerated);
+            return;
+        }
         if (canBeGyroPlayed && !isKeyboardPlayed && connMgr == null)
         {
             if (gameMgr != null) connMgr = gameMgr.getConnectionManager();
@@ -151,22 +159,22 @@ public class Rubix : MonoBehaviour
         // Calibration
         if (Input.GetKeyDown(KeyCode.Keypad1)) // FRONT
         {
-            desiredOrientation = Quaternion.Euler(0, 0, 0);
+            desiredOrientation = Quaternion.Euler(0, 0+or.getAngleDeviation(), 0);
             or.setRotation(desiredOrientation);
         }
         else if (Input.GetKeyDown(KeyCode.Keypad2)) // RIGHT
         {
-            desiredOrientation = Quaternion.Euler(0, 90, 0);
+            desiredOrientation = Quaternion.Euler(0, 90+or.getAngleDeviation(), 0);
             or.setRotation(desiredOrientation);
         }
         else if (Input.GetKeyDown(KeyCode.Keypad3)) // BACK
         {
-            desiredOrientation = Quaternion.Euler(0, 180, 0);
+            desiredOrientation = Quaternion.Euler(0, 180 + or.getAngleDeviation(), 0);
             or.setRotation(desiredOrientation);
         }
         else if (Input.GetKeyDown(KeyCode.Keypad4)) // LEFT
         {
-            desiredOrientation = Quaternion.Euler(0, 270, 0);
+            desiredOrientation = Quaternion.Euler(0, 270 + or.getAngleDeviation(), 0);
             or.setRotation(desiredOrientation);
         }
 
@@ -663,14 +671,18 @@ public class Rubix : MonoBehaviour
         Vector3 rotationAxis = Vector3.zero;
         Transform cubesParents;
 
+        // Infinitely rotating face bug SEEMS to be solved
+
         // Top Face
-        if (canFaceRotate(colliderFace.TOP) && (int)(topCenterCube.localRotation.eulerAngles.y) != facesSupposedRotation[4])
+        if (canFaceRotate(colliderFace.TOP) && (int)Mathf.Round(topCenterCube.localRotation.eulerAngles.y) != facesSupposedRotation[4])
         {
+            faceNeedSnappingK[4] = true;
             rotationAxis = new Vector3(0, 1, 0);
             cubesParents = topCenterCube.parent;
             foreach (Transform cube in topCubes)
             {
                 cube.SetParent(topCenterCube, true);
+                if(cube.tag == "Player") cube.GetComponent<Rigidbody>().isKinematic = true;
             }
 
             if (shouldRotateClockwise((int)topCenterCube.localRotation.eulerAngles.y, facesSupposedRotation[4]))
@@ -687,7 +699,7 @@ public class Rubix : MonoBehaviour
                 if (cube.tag == "Player")
                 {
                     cube.SetParent(transform, true);
-                    cube.GetComponent<Rigidbody>().isKinematic = true;
+                    cube.GetComponent<Rigidbody>().isKinematic = false;
 
                 }
                 else cube.SetParent(cubesParents, true);
@@ -695,13 +707,15 @@ public class Rubix : MonoBehaviour
         }
         
         // Bottom Face
-        if (canFaceRotate(colliderFace.BOTTOM) && (int)(bottomCenterCube.localRotation.eulerAngles.y) != facesSupposedRotation[5])
+        if (canFaceRotate(colliderFace.BOTTOM) && (int)Mathf.Round(bottomCenterCube.localRotation.eulerAngles.y) != facesSupposedRotation[5])
         {
+            faceNeedSnappingK[5] = true;
             rotationAxis = new Vector3(0, 1, 0);
             cubesParents = bottomCenterCube.parent;
             foreach (Transform cube in bottomCubes)
             {
                 cube.SetParent(bottomCenterCube, true);
+                if (cube.tag == "Player") cube.GetComponent<Rigidbody>().isKinematic = true;
             }
 
             if (shouldRotateClockwise((int)bottomCenterCube.localRotation.eulerAngles.y, facesSupposedRotation[5]))
@@ -718,21 +732,22 @@ public class Rubix : MonoBehaviour
                 if (cube.tag == "Player")
                 {
                     cube.SetParent(transform, true);
-                    cube.GetComponent<Rigidbody>().isKinematic = true;
-
+                    cube.GetComponent<Rigidbody>().isKinematic = false;
                 }
                 else cube.SetParent(cubesParents, true);
             }
         }
 
         // Front face
-        if (canFaceRotate(colliderFace.FRONT) && (int)(frontCenterCube.localRotation.eulerAngles.z) != facesSupposedRotation[0])
+        if (canFaceRotate(colliderFace.FRONT) && (int)Mathf.Round(frontCenterCube.localRotation.eulerAngles.z) != facesSupposedRotation[0])
         {
+            faceNeedSnappingK[0] = true;
             rotationAxis = new Vector3(0, 0, 1);
             cubesParents = frontCenterCube.parent;
             foreach (Transform cube in frontCubes)
             {
                 cube.SetParent(frontCenterCube, true);
+                if (cube.tag == "Player") cube.GetComponent<Rigidbody>().isKinematic = true;
             }
 
             if (shouldRotateClockwise((int)frontCenterCube.localRotation.eulerAngles.z, facesSupposedRotation[0]))
@@ -749,7 +764,7 @@ public class Rubix : MonoBehaviour
                 if (cube.tag == "Player")
                 {
                     cube.SetParent(transform, true);
-                    cube.GetComponent<Rigidbody>().isKinematic = true;
+                    cube.GetComponent<Rigidbody>().isKinematic = false;
 
                 }
                 else cube.SetParent(cubesParents, true);
@@ -757,13 +772,15 @@ public class Rubix : MonoBehaviour
         }
 
         // Back Face
-        if (canFaceRotate(colliderFace.BACK) && (int)(backCenterCube.localRotation.eulerAngles.z) != facesSupposedRotation[1])
+        if (canFaceRotate(colliderFace.BACK) && (int)Mathf.Round(backCenterCube.localRotation.eulerAngles.z) != facesSupposedRotation[1])
         {
+            faceNeedSnappingK[1] = true;
             rotationAxis = new Vector3(0, 0, 1);
             cubesParents = backCenterCube.parent;
             foreach (Transform cube in backCubes)
             {
                 cube.SetParent(backCenterCube, true);
+                if (cube.tag == "Player") cube.GetComponent<Rigidbody>().isKinematic = true;
             }
 
             if (shouldRotateClockwise((int)backCenterCube.localRotation.eulerAngles.z, facesSupposedRotation[1]))
@@ -780,7 +797,7 @@ public class Rubix : MonoBehaviour
                 if (cube.tag == "Player")
                 {
                     cube.SetParent(transform, true);
-                    cube.GetComponent<Rigidbody>().isKinematic = true;
+                    cube.GetComponent<Rigidbody>().isKinematic = false;
 
                 }
                 else cube.SetParent(cubesParents, true);
@@ -796,7 +813,7 @@ public class Rubix : MonoBehaviour
         {
             //bugged
             isBugged = true;
-            if ((int)(leftCenterCube.localEulerAngles.x) == 0)
+            if ((int)Mathf.Round(leftCenterCube.localEulerAngles.x) == 0)
             {
                 correctedAngle = 180;
             }
@@ -809,15 +826,19 @@ public class Rubix : MonoBehaviour
                 correctedAngle = 540 - leftCenterCube.localEulerAngles.x;
             }
         }
-
+     
         // Left Face
-        if (canFaceRotate(colliderFace.LEFT) && (int)(correctedAngle) != facesSupposedRotation[2])
+        if (canFaceRotate(colliderFace.LEFT) && (int)Mathf.Round(correctedAngle) != facesSupposedRotation[2])
         {
+            faceNeedSnappingK[2] = true;
+            Debug.Log("Left: "+ (int)Mathf.Round(correctedAngle) + " " + facesSupposedRotation[2]);
+            Debug.Log(leftCenterCube.localEulerAngles);
             rotationAxis = new Vector3(1, 0, 0);
             cubesParents = leftCenterCube.parent;
             foreach (Transform cube in leftCubes)
             {
                 cube.SetParent(leftCenterCube, true);
+                if (cube.tag == "Player") cube.GetComponent<Rigidbody>().isKinematic = true;
             }
             if (shouldRotateClockwise((int) correctedAngle, facesSupposedRotation[2]))
             {
@@ -833,7 +854,7 @@ public class Rubix : MonoBehaviour
                 if (cube.tag == "Player")
                 {
                     cube.SetParent(transform, true);
-                    cube.GetComponent<Rigidbody>().isKinematic = true;
+                    cube.GetComponent<Rigidbody>().isKinematic = false;
                 }
                 else cube.SetParent(cubesParents, true);
             }
@@ -842,17 +863,18 @@ public class Rubix : MonoBehaviour
         // Unity bug correction
         correctedAngle = rightCenterCube.localRotation.eulerAngles.x;
         isBugged = false;
-        if (rightCenterCube.localRotation.eulerAngles.y == 180 && rightCenterCube.localRotation.eulerAngles.z == 180)
+        if ((int)Mathf.Round(rightCenterCube.localRotation.eulerAngles.y) == 180 && (int)Mathf.Round(rightCenterCube.localRotation.eulerAngles.z) == 180)
         {
+
             //bugged
             isBugged = true;
-            if ((int)(rightCenterCube.localEulerAngles.x) == 0)
+            if ((int)Mathf.Round(rightCenterCube.localEulerAngles.x) == 0)
             {
                 correctedAngle = 180;
             }
             else if (rightCenterCube.localEulerAngles.x < 90 && rightCenterCube.localEulerAngles.x > 0)
             {
-                correctedAngle = 180 - leftCenterCube.localEulerAngles.x;
+                correctedAngle = 180 - rightCenterCube.localEulerAngles.x;
             }
             else if (rightCenterCube.localEulerAngles.x >= 270)
             {
@@ -860,13 +882,17 @@ public class Rubix : MonoBehaviour
             }
         }
         // Right Face
-        if (canFaceRotate(colliderFace.RIGHT) && (int)(correctedAngle) != facesSupposedRotation[3])
+        if (canFaceRotate(colliderFace.RIGHT) && (int)Mathf.Round(correctedAngle) != facesSupposedRotation[3])
         {
+            faceNeedSnappingK[3] = true;
+            Debug.Log("Right: " + (int)Mathf.Round(correctedAngle) + "(" + correctedAngle + ")" + " " + facesSupposedRotation[3]);
+            Debug.Log(rightCenterCube.localEulerAngles);
             rotationAxis = new Vector3(1, 0, 0);
             cubesParents = rightCenterCube.parent;
             foreach (Transform cube in rightCubes)
             {
                 cube.SetParent(rightCenterCube, true);
+                if (cube.tag == "Player") cube.GetComponent<Rigidbody>().isKinematic = true;
             }
 
             if (shouldRotateClockwise((int)correctedAngle, facesSupposedRotation[3]))
@@ -883,7 +909,7 @@ public class Rubix : MonoBehaviour
                 if (cube.tag == "Player")
                 {
                     cube.SetParent(transform, true);
-                    cube.GetComponent<Rigidbody>().isKinematic = true;
+                    cube.GetComponent<Rigidbody>().isKinematic = false;
 
                 }
                 else cube.SetParent(cubesParents, true);
@@ -895,15 +921,20 @@ public class Rubix : MonoBehaviour
 
         // Face rotation corrections: 
         // bottom
-        if ((int)(bottomCenterCube.localRotation.eulerAngles.y) == facesSupposedRotation[5])
+        if ((int)Mathf.Round(bottomCenterCube.localRotation.eulerAngles.y) == facesSupposedRotation[5] && faceNeedSnappingK[5])
         {
+            faceNeedSnappingK[5] = false;
             cubesParents = bottomCenterCube.parent;
             foreach (Transform cube in bottomCubes)
             {
                 cube.SetParent(bottomCenterCube, true);
+                if (cube.tag == "Player") cube.GetComponent<Rigidbody>().isKinematic = true;
             }
 
             bottomCenterCube.localRotation = Quaternion.Euler(0, facesSupposedRotation[5], 0);
+            Debug.Log("0 " + facesSupposedRotation[5] + " 0");
+            Debug.Log("Bottom: " + bottomCenterCube.localEulerAngles);
+
             foreach (Transform cube in bottomCubes)
             {
                 if (cube.tag == "Player")
@@ -916,15 +947,18 @@ public class Rubix : MonoBehaviour
         }
 
         //Top
-        if ((int)(topCenterCube.localRotation.eulerAngles.y) == facesSupposedRotation[4])
+        if ((int)Mathf.Round(topCenterCube.localRotation.eulerAngles.y) == facesSupposedRotation[4] && faceNeedSnappingK[4])
         {
+            faceNeedSnappingK[4] = false;
             cubesParents = topCenterCube.parent;
             foreach (Transform cube in topCubes)
             {
                 cube.SetParent(topCenterCube, true);
+                if (cube.tag == "Player") cube.GetComponent<Rigidbody>().isKinematic = true;
             }
 
             topCenterCube.localRotation = Quaternion.Euler(0, facesSupposedRotation[4], 0);
+            Debug.Log("Top: " + topCenterCube.localEulerAngles);
 
 
             foreach (Transform cube in topCubes)
@@ -939,15 +973,18 @@ public class Rubix : MonoBehaviour
         }
 
         //Front
-        if ((int)(frontCenterCube.localRotation.eulerAngles.z) == facesSupposedRotation[0])
+        if ((int)Mathf.Round(frontCenterCube.localRotation.eulerAngles.z) == facesSupposedRotation[0] && faceNeedSnappingK[0])
         {
+            faceNeedSnappingK[0] = false;
             cubesParents = frontCenterCube.parent;
             foreach (Transform cube in frontCubes)
             {
                 cube.SetParent(frontCenterCube, true);
+                if (cube.tag == "Player") cube.GetComponent<Rigidbody>().isKinematic = true;
             }
 
             frontCenterCube.localRotation = Quaternion.Euler(0, 0, facesSupposedRotation[0]);
+            Debug.Log("Front: " + frontCenterCube.localEulerAngles);
 
 
             foreach (Transform cube in frontCubes)
@@ -962,8 +999,9 @@ public class Rubix : MonoBehaviour
         }
 
         //Back
-        if ((int)(backCenterCube.localRotation.eulerAngles.z) == facesSupposedRotation[1])
+        if ((int)Mathf.Round(backCenterCube.localRotation.eulerAngles.z) == facesSupposedRotation[1] && faceNeedSnappingK[1])
         {
+            faceNeedSnappingK[1] = false;
             cubesParents = backCenterCube.parent;
             foreach (Transform cube in backCubes)
             {
@@ -971,6 +1009,7 @@ public class Rubix : MonoBehaviour
             }
 
             backCenterCube.localRotation = Quaternion.Euler(0, 0, facesSupposedRotation[1]);
+            Debug.Log("Back: " + backCenterCube.localEulerAngles);
 
 
             foreach (Transform cube in backCubes)
@@ -988,7 +1027,7 @@ public class Rubix : MonoBehaviour
         correctedAngle = leftCenterCube.localRotation.eulerAngles.x;
         isBugged = false;
         //bugCorrection
-        if (leftCenterCube.localRotation.eulerAngles.y == 180 && leftCenterCube.localRotation.eulerAngles.z == 180)
+        if ((int)Mathf.Round(leftCenterCube.localRotation.eulerAngles.y) == 180 && (int)Mathf.Round(leftCenterCube.localRotation.eulerAngles.z) == 180)
         {
             //bugged
             isBugged = true;
@@ -1007,17 +1046,20 @@ public class Rubix : MonoBehaviour
         }
 
         //Left
-        if ((int)(correctedAngle) == facesSupposedRotation[2])
+        if ((int)Mathf.Round(correctedAngle) == facesSupposedRotation[2] && faceNeedSnappingK[2])
         {
+            faceNeedSnappingK[2] = false;
             cubesParents = leftCenterCube.parent;
             foreach (Transform cube in leftCubes)
             {
                 cube.SetParent(leftCenterCube, true);
+                if (cube.tag == "Player") cube.GetComponent<Rigidbody>().isKinematic = true;
             }
 
             //Debug.Log("Angles to correct: " + facesSupposedRotation[2]);
 
-            leftCenterCube.localRotation = Quaternion.Euler((int)correctedAngle, 0, 0);
+            leftCenterCube.localRotation = Quaternion.Euler(facesSupposedRotation[2], 0, 0);
+            Debug.Log("Left: " + leftCenterCube.localEulerAngles);
 
             foreach (Transform cube in leftCubes)
             {
@@ -1051,16 +1093,19 @@ public class Rubix : MonoBehaviour
             }
         }
         //Right
-        if ((int)(correctedAngle) == facesSupposedRotation[3])
+        if ((int)Mathf.Round(correctedAngle) == facesSupposedRotation[3] && faceNeedSnappingK[3])
         {
+            faceNeedSnappingK[3] = false;
             rotationAxis = new Vector3(1, 0, 0);
             cubesParents = rightCenterCube.parent;
             foreach (Transform cube in rightCubes)
             {
                 cube.SetParent(rightCenterCube, true);
+                if (cube.tag == "Player") cube.GetComponent<Rigidbody>().isKinematic = true;
             }
 
-            rightCenterCube.localRotation = Quaternion.Euler((int)correctedAngle, 0, 0);
+            rightCenterCube.localRotation = Quaternion.Euler(facesSupposedRotation[3], 0, 0);
+            Debug.Log("Right: " + rightCenterCube.localEulerAngles);
 
 
             foreach (Transform cube in rightCubes)

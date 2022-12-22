@@ -2296,6 +2296,10 @@ PrefabInstance:
       propertyPath: canBeGyroPlayed
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 230784792154801385, guid: deb598a99fdf6334c9ec11bfb9b314e2, type: 3}
+      propertyPath: rotationMovementSpeed
+      value: 100
+      objectReference: {fileID: 0}
     - target: {fileID: 230784792154801386, guid: deb598a99fdf6334c9ec11bfb9b314e2, type: 3}
       propertyPath: m_Name
       value: RubixSecondPlayer
@@ -2359,6 +2363,10 @@ PrefabInstance:
     - target: {fileID: 2461818459652685762, guid: deb598a99fdf6334c9ec11bfb9b314e2, type: 3}
       propertyPath: m_LocalPosition.z
       value: 0.012
+      objectReference: {fileID: 0}
+    - target: {fileID: 2461818459795900460, guid: deb598a99fdf6334c9ec11bfb9b314e2, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.337
       objectReference: {fileID: 0}
     - target: {fileID: 2461818459795900460, guid: deb598a99fdf6334c9ec11bfb9b314e2, type: 3}
       propertyPath: m_LocalPosition.z
@@ -4690,7 +4698,7 @@ MonoBehaviour:
   speed: 10
   test: 10
   Alpha: 0.98
-  AngleDeviation: -25
+  AngleDeviation: 25
 --- !u!65 &1903286668
 BoxCollider:
   m_ObjectHideFlags: 0

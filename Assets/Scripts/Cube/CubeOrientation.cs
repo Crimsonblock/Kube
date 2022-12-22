@@ -27,6 +27,9 @@ public class CubeOrientation : MonoBehaviour
 
     private cOrientation orient;
 
+    bool rubixReady = false;
+    bool wasCompensated = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -39,6 +42,17 @@ public class CubeOrientation : MonoBehaviour
 
     }
 
+    private void Update()
+    {
+        if(rubixReady && !wasCompensated)
+        {
+            wasCompensated = true;
+            for (int i = 0; i < transform.childCount; i++)
+            {
+                transform.GetChild(i).Rotate(0, AngleDeviation, 0, Space.Self);
+            }
+        }
+    }
 
     public void setRotation(Quaternion q)
     {
@@ -82,5 +96,12 @@ public class CubeOrientation : MonoBehaviour
         Pause = !Pause;
         if (Pause)
             transform.eulerAngles = new Vector3(0, 0, 0);
+    }
+
+    public float getAngleDeviation() { return AngleDeviation; }
+
+    public void isRubixReady(bool setting)
+    {
+        rubixReady = setting;
     }
 }
