@@ -4181,7 +4181,7 @@ MonoBehaviour:
   speed: 10
   test: 10
   Alpha: 0.98
-  AngleDeviation: -25
+  AngleDeviation: 0
 --- !u!65 &1903286668
 BoxCollider:
   m_ObjectHideFlags: 0
