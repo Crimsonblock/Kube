@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -10,14 +11,17 @@ public delegate void ToggleModeHandler();
 public class GameManager : MonoBehaviour
 {
 
-    public CubeOrientation orientation;
-    public UpdateText updateText;
+    public AudioSource source1;
+    public AudioClip yay;
+
     private BleManager bleManager = null;
     private int numCubes = 0;
     private int numFinished = 0;
     SerialConnectionManager connmgr = null;
 
     bool lastLevelFinished = false;
+
+    public Button NextLevel;
 
     List<ToggleModeHandler> toggleModes = new List<ToggleModeHandler>();
 
@@ -27,6 +31,9 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         connmgr = new();
+        NextLevel.gameObject.SetActive(false);
+        source1 = GetComponent<AudioSource>();
+
     }
 
     ~GameManager()
@@ -79,7 +86,7 @@ public class GameManager : MonoBehaviour
     }
 
 
-    public void finish()
+    public bool finish()
     {
         numFinished++;
         if(numFinished >= numCubes)
@@ -88,19 +95,27 @@ public class GameManager : MonoBehaviour
             if(SceneManager.GetActiveScene().buildIndex < SceneManager.sceneCountInBuildSettings - 1)
             {
                 Debug.Log("Loading next level");
-                bleManager.resetConnMgrs();
-                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+                //bleManager.resetConnMgrs();
+                source1.Pause();
+                AudioClip.PlayOneShot(yay, 1.0f);
+                NextLevel.gameObject.SetActive(true);
+
+                return true;
             }
             else
             {
                 Debug.Log("Last Level");
                 lastLevelFinished =  true;
+                NextLevel.gameObject.SetActive(false);
             }
         }
+
+        return false;
     }
 
     public void unFinish()
     {
         numFinished--;
+        NextLevel.gameObject.SetActive(false);
     }
 }

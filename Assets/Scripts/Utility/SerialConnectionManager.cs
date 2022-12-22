@@ -22,6 +22,7 @@ public class SerialConnectionManager
     {
         foreach (string port in SerialPort.GetPortNames())
         {
+            Debug.Log(port);
             sp = new SerialPort("\\\\.\\" + port, 9600);
             break;
         }
