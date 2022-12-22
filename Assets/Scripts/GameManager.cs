@@ -22,7 +22,7 @@ public class GameManager : MonoBehaviour
 
     bool lastLevelFinished = false;
 
-    public Button NextLevel;
+    public GameObject NextLevel;
 
     List<ToggleModeHandler> toggleModes = new List<ToggleModeHandler>();
 
@@ -32,7 +32,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         connmgr = new();
-        if(NextLevel != null) NextLevel.gameObject.SetActive(false);
+        if(NextLevel != null) NextLevel.SetActive(false);
         source1 = GetComponent<AudioSource>();
     }
 
@@ -98,7 +98,7 @@ public class GameManager : MonoBehaviour
                 //bleManager.resetConnMgrs();
                 source1.Pause();
                 source1.PlayOneShot(yay, 1.0f);
-                NextLevel.gameObject.SetActive(true);
+                NextLevel.SetActive(true);
 
                 return true;
             }
@@ -106,7 +106,7 @@ public class GameManager : MonoBehaviour
             {
                 Debug.Log("Last Level");
                 lastLevelFinished =  true;
-                NextLevel.gameObject.SetActive(false);
+                NextLevel.SetActive(false);
             }
         }
 
@@ -116,6 +116,6 @@ public class GameManager : MonoBehaviour
     public void unFinish()
     {
         numFinished--;
-        NextLevel.gameObject.SetActive(false);
+        NextLevel.SetActive(false);
     }
 }

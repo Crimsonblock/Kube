@@ -1602,7 +1602,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   source1: {fileID: 0}
   yay: {fileID: 0}
-  NextLevel: {fileID: 0}
+  NextLevel: {fileID: 1143883371}
 --- !u!4 &503211913
 Transform:
   m_ObjectHideFlags: 0
