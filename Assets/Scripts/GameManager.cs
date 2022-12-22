@@ -11,8 +11,8 @@ public delegate void ToggleModeHandler();
 public class GameManager : MonoBehaviour
 {
 
-    public AudioSource source1;
-    public AudioSource source2;
+    public AudioSource Background;
+    public AudioSource CelebrationSound;
 
     private BleManager bleManager = null;
     private int numCubes = 0;
@@ -94,8 +94,8 @@ public class GameManager : MonoBehaviour
             {
                 Debug.Log("Loading next level");
                 //bleManager.resetConnMgrs();
-                source1.Pause();
-                source2.Play();
+                Background.Pause();
+                CelebrationSound.Play();
                 NextLevel.SetActive(true);
 
                 return true;

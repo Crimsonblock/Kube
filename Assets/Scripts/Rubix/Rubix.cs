@@ -10,6 +10,7 @@ using UnityEngine.PlayerLoop;
 public class Rubix : MonoBehaviour
 {
 
+
     // Cubes faces
     List<Transform> topCubes = new List<Transform>();
     List<Transform> bottomCubes = new List<Transform>();
@@ -34,6 +35,8 @@ public class Rubix : MonoBehaviour
     Transform rightCenterCube;
     Transform topCenterCube;
     Transform bottomCenterCube;
+
+    public AudioSource RotaryClick;
 
     public float timeBeforeSnap;
 
@@ -66,7 +69,6 @@ public class Rubix : MonoBehaviour
     Vector3 keysStatus = Vector3.zero;
 
     bool orient = false;
-
 
     // Start is called before the first frame update
     void Start()
@@ -531,6 +533,9 @@ public class Rubix : MonoBehaviour
     /// <param name="steps">The number of steps to rotate. 1 step = 10�. Positive = cw, negative = ccw</param>
     void rotateFace(colliderFace face,  float steps)
     {
+        RotaryClick.Stop();
+        RotaryClick.Play();
+
         Vector3 faceCenter = Vector3.zero;
         Vector3 rotationAxis = Vector3.zero;
         Transform cubesParents = null;
