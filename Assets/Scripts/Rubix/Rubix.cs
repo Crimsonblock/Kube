@@ -6,6 +6,7 @@ using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
 using UnityEngine.Assertions.Must;
 using UnityEngine.PlayerLoop;
+using UnityEngine.SceneManagement;
 
 public class Rubix : MonoBehaviour
 {
@@ -388,7 +389,7 @@ public class Rubix : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.X))
         {
             facesSupposedRotation[currentSelectedFace] -= 90;
-            if(facesSupposedRotation[currentSelectedFace] < 0) facesSupposedRotation[currentSelectedFace] += 360;
+            if (facesSupposedRotation[currentSelectedFace] < 0) facesSupposedRotation[currentSelectedFace] += 360;
             //Debug.Log(facesSupposedRotation[currentSelectedFace]);
         }
         else if (Input.GetKeyDown(KeyCode.W))
@@ -396,6 +397,12 @@ public class Rubix : MonoBehaviour
             facesSupposedRotation[currentSelectedFace] += 90;
             if (facesSupposedRotation[currentSelectedFace] >= 360) facesSupposedRotation[currentSelectedFace] -= 360;
             //Debug.Log(facesSupposedRotation[currentSelectedFace]);
+        }
+
+        else if (Input.GetKeyDown(KeyCode.G))
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            print("reset");
         }
 
         rotateFacesK();
