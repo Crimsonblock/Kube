@@ -8,12 +8,17 @@ public class GateScript : MonoBehaviour
     bool isOpen = false;
     public bool CloseOnActivatorExit = false;
     public Color gateColor;
+    public AudioSource GateSwing;
+
     void Start()
     {
         for(int i=0; i<transform.childCount; i++)
         {
             transform.GetChild(i).GetComponent<Renderer>().material.color = gateColor;
         }
+
+        if (GateSwing == null)
+            GateSwing = GetComponent<AudioSource>();
     }
 
 
@@ -44,12 +49,24 @@ public class GateScript : MonoBehaviour
 
     public void activatorEnter()
     {
+        if (!isOpen)
+        {
+            GateSwing.Stop();
+            GateSwing.Play();
+        }
+
         isOpen = true;
     }
 
 
     public void activatorLeave()
     {
-        if(CloseOnActivatorExit) isOpen = false;
+        if (CloseOnActivatorExit)
+        {
+            isOpen = false;
+
+            GateSwing.Stop();
+            GateSwing.Play();
+        }
     }
 }

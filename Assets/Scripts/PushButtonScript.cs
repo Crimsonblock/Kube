@@ -8,7 +8,7 @@ public class PushButtonScript : MonoBehaviour
 
     public GateScript gate;
     public Color buttonColor;
-
+    public AudioSource ButtonClick;
 
     private void Start()
     {
@@ -21,6 +21,9 @@ public class PushButtonScript : MonoBehaviour
                 child.GetComponent<Renderer>().material.color = buttonColor;
             }
         }
+
+        if (ButtonClick == null)
+            ButtonClick = GetComponent<AudioSource>();
     }
 
 
@@ -29,6 +32,8 @@ public class PushButtonScript : MonoBehaviour
         if (other.tag == "Player")
         {
             gate.activatorEnter();
+            ButtonClick.Stop();
+            ButtonClick.Play();
         }
     }
 
@@ -38,6 +43,8 @@ public class PushButtonScript : MonoBehaviour
         if (other.tag == "Player")
         {
             gate.activatorLeave();
+            ButtonClick.Stop();
+            ButtonClick.Play();
         }
     }
 }
