@@ -12,8 +12,7 @@ public class GameManager : MonoBehaviour
 {
 
     public AudioSource source1;
-    public AudioClip yay;
-    
+    public AudioSource source2;
 
     private BleManager bleManager = null;
     private int numCubes = 0;
@@ -33,7 +32,6 @@ public class GameManager : MonoBehaviour
     {
         connmgr = new();
         if(NextLevel != null) NextLevel.SetActive(false);
-        source1 = GetComponent<AudioSource>();
     }
 
     ~GameManager()
@@ -97,7 +95,7 @@ public class GameManager : MonoBehaviour
                 Debug.Log("Loading next level");
                 //bleManager.resetConnMgrs();
                 source1.Pause();
-                source1.PlayOneShot(yay, 1.0f);
+                source2.Play();
                 NextLevel.SetActive(true);
 
                 return true;

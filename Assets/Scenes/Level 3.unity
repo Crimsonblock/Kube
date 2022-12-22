@@ -715,8 +715,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9373e031b072044aaf1f6b00243ac23, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  source1: {fileID: 0}
-  yay: {fileID: 0}
+  source1: {fileID: 503211915}
+  source2: {fileID: 503211914}
   NextLevel: {fileID: 2048707664}
 --- !u!4 &503211913
 Transform:
@@ -745,7 +745,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: ff064e2cc557c1a40bd94430a4119571, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 0.749
+  m_Volume: 0.5
   m_Pitch: 1
   Loop: 0
   Mute: 0

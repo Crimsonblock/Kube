@@ -23,7 +23,7 @@ public class SerialConnectionManager
         foreach (string port in SerialPort.GetPortNames())
         {
             Debug.Log(port);
-            sp = new SerialPort("\\\\.\\" + port, 9600);
+            sp = new SerialPort("\\\\.\\" + "COM4", 9600);
             break;
         }
         if (sp!= null && !sp.IsOpen)
