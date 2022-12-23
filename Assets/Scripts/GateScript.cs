@@ -69,4 +69,9 @@ public class GateScript : MonoBehaviour
             GateSwing.Play();
         }
     }
+
+    public bool getCloseOnActivatorExit()
+    {
+        return CloseOnActivatorExit;
+    }
 }
