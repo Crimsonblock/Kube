@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using TMPro;
 using Unity.VisualScripting;
 using Unity.VisualScripting.Antlr3.Runtime.Misc;
@@ -204,8 +205,6 @@ public class Rubix : MonoBehaviour
             // Snaps back
             if (timeNotCentered[0] >= timeBeforeSnap)
             {
-                Debug.Log("Snapping front face");
-                Debug.Log("Front" + angle);
                 if (angle >= 50) correction.front = angle-90;
                 else correction.front = angle;
                 correction.front = (int) (-correction.front / step);
@@ -220,8 +219,6 @@ public class Rubix : MonoBehaviour
             // Snaps back
             if (timeNotCentered[1] >= timeBeforeSnap)
             {
-                Debug.Log("Snapping back face");
-                Debug.Log("Back: " + angle);
                 if (angle >= 50) correction.back = 90 - angle;
                 else correction.back = -angle;
                 correction.back = -correction.back / step;
@@ -257,8 +254,6 @@ public class Rubix : MonoBehaviour
             // Snaps back
             if (timeNotCentered[2] >= timeBeforeSnap)
             {
-                Debug.Log("Snapping left face");
-                Debug.Log("Left: " + angle);
                 if (angle >= 50) correction.left = angle-90;
                 else correction.left = angle;
                 correction.left = -correction.left / step;
@@ -291,8 +286,6 @@ public class Rubix : MonoBehaviour
             // Snaps back
             if (timeNotCentered[3] >= timeBeforeSnap)
             {
-                Debug.Log("Snapping right face");
-                Debug.Log("Right: " + angle);
                 if (angle % 90 >= 50) correction.right = 90-angle;
                 else correction.right = -angle;
                 correction.right = -correction.right / step;
@@ -307,8 +300,6 @@ public class Rubix : MonoBehaviour
             // Snaps back
             if (timeNotCentered[4] >= timeBeforeSnap)
             {
-                Debug.Log("Snapping top face");
-                Debug.Log("Top: " + angle);
                 if (angle >= 50) correction.top = 90-angle;
                 else correction.top = -angle;
                 correction.top = -correction.top / step;
@@ -323,8 +314,6 @@ public class Rubix : MonoBehaviour
             // Snaps back
             if (timeNotCentered[5] >= timeBeforeSnap)
             {
-                Debug.Log("Snapping bottom face");
-                Debug.Log("Bottom: " + angle);
                 if (angle >= 50) correction.bottom = angle - 90;
                 else correction.bottom = angle;
                 correction.bottom = -correction.bottom / step;
@@ -840,8 +829,6 @@ public class Rubix : MonoBehaviour
         if (canFaceRotate(colliderFace.LEFT) && (int)Mathf.Round(correctedAngle) != facesSupposedRotation[2])
         {
             faceNeedSnappingK[2] = true;
-            Debug.Log("Left: "+ (int)Mathf.Round(correctedAngle) + " " + facesSupposedRotation[2]);
-            Debug.Log(leftCenterCube.localEulerAngles);
             rotationAxis = new Vector3(1, 0, 0);
             cubesParents = leftCenterCube.parent;
             foreach (Transform cube in leftCubes)
@@ -849,7 +836,10 @@ public class Rubix : MonoBehaviour
                 cube.SetParent(leftCenterCube, true);
                 if (cube.tag == "Player") cube.GetComponent<Rigidbody>().isKinematic = true;
             }
-            if (shouldRotateClockwise((int) correctedAngle, facesSupposedRotation[2]))
+            Debug.Log(shouldRotateClockwise((int)Mathf.Round(correctedAngle), facesSupposedRotation[2]) 
+                + "    src: " + (int)Mathf.Round(correctedAngle) + "     dest: " + facesSupposedRotation[2]+ "     Euler: " + leftCenterCube.localEulerAngles); ;
+
+            if (shouldRotateClockwise((int) Mathf.Round(correctedAngle), facesSupposedRotation[2]))
             {
                 leftCenterCube.Rotate(rotationAxis, 1 * rotationMovementSpeed * Time.deltaTime, Space.Self);
             }
@@ -894,8 +884,6 @@ public class Rubix : MonoBehaviour
         if (canFaceRotate(colliderFace.RIGHT) && (int)Mathf.Round(correctedAngle) != facesSupposedRotation[3])
         {
             faceNeedSnappingK[3] = true;
-            Debug.Log("Right: " + (int)Mathf.Round(correctedAngle) + "(" + correctedAngle + ")" + " " + facesSupposedRotation[3]);
-            Debug.Log(rightCenterCube.localEulerAngles);
             rotationAxis = new Vector3(1, 0, 0);
             cubesParents = rightCenterCube.parent;
             foreach (Transform cube in rightCubes)
@@ -904,7 +892,8 @@ public class Rubix : MonoBehaviour
                 if (cube.tag == "Player") cube.GetComponent<Rigidbody>().isKinematic = true;
             }
 
-            if (shouldRotateClockwise((int)correctedAngle, facesSupposedRotation[3]))
+            Debug.Log(shouldRotateClockwise((int)Mathf.Round(correctedAngle), facesSupposedRotation[3]));
+            if (shouldRotateClockwise((int) Mathf.Round(correctedAngle), facesSupposedRotation[3]))
             {
                 rightCenterCube.Rotate(rotationAxis, 1 * rotationMovementSpeed * Time.deltaTime, Space.Self);
             }
@@ -941,8 +930,6 @@ public class Rubix : MonoBehaviour
             }
 
             bottomCenterCube.localRotation = Quaternion.Euler(0, facesSupposedRotation[5], 0);
-            Debug.Log("0 " + facesSupposedRotation[5] + " 0");
-            Debug.Log("Bottom: " + bottomCenterCube.localEulerAngles);
 
             foreach (Transform cube in bottomCubes)
             {
@@ -967,7 +954,6 @@ public class Rubix : MonoBehaviour
             }
 
             topCenterCube.localRotation = Quaternion.Euler(0, facesSupposedRotation[4], 0);
-            Debug.Log("Top: " + topCenterCube.localEulerAngles);
 
 
             foreach (Transform cube in topCubes)
@@ -993,7 +979,6 @@ public class Rubix : MonoBehaviour
             }
 
             frontCenterCube.localRotation = Quaternion.Euler(0, 0, facesSupposedRotation[0]);
-            Debug.Log("Front: " + frontCenterCube.localEulerAngles);
 
 
             foreach (Transform cube in frontCubes)
@@ -1018,7 +1003,6 @@ public class Rubix : MonoBehaviour
             }
 
             backCenterCube.localRotation = Quaternion.Euler(0, 0, facesSupposedRotation[1]);
-            Debug.Log("Back: " + backCenterCube.localEulerAngles);
 
 
             foreach (Transform cube in backCubes)
@@ -1068,8 +1052,6 @@ public class Rubix : MonoBehaviour
             //Debug.Log("Angles to correct: " + facesSupposedRotation[2]);
 
             leftCenterCube.localRotation = Quaternion.Euler(facesSupposedRotation[2], 0, 0);
-            Debug.Log("Left: " + leftCenterCube.localEulerAngles);
-
             foreach (Transform cube in leftCubes)
             {
                 if (cube.tag == "Player")
@@ -1114,7 +1096,6 @@ public class Rubix : MonoBehaviour
             }
 
             rightCenterCube.localRotation = Quaternion.Euler(facesSupposedRotation[3], 0, 0);
-            Debug.Log("Right: " + rightCenterCube.localEulerAngles);
 
 
             foreach (Transform cube in rightCubes)
@@ -1530,40 +1511,40 @@ public class Rubix : MonoBehaviour
         switch (face)
         {
             case colliderFace.TOP:
-                if ((int)Mathf.Floor(frontCenterCube.localRotation.eulerAngles.z % 90) == 0
-                    && (int)Mathf.Floor(backCenterCube.localRotation.eulerAngles.z % 90) == 0
-                    && (int)Mathf.Floor(leftCenterCube.localRotation.eulerAngles.x % 90) == 0
-                    && (int)Mathf.Floor(rightCenterCube.localRotation.eulerAngles.x % 90) == 0) return true;
+                if ((int)Mathf.Round(frontCenterCube.localRotation.eulerAngles.z % 90)%90 == 0
+                    && (int)Mathf.Round(backCenterCube.localRotation.eulerAngles.z % 90)%90 == 0
+                    && (int)Mathf.Round(leftCenterCube.localRotation.eulerAngles.x % 90)%90 == 0
+                    && (int)Mathf.Round(rightCenterCube.localRotation.eulerAngles.x % 90)%90 == 0) return true;
                     break;
             case colliderFace.BOTTOM:
-                if ((int)Mathf.Floor(frontCenterCube.localRotation.eulerAngles.z) % 90 == 0
-                    && (int)Mathf.Floor(backCenterCube.localRotation.eulerAngles.z) % 90 == 0
-                    && (int)Mathf.Floor(leftCenterCube.localRotation.eulerAngles.x) % 90 == 0
-                    && (int)Mathf.Floor(rightCenterCube.localRotation.eulerAngles.x) % 90 == 0) return true;
+                if ((int)Mathf.Round(frontCenterCube.localRotation.eulerAngles.z%90) % 90 == 0
+                    && (int)Mathf.Round(backCenterCube.localRotation.eulerAngles.z%90) % 90 == 0
+                    && (int)Mathf.Round(leftCenterCube.localRotation.eulerAngles.x%90) % 90 == 0
+                    && (int)Mathf.Round(rightCenterCube.localRotation.eulerAngles.x%90) % 90 == 0) return true;
                 break;
             case colliderFace.LEFT:
-                if ((int)Mathf.Floor(frontCenterCube.localRotation.eulerAngles.z) % 90 == 0
-                    && (int)Mathf.Floor(backCenterCube.localRotation.eulerAngles.z) % 90 == 0
-                    && (int)Mathf.Floor(topCenterCube.localRotation.eulerAngles.y) % 90 == 0
-                    && (int)Mathf.Floor(bottomCenterCube.localRotation.eulerAngles.y) % 90 == 0) return true;
+                if ((int)Mathf.Round(frontCenterCube.localRotation.eulerAngles.z%90) % 90 == 0
+                    && (int)Mathf.Round(backCenterCube.localRotation.eulerAngles.z%90) % 90 == 0
+                    && (int)Mathf.Round(topCenterCube.localRotation.eulerAngles.y%90) % 90 == 0
+                    && (int)Mathf.Round(bottomCenterCube.localRotation.eulerAngles.y%90) % 90 == 0) return true;
                 break;
             case colliderFace.RIGHT:
-                if ((int)Mathf.Floor(frontCenterCube.localRotation.eulerAngles.z % 90) == 0
-                    && (int)Mathf.Floor(backCenterCube.localRotation.eulerAngles.z % 90) == 0
-                    && (int)Mathf.Floor(topCenterCube.localRotation.eulerAngles.y % 90) == 0
-                    && (int)Mathf.Floor(bottomCenterCube.localRotation.eulerAngles.y % 90) == 0) return true;
+                if ((int)Mathf.Round(frontCenterCube.localRotation.eulerAngles.z % 90)%90 == 0
+                    && (int)Mathf.Round(backCenterCube.localRotation.eulerAngles.z % 90)%90 == 0
+                    && (int)Mathf.Round(topCenterCube.localRotation.eulerAngles.y % 90)%90 == 0
+                    && (int)Mathf.Round(bottomCenterCube.localRotation.eulerAngles.y % 90)%90 == 0) return true;
                 break;
             case colliderFace.FRONT:
-                if ((int)Mathf.Floor(topCenterCube.localRotation.eulerAngles.y % 90) == 0
-                    && (int)Mathf.Floor(bottomCenterCube.localRotation.eulerAngles.y % 90) == 0
-                    && (int)Mathf.Floor(leftCenterCube.localRotation.eulerAngles.x % 90) == 0
-                    && (int)Mathf.Floor(rightCenterCube.localRotation.eulerAngles.x % 90) == 0) return true;
+                if ((int)Mathf.Round(topCenterCube.localRotation.eulerAngles.y % 90) %90 == 0
+                    && (int)Mathf.Round(bottomCenterCube.localRotation.eulerAngles.y % 90) %90 == 0
+                    && (int)Mathf.Round(leftCenterCube.localRotation.eulerAngles.x % 90) %90 == 0
+                    && (int)Mathf.Round(rightCenterCube.localRotation.eulerAngles.x % 90)%90 == 0) return true;
                 break;
             case colliderFace.BACK:
-                if ((int)Mathf.Floor(topCenterCube.localRotation.eulerAngles.y % 90) == 0
-                    && (int)Mathf.Floor(bottomCenterCube.localRotation.eulerAngles.y % 90) == 0
-                    && (int)Mathf.Floor(leftCenterCube.localRotation.eulerAngles.x % 90) == 0
-                    && (int)Mathf.Floor(rightCenterCube.localRotation.eulerAngles.x % 90) == 0) return true;
+                if ((int)Mathf.Round(topCenterCube.localRotation.eulerAngles.y % 90) %90== 0
+                    && (int)Mathf.Round(bottomCenterCube.localRotation.eulerAngles.y % 90) %90 == 0
+                    && (int)Mathf.Round(leftCenterCube.localRotation.eulerAngles.x % 90) %90 == 0
+                    && (int)Mathf.Round(rightCenterCube.localRotation.eulerAngles.x % 90) %90 == 0) return true;
                 break;
             default:
                 Debug.Log("Unknown face to add the cube to");

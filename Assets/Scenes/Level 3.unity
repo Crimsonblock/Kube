@@ -3198,9 +3198,9 @@ Light:
   m_Type: 0
   m_Shape: 0
   m_Color: {r: 1, g: 0.8873563, b: 0.6666666, a: 1}
-  m_Intensity: 3
-  m_Range: 20
-  m_SpotAngle: 44.3
+  m_Intensity: 2.5
+  m_Range: 23
+  m_SpotAngle: 32
   m_InnerSpotAngle: 1
   m_CookieSize: 10
   m_Shadows:
@@ -4491,7 +4491,7 @@ MonoBehaviour:
   speed: 10
   test: 10
   Alpha: 0.98
-  AngleDeviation: 0
+  AngleDeviation: 15
 --- !u!65 &1903286668
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -5670,11 +5670,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 230784792154801388, guid: deb598a99fdf6334c9ec11bfb9b314e2, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.003
+      value: 0.0030000552
       objectReference: {fileID: 0}
     - target: {fileID: 230784792154801388, guid: deb598a99fdf6334c9ec11bfb9b314e2, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.009
+      value: 0.008999999
       objectReference: {fileID: 0}
     - target: {fileID: 230784792154801388, guid: deb598a99fdf6334c9ec11bfb9b314e2, type: 3}
       propertyPath: m_LocalRotation.w
@@ -5796,7 +5796,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 680858720333214821, guid: 9102347befd030848b85026f27974c6b, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -7.9
+      value: -3.67
       objectReference: {fileID: 0}
     - target: {fileID: 680858720333214821, guid: 9102347befd030848b85026f27974c6b, type: 3}
       propertyPath: m_LocalPosition.z
@@ -5839,6 +5839,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 7495201741561467124, guid: f6ce1269c68f88744b933aaf657792b6, type: 3}
+      propertyPath: m_Range
+      value: 23
+      objectReference: {fileID: 0}
+    - target: {fileID: 7495201741561467124, guid: f6ce1269c68f88744b933aaf657792b6, type: 3}
+      propertyPath: m_Intensity
+      value: 2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7495201741561467124, guid: f6ce1269c68f88744b933aaf657792b6, type: 3}
+      propertyPath: m_SpotAngle
+      value: 32
+      objectReference: {fileID: 0}
     - target: {fileID: 7495201741561467125, guid: f6ce1269c68f88744b933aaf657792b6, type: 3}
       propertyPath: m_RootOrder
       value: 7

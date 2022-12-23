@@ -70,6 +70,11 @@ public class GameManager : MonoBehaviour
                 Destroy(gameObject);
             }
         }
+
+        if (Input.GetKeyDown(KeyCode.G))
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
     }
 
     public void registerRubix()
@@ -104,7 +109,7 @@ public class GameManager : MonoBehaviour
             {
                 Debug.Log("Last Level");
                 lastLevelFinished =  true;
-                NextLevel.SetActive(false);
+                if( NextLevel != null ) NextLevel.SetActive(false);
             }
         }
 
