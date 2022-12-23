@@ -43,8 +43,12 @@ public class PushButtonScript : MonoBehaviour
         if (other.tag == "Player")
         {
             gate.activatorLeave();
-            ButtonClick.Stop();
-            ButtonClick.Play();
+
+            if (gate.getCloseOnActivatorExit())
+            {
+                ButtonClick.Stop();
+                ButtonClick.Play();
+            }
         }
     }
 }
